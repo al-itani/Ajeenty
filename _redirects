@@ -1,0 +1,16 @@
+# Cloudflare Pages redirects
+# Short links for printed menus, bags, stickers and QR codes
+# /order opens the menu, where people order online. WhatsApp stays for questions.
+/order        /menu/   302
+/whatsapp     https://wa.me/96176770026?text=Marhaba%20AJEENTY!   302
+/wa           https://wa.me/96176770026?text=Marhaba%20AJEENTY!   302
+/map          https://maps.app.goo.gl/8EuMrwrfKrTEsUth9           302
+/directions   https://maps.app.goo.gl/8EuMrwrfKrTEsUth9           302
+
+# Old link-preview image from the previous site
+/food-layers/*   /og.jpg   301
+
+# Common guesses for the menu
+/menu.html    /menu/   301
+/ar           /?lang=ar   302
+/ar/          /?lang=ar   302

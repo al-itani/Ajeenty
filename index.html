@@ -1,545 +1,204 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AJEENTY — Now open in Beirut</title>
-  <meta name="description" content="AJEENTY is now open in Ras El Nabeh, Beirut. Man’oushe, mo3ajanat, and fresh dough straight from the oven. Order on WhatsApp: +961 76 770 026." />
-  <meta name="theme-color" content="#F4EBDD" />
-  <link rel="canonical" href="https://ajeenty.com/" />
-  <link rel="icon" href="https://ajeenty.com/AJEENTY_EN_FullColor.svg" type="image/svg+xml" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>AJEENTY | Man’oushe &amp; mo3ajanat in Ras El Nabeh, Beirut</title>
+  <meta name="description" content="AJEENTY (عجينتي) bakes man’oushe, mo3ajanat and fresh dough in Ras El Nabeh, Beirut. Open Monday to Saturday, 7 AM to 8 PM. Order online for pickup or delivery.">
+  <meta name="theme-color" content="#F4EBDD">
+  <link rel="canonical" href="https://ajeenty.com/">
+  <link rel="alternate" hreflang="en" href="https://ajeenty.com/">
+  <link rel="alternate" hreflang="ar" href="https://ajeenty.com/?lang=ar">
+  <link rel="alternate" hreflang="x-default" href="https://ajeenty.com/">
 
-  <!-- Social sharing (WhatsApp, Instagram, Facebook, X) -->
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="AJEENTY" />
-  <meta property="og:title" content="AJEENTY — Beirut, we’re open." />
-  <meta property="og:description" content="Man’oushe, mo3ajanat, and fresh dough — straight from the oven. Now open in Ras El Nabeh, Beirut." />
-  <meta property="og:url" content="https://ajeenty.com/" />
-  <meta property="og:image" content="https://ajeenty.com/food-layers/mankoushe-left.webp" />
-  <meta property="og:locale" content="en_US" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-48.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
 
-  <!-- Map library (Leaflet) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-  <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin />
+  <!-- Link previews (WhatsApp, Instagram, Facebook, X) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AJEENTY">
+  <meta property="og:title" content="AJEENTY — Beirut, we’re open.">
+  <meta property="og:description" content="Man’oushe, mo3ajanat and fresh dough, straight from the oven. Ras El Nabeh, Beirut · Mon–Sat 7 AM–8 PM.">
+  <meta property="og:url" content="https://ajeenty.com/">
+  <meta property="og:image" content="https://ajeenty.com/og.jpg">
+  <meta property="og:image:secure_url" content="https://ajeenty.com/og.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="AJEENTY: Beirut, we’re open. A zaatar and cheese man’oushe under an arched window.">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ar_LB">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://ajeenty.com/og.jpg">
 
-  <style>
-    :root {
-      --sage:#2E3A2F;
-      --sage-deep:#263027;
-      --beige:#E7D6C0;
-      --terra:#B8663E;
-      --ink:#1E251F;
-      --paper:#F4EBDD;
-      --line:rgba(46,58,47,.20);
-      --max:1420px;
-    }
-
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      background:var(--paper);
-      color:var(--sage);
-      font-family:Arial, Helvetica, sans-serif;
-      -webkit-font-smoothing:antialiased;
-      overflow-x:hidden;
-    }
-    a{color:inherit;text-decoration:none}
-    a:focus-visible{outline:2px solid var(--terra);outline-offset:4px}
-    img{display:block;max-width:100%}
-    .wa-icon{width:18px;height:18px;flex-shrink:0}
-
-    .skip{
-      position:absolute;left:-9999px;top:12px;z-index:3000;
-      background:var(--sage);color:var(--paper);
-      padding:10px 14px;font-size:12px;font-weight:800;
-      letter-spacing:.08em;text-transform:uppercase;
-    }
-    .skip:focus{left:12px}
-
-    .page{
-      width:min(var(--max),100%);
-      margin:0 auto;
-      border-left:1px solid var(--line);
-      border-right:1px solid var(--line);
-      min-height:100vh;
-      background:var(--paper);
-    }
-
-    /* BUTTONS */
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:12px;
-      padding:16px 22px;
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:.09em;
-      text-transform:uppercase;
-      border-radius:999px;
-      transition:transform .2s ease, background .2s ease;
-    }
-    .btn-wa{background:var(--sage);color:var(--paper)}
-    .btn-wa:hover{background:var(--terra);transform:translateY(-2px)}
-    .link-arrow{
-      display:inline-flex;align-items:center;gap:14px;
-      font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;
-      border-bottom:2px solid var(--sage);padding-bottom:6px;
-    }
-    .link-arrow span{font-size:18px;line-height:1;transition:transform .2s ease}
-    .link-arrow:hover span{transform:translateX(5px)}
-
-    /* NAV */
-    .nav{
-      height:86px;
-      display:grid;
-      grid-template-columns:1fr auto 1fr;
-      align-items:center;
-      gap:24px;
-      padding:0 34px;
-      border-bottom:1px solid var(--line);
-    }
-    .nav small{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
-    .nav small b{color:var(--terra)}
-    .nav-logo img{width:150px;height:auto}
-    .nav-right{justify-self:end;display:flex;gap:26px;align-items:center}
-    .nav-right > a:not(.btn){font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
-    .nav-right .btn{padding:11px 16px;font-size:11px}
-
-    /* HERO */
-    .hero{
-      min-height:720px;
-      display:grid;
-      grid-template-columns:minmax(0,5fr) minmax(430px,7fr);
-      border-bottom:1px solid var(--line);
-    }
-    .hero-copy{
-      padding:72px 44px 42px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      border-right:1px solid var(--line);
-    }
-    .location-line{
-      display:flex;
-      justify-content:space-between;
-      gap:20px;
-      padding-bottom:16px;
-      border-bottom:1px solid var(--line);
-      font-size:11px;
-      font-weight:800;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
-    .live{display:inline-flex;align-items:center;gap:8px;color:var(--terra)}
-    .live::before{
-      content:"";width:8px;height:8px;border-radius:50%;background:var(--terra);
-      box-shadow:0 0 0 0 rgba(184,102,62,.6);animation:ping 2s infinite;
-    }
-    @keyframes ping{
-      0%{box-shadow:0 0 0 0 rgba(184,102,62,.55)}
-      70%{box-shadow:0 0 0 9px rgba(184,102,62,0)}
-      100%{box-shadow:0 0 0 0 rgba(184,102,62,0)}
-    }
-
-    h1{
-      margin:56px 0 0;
-      max-width:670px;
-      font-size:clamp(64px,7vw,114px);
-      line-height:.82;
-      letter-spacing:-.075em;
-      font-weight:900;
-      text-transform:uppercase;
-    }
-    h1 .open{display:block;color:var(--terra)}
-
-    .hero-bottom{margin-top:62px}
-    .hero-bottom p{
-      margin:0 0 30px;
-      max-width:440px;
-      font-size:18px;
-      line-height:1.45;
-      font-weight:600;
-    }
-    .hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:22px 30px}
-
-    /* HERO ART */
-    .hero-art{
-      position:relative;
-      overflow:hidden;
-      background:
-        radial-gradient(ellipse 55% 45% at 50% 62%, rgba(184,102,62,.22), transparent 70%),
-        var(--sage);
-      min-height:720px;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      padding:90px 24px 0;
-    }
-    .hero-art svg.scene{width:100%;max-width:600px;height:auto;display:block}
-    .art-label{
-      position:absolute;z-index:3;top:34px;left:34px;
-      color:var(--beige);
-      font-size:11px;line-height:1.5;font-weight:700;
-      text-transform:uppercase;letter-spacing:.13em;
-    }
-    .art-label strong{display:block;color:var(--terra);font-size:12px}
-    .stamp{
-      position:absolute;z-index:3;top:26px;right:26px;
-      width:128px;height:128px;
-      color:var(--beige);
-    }
-    .stamp > svg{width:100%;height:100%;animation:spin 22s linear infinite}
-    .stamp .core svg{width:24px;height:22px}
-    .stamp .core{
-      position:absolute;inset:0;display:grid;place-items:center;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .steam path{animation:rise 3.4s ease-in-out infinite;opacity:0}
-    .steam path:nth-child(2){animation-delay:1.1s}
-    .steam path:nth-child(3){animation-delay:2.2s}
-    @keyframes rise{
-      0%{opacity:0;transform:translateY(14px)}
-      35%{opacity:.85}
-      100%{opacity:0;transform:translateY(-22px)}
-    }
-
-    /* TICKER */
-    .ticker{
-      overflow:hidden;
-      background:var(--terra);
-      color:var(--paper);
-      border-bottom:1px solid var(--line);
-      padding:14px 0 13px;
-    }
-    .ticker-track{display:flex;width:max-content;animation:scroll 32s linear infinite}
-    .ticker-group{display:flex;flex-shrink:0}
-    .ticker-group span{
-      padding-right:48px;white-space:nowrap;
-      font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
-    }
-    @keyframes scroll{to{transform:translateX(-50%)}}
-
-    /* INFO */
-    .info{
-      display:grid;
-      grid-template-columns:1.4fr 1fr;
-      border-bottom:1px solid var(--line);
-    }
-    .info>div{padding:54px 34px}
-    .info-main{border-right:1px solid var(--line)}
-    .kicker{
-      margin:0 0 40px;
-      font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
-      color:var(--terra);
-    }
-    .info-main h2{
-      margin:0;max-width:760px;
-      font-size:clamp(44px,5vw,78px);line-height:.93;letter-spacing:-.055em;font-weight:900;
-    }
-    .info-main p{margin:30px 0 0;max-width:560px;font-size:17px;line-height:1.55}
-
-    .contact{display:flex;flex-direction:column;gap:34px;justify-content:space-between}
-    .contact .big{
-      display:block;
-      font-size:clamp(30px,3vw,42px);line-height:1;font-weight:900;letter-spacing:-.04em;
-      margin-bottom:22px;
-    }
-    .contact .big:hover{color:var(--terra)}
-    .contact .note{margin:0 0 26px;font-size:15px;line-height:1.5;max-width:340px}
-    .email{
-      padding-top:22px;border-top:1px solid var(--line);
-      font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
-    }
-    .email span{display:block;color:var(--terra);font-size:10px;font-weight:900;letter-spacing:.14em;margin-bottom:8px}
-    .email a{border-bottom:1px solid currentColor;padding-bottom:2px}
-
-    /* MAP */
-    .map-section{border-bottom:1px solid var(--line)}
-    .map{
-      position:relative;
-      display:block;
-      height:480px;
-      overflow:hidden;
-      background:#E9E0D0;
-      cursor:pointer;
-    }
-    #map{
-      position:absolute;inset:0;
-      pointer-events:none;
-      transition:transform .6s ease;
-    }
-    .map:hover #map{transform:scale(1.04)}
-    #map .leaflet-tile-pane{filter:sepia(.35) saturate(.75) hue-rotate(-8deg) contrast(.95)}
-    .leaflet-container{background:#E9E0D0;font-family:inherit}
-
-    .pin{position:relative;width:46px;height:58px}
-    .pin svg{position:relative;z-index:2;width:46px;height:58px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25))}
-    .pin::before{
-      content:"";position:absolute;left:50%;bottom:-6px;z-index:1;
-      width:18px;height:18px;margin-left:-9px;border-radius:50%;
-      background:rgba(184,102,62,.45);animation:pulse 2.2s ease-out infinite;
-    }
-    @keyframes pulse{
-      0%{transform:scale(.6);opacity:.9}
-      100%{transform:scale(4);opacity:0}
-    }
-
-    .map-fallback{
-      position:absolute;inset:0;display:none;
-      background:
-        linear-gradient(rgba(46,58,47,.07) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(46,58,47,.07) 1px,transparent 1px),
-        #E9E0D0;
-      background-size:40px 40px;
-      place-items:center;
-    }
-    .no-map .map-fallback{display:grid}
-
-    .map-card{
-      position:absolute;z-index:1000;left:34px;bottom:34px;
-      background:var(--paper);
-      padding:22px 24px;
-      max-width:320px;
-      box-shadow:0 18px 40px rgba(30,37,31,.18);
-    }
-    .map-card .kicker{margin-bottom:14px}
-    .map-card strong{display:block;font-size:24px;line-height:1.05;letter-spacing:-.03em;font-weight:900}
-    .map-card p{margin:10px 0 18px;font-size:13px;line-height:1.5}
-    .map-card .go{
-      display:inline-flex;align-items:center;gap:10px;
-      font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
-      border-bottom:1px solid currentColor;padding-bottom:3px;
-    }
-    .map-card .go span{transition:transform .2s ease}
-    .map:hover .map-card .go span{transform:translate(3px,-3px)}
-    .map-hint{
-      position:absolute;z-index:1000;top:24px;right:24px;
-      background:var(--sage);color:var(--paper);
-      padding:10px 14px;border-radius:999px;
-      font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-      opacity:.9;transition:opacity .2s ease, transform .2s ease;
-    }
-    .map:hover .map-hint{opacity:1;transform:translateY(-2px);background:var(--terra)}
-    .map-credit{
-      padding:8px 34px;font-size:10px;color:rgba(46,58,47,.6);text-align:right;
-    }
-    .map-credit a{text-decoration:underline}
-
-    /* FLOATING WHATSAPP */
-    .wa-float{
-      position:fixed;right:22px;bottom:22px;z-index:2000;
-      display:inline-flex;align-items:center;gap:10px;
-      background:var(--terra);color:var(--paper);
-      padding:14px 18px;border-radius:999px;
-      font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
-      box-shadow:0 12px 28px rgba(30,37,31,.28);
-      transition:transform .2s ease, background .2s ease;
-    }
-    .wa-float:hover{transform:translateY(-3px);background:var(--sage)}
-    .wa-float .wa-icon{width:20px;height:20px}
-
-    /* FOOTER */
-    footer{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:30px;
-      align-items:end;
-      padding:54px 34px 42px;
-      background:var(--beige);
-    }
-    .footer-logo{width:min(310px,55vw);height:auto}
-    .footer-right{text-align:right;font-size:11px;font-weight:800;line-height:1.9;letter-spacing:.08em;text-transform:uppercase}
-    .footer-right a{border-bottom:1px solid currentColor}
-
-    /* RESPONSIVE */
-    @media(max-width:980px){
-      .nav{grid-template-columns:1fr auto;padding:0 22px}
-      .nav small{display:none}
-      .nav-logo{justify-self:start}
-      .nav-right > a:not(.btn){display:none}
-      .hero{grid-template-columns:1fr;min-height:auto}
-      .hero-copy{border-right:0;border-bottom:1px solid var(--line);padding:48px 24px 40px}
-      h1{font-size:clamp(62px,15vw,112px);max-width:880px}
-      .hero-art{min-height:auto;padding-top:120px}
-      .info{grid-template-columns:1fr}
-      .info-main{border-right:0;border-bottom:1px solid var(--line)}
-    }
-
-    @media(max-width:620px){
-      .page{border:0}
-      .nav{height:74px;padding:0 18px}
-      .nav-logo img{width:124px}
-      .nav-right .btn{padding:10px 13px;font-size:10px}
-      .hero-copy{padding:34px 18px 34px}
-      .location-line{font-size:9px}
-      h1{margin-top:38px;font-size:clamp(58px,18vw,84px)}
-      .hero-bottom{margin-top:44px}
-      .hero-bottom p{font-size:16px}
-      .hero-art{padding:118px 10px 0}
-      .art-label{top:22px;left:18px;font-size:9px}
-      .art-label strong{font-size:10px}
-      .stamp{width:96px;height:96px;right:14px;top:14px}
-      .ticker-group span{font-size:10px}
-      .info>div{padding:40px 18px}
-      .info-main h2{font-size:48px}
-      .map{height:420px}
-      .map-card{left:14px;right:14px;bottom:14px;max-width:none;padding:18px}
-      .map-card strong{font-size:20px}
-      .map-hint{top:14px;right:14px}
-      .map-credit{padding:8px 18px}
-      .wa-float{right:14px;bottom:14px;padding:13px 15px}
-      .wa-float .label{display:none}
-      footer{grid-template-columns:1fr;padding:40px 18px 90px}
-      .footer-right{text-align:left}
-    }
-
-    @media(prefers-reduced-motion:reduce){
-      html{scroll-behavior:auto}
-      .ticker-track,.stamp > svg,.live::before,.pin::before{animation:none}
-      .steam path{animation:none;opacity:.7}
-      #map,.btn,.link-arrow span,.wa-float,.map-hint{transition:none}
-    }
-  </style>
+  <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/home.css">
+  <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
 
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@type":"Bakery",
-    "name":"AJEENTY",
-    "alternateName":"عجينتي",
-    "url":"https://ajeenty.com/",
-    "logo":"https://ajeenty.com/AJEENTY_EN_FullColor.svg",
-    "image":"https://ajeenty.com/food-layers/mankoushe-left.webp",
-    "telephone":"+96176770026",
-    "email":"marhaba@ajeenty.com",
-    "servesCuisine":"Lebanese",
-    "hasMap":"https://maps.app.goo.gl/8EuMrwrfKrTEsUth9",
-    "geo":{"@type":"GeoCoordinates","latitude":33.8799516,"longitude":35.5068473},
-    "address":{
-      "@type":"PostalAddress",
-      "addressLocality":"Beirut",
-      "addressRegion":"Ras El Nabeh",
-      "addressCountry":"LB"
+    "@context": "https://schema.org",
+    "@type": "Bakery",
+    "@id": "https://ajeenty.com/#bakery",
+    "name": "AJEENTY",
+    "alternateName": "عجينتي",
+    "description": "Lebanese bakery in Ras El Nabeh, Beirut: man’oushe, mo3ajanat and fresh dough, straight from the oven.",
+    "url": "https://ajeenty.com/",
+    "logo": "https://ajeenty.com/icon-512.png",
+    "image": ["https://ajeenty.com/og.jpg", "https://ajeenty.com/img/emblem.png"],
+    "telephone": "+96176770026",
+    "email": "marhaba@ajeenty.com",
+    "servesCuisine": ["Lebanese", "Bakery", "Manakish"],
+    "currenciesAccepted": "LBP",
+    "hasMenu": "https://ajeenty.com/menu/",
+    "hasMap": "https://maps.app.goo.gl/8EuMrwrfKrTEsUth9",
+    "acceptsReservations": false,
+    "potentialAction": { "@type": "OrderAction", "target": { "@type": "EntryPoint", "urlTemplate": "https://ajeenty.com/menu/", "actionPlatform": ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"] }, "deliveryMethod": ["http://purl.org/goodrelations/v1#DeliveryModePickUp", "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"] },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Ras El Nabeh, near Bechara El Khoury and Al Amliyeh School",
+      "addressLocality": "Beirut",
+      "addressRegion": "Beirut",
+      "addressCountry": "LB"
     },
-    "areaServed":"Beirut"
+    "geo": { "@type": "GeoCoordinates", "latitude": 33.8799516, "longitude": 35.5068473 },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "07:00",
+        "closes": "20:00"
+      }
+    ],
+    "contactPoint": [
+      { "@type": "ContactPoint", "telephone": "+96176770026", "contactType": "customer service", "description": "Mobile, WhatsApp and delivery orders", "availableLanguage": ["Arabic", "English"] },
+      { "@type": "ContactPoint", "telephone": "+9611633433", "contactType": "customer service", "description": "Landline", "availableLanguage": ["Arabic", "English"] }
+    ],
+    "areaServed": "Beirut"
   }
   </script>
 </head>
-<body>
-  <a class="skip" href="#top">Skip to content</a>
+<body data-photos="off" data-page="home">
+  <!-- Photos: put files in /photos/ (see README) and change data-photos="off" to "on" above. -->
+  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 
-  <!-- Reusable WhatsApp glyph -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="wa" viewBox="0 0 24 24">
-      <path d="M12 2.8a9.2 9.2 0 0 0-7.9 13.9L3 21.2l4.6-1.2A9.2 9.2 0 1 0 12 2.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-      <path d="M8.9 7.6c.3-.5.6-.5.9-.5h.5c.2 0 .4.1.5.4l.8 1.8c.1.2 0 .5-.1.6l-.6.7c-.1.1-.1.3 0 .5.6 1 1.4 1.8 2.4 2.4.2.1.4.1.5 0l.7-.7c.2-.2.4-.2.6-.1l1.8.8c.2.1.4.3.4.5v.5c0 .3-.1.7-.6 1-.7.4-1.8.6-3.6-.3-1.7-.9-3.1-2.3-4-4-.8-1.7-.6-2.9-.2-3.6z" fill="currentColor"/>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12 2.8a9.2 9.2 0 0 0-7.9 13.9L3 21.2l4.6-1.2A9.2 9.2 0 1 0 12 2.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.9 7.6c.3-.5.6-.5.9-.5h.5c.2 0 .4.1.5.4l.8 1.8c.1.2 0 .5-.1.6l-.6.7c-.1.1-.1.3 0 .5.6 1 1.4 1.8 2.4 2.4.2.1.4.1.5 0l.7-.7c.2-.2.4-.2.6-.1l1.8.8c.2.1.4.3.4.5v.5c0 .3-.1.7-.6 1-.7.4-1.8.6-3.6-.3-1.7-.9-3.1-2.3-4-4-.8-1.7-.6-2.9-.2-3.6z" fill="currentColor"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a12 12 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.2 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.8-6.5-11a6.5 6.5 0 0 1 13 0c0 5.2-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4" fill="currentColor"/></symbol>
+    <symbol id="i-bike" viewBox="0 0 24 24"><circle cx="6" cy="17" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="17" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 17l4-7h5l3 7M13 10l-2-4H8M15 10h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 7l8.5 6 8.5-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-wheat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 22V7"/><path d="M12 7c-2.4-.5-3.4-2.4-3.4-4.4 2.4.5 3.4 2.4 3.4 4.4zM12 7c2.4-.5 3.4-2.4 3.4-4.4-2.4.5-3.4 2.4-3.4 4.4zM12 12c-2.4-.5-3.4-2.4-3.4-4.4 2.4.5 3.4 2.4 3.4 4.4zM12 12c2.4-.5 3.4-2.4 3.4-4.4-2.4.5-3.4 2.4-3.4 4.4zM12 17c-2.4-.5-3.4-2.4-3.4-4.4 2.4.5 3.4 2.4 3.4 4.4zM12 17c2.4-.5 3.4-2.4 3.4-4.4-2.4.5-3.4 2.4-3.4 4.4z"/></g></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 8.5h18v11a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5z"/><path d="M5 8.5L7 4h10l2 4.5"/><circle cx="8" cy="13" r="1.6"/><circle cx="12" cy="13" r="1.6"/><circle cx="16" cy="13" r="1.6"/><circle cx="8" cy="17" r="1.6"/><circle cx="12" cy="17" r="1.6"/><circle cx="16" cy="17" r="1.6"/></g></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10"/></g></symbol>
+    <symbol id="i-wordmark" viewBox="8 28 338 68">
+      <path fill="currentColor" fill-rule="evenodd" transform="translate(-5.202719 27.243511) scale(0.04573548)" d="M 740.500 119.500 L 723.500 135.500 L 680.000 220.000 L 672.000 228.000 L 652.000 274.000 L 505.000 545.000 L 489.000 582.500 L 471.500 609.000 L 401.000 752.000 L 399.000 828.500 L 414.000 861.000 L 437.500 886.500 L 482.500 910.000 L 523.500 912.500 L 556.000 896.000 L 561.500 881.500 L 557.500 865.500 L 546.500 854.000 L 534.500 830.500 L 533.500 811.000 L 549.500 757.500 L 564.500 731.000 L 588.500 704.000 L 630.000 676.500 L 676.000 661.500 L 707.000 655.500 L 802.000 650.500 L 970.500 649.500 L 1015.500 656.500 L 1107.500 820.500 L 1130.500 840.500 L 1149.000 847.500 L 1218.500 848.500 L 1245.500 843.000 L 1247.000 835.500 L 1231.500 803.500 L 1176.000 707.500 L 1166.000 683.000 L 1148.000 655.500 L 1072.500 510.500 L 1050.500 478.000 L 1030.000 437.000 L 1020.500 426.500 L 978.000 341.000 L 953.500 302.000 L 938.000 268.000 L 869.000 145.500 L 846.000 121.000 L 815.500 109.500 L 812.000 105.000 L 778.000 105.000 L 759.000 115.000 Z M 799.000 252.000 L 803.000 257.500 L 806.000 268.000 L 815.000 282.500 L 822.000 299.000 L 826.500 303.000 L 829.000 309.000 L 842.000 327.500 L 848.000 342.000 L 854.000 350.000 L 858.000 362.000 L 863.000 372.000 L 867.500 377.000 L 875.000 394.000 L 891.000 423.000 L 902.000 439.500 L 929.000 493.000 L 937.500 504.000 L 942.000 515.500 L 949.000 527.500 L 949.500 536.500 L 945.500 542.000 L 931.500 544.000 L 927.000 543.000 L 924.500 544.000 L 916.000 543.000 L 913.000 544.000 L 910.500 543.000 L 906.500 544.000 L 827.000 544.000 L 824.500 545.000 L 787.000 545.000 L 784.500 546.000 L 713.000 549.000 L 690.000 553.000 L 667.500 562.000 L 643.500 568.000 L 629.500 570.000 L 628.000 568.500 L 629.500 554.000 L 640.500 532.500 L 650.500 517.000 L 670.500 474.500 L 677.000 466.500 L 683.500 455.000 L 698.500 421.500 L 716.500 392.000 L 723.500 374.000 L 737.500 346.500 L 745.000 337.500 L 765.500 293.500 L 773.500 285.000 L 780.500 268.500 L 787.500 258.500 L 794.000 252.500 Z"/>
+      <g fill="none" stroke="currentColor" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 90 35 L 90 58 C 90 65 86 69 80 69 C 76 69 73 67 71 64"/>
+        <path d="M 119 35 L 119 68 M 119 35 L 141 35 M 119 51.5 L 137 51.5 M 119 68 L 142 68"/>
+        <path d="M 167 35 L 167 68 M 167 35 L 189 35 M 167 51.5 L 185 51.5 M 167 68 L 190 68"/>
+        <path d="M 216 68 L 216 35 L 243 68 L 243 35"/>
+        <path d="M 266 35 L 294 35 M 280 35 L 280 68"/>
+        <path d="M 309 35 L 325 52 L 341 35 M 325 52 L 325 69 C 325 78 320 82 313 82 C 310 82 308 81 307 80"/>
+      </g>
+      <path d="M 307 88 C 315 91 324 92 331 89 C 336 87 339 84 341 80" fill="none" stroke="#B8663E" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
   </svg>
 
   <div class="page">
     <header class="nav">
-      <small><b>Now open</b> · Ras El Nabeh · Beirut</small>
-      <a class="nav-logo" href="#top" aria-label="AJEENTY home">
-        <img src="https://ajeenty.com/AJEENTY_EN_FullColor.svg" alt="AJEENTY" width="150" height="40" />
+      <a class="nav-logo" href="index.html" aria-label="AJEENTY home">
+        <svg class="wm" viewBox="0 0 338 68" aria-hidden="true"><use href="#i-wordmark"/></svg>
+        <span class="ar-wm" lang="ar" aria-hidden="true">عجينتي</span>
       </a>
-      <nav class="nav-right" aria-label="Main">
-        <a href="#visit">Find us</a>
-        <a class="btn btn-wa" href="https://wa.me/96176770026?text=Marhaba%20AJEENTY!" target="_blank" rel="noopener">
-          <svg class="wa-icon" aria-hidden="true"><use href="#wa"/></svg>WhatsApp
-        </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="menu/index.html" data-i18n="navMenu">Menu</a>
+        <a class="nl-visit" href="#visit" data-i18n="navVisit">Visit us</a>
       </nav>
+      <div class="nav-right">
+        <span class="status" data-status>Ras El Nabeh · Beirut</span>
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="ar" aria-pressed="false" lang="ar">ع</button>
+        </div>
+        <a class="btn btn-sage nav-order" href="menu/index.html" aria-label="Order online" data-i18n-attr="aria-label:orderOnline">
+          <svg class="ic" aria-hidden="true"><use href="#i-bag"/></svg><span class="lbl" data-i18n="orderOnline">Order online</span>
+        </a>
+      </div>
     </header>
 
-    <main id="top">
+    <main id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <div>
             <div class="location-line">
               <span>AJEENTY / <span lang="ar" dir="rtl">عجينتي</span></span>
-              <span class="live">Now open</span>
+              <span class="status" data-status>Mon–Sat · 7 AM – 8 PM</span>
             </div>
-            <h1 id="hero-title">Beirut,<span class="open">we’re open.</span></h1>
+            <h1 id="hero-title"><span data-i18n="h1a">Beirut,</span><span class="open" data-i18n="h1b">we’re open.</span></h1>
           </div>
 
           <div class="hero-bottom">
-            <p>Man’oushe, mo3ajanat, and fresh dough — straight from the oven. Delivery and takeaway.</p>
-            <div class="hero-actions">
-              <a class="btn btn-wa" href="https://wa.me/96176770026?text=Marhaba%20AJEENTY!" target="_blank" rel="noopener">
-                <svg class="wa-icon" aria-hidden="true"><use href="#wa"/></svg>Order on WhatsApp
+            <p data-i18n="heroP">Man’oushe, mo3ajanat and fresh dough, straight from the oven. Order online for pickup or delivery, or grab it hot from the counter.</p>
+            <div class="hero-actions" id="heroActions">
+              <a class="btn btn-sage" href="menu/index.html">
+                <svg class="ic" aria-hidden="true"><use href="#i-bag"/></svg><span data-i18n="orderOnline">Order online</span>
               </a>
-              <a class="link-arrow" href="#visit">Find us <span aria-hidden="true">→</span></a>
+              <a class="link-arrow" href="#visit"><span data-i18n="findUs">Find us</span> <span class="ar" aria-hidden="true">→</span></a>
             </div>
+            <ul class="hero-meta">
+              <li><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="hoursShort">Mon–Sat · 7 AM – 8 PM</span></li>
+              <li><svg aria-hidden="true"><use href="#i-bike"/></svg><span data-i18n="deliveryShort">Pickup &amp; delivery</span></li>
+              <li><svg aria-hidden="true"><use href="#i-pin"/></svg><a href="#visit" data-i18n="whereShort">Ras El Nabeh, Beirut</a></li>
+            </ul>
           </div>
         </div>
 
-        <div class="hero-art" role="img" aria-label="Illustration of a fresh za’atar and cheese man’oushe steaming under an arched window">
-          <div class="art-label" aria-hidden="true"><strong>Now open</strong>Ras El Nabeh<br>Beirut</div>
+        <div class="hero-art" role="img" aria-label="Illustration of a fresh zaatar and cheese man’oushe steaming under an arched window" data-i18n-attr="aria-label:artAlt">
+          <div class="art-label" aria-hidden="true"><strong data-i18n="artLabelA">Hot from the oven</strong><span data-i18n-html="artLabelB">Ras El Nabeh<br>Beirut</span></div>
 
           <div class="stamp" aria-hidden="true">
             <svg viewBox="0 0 120 120">
               <defs><path id="ring" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs>
               <circle cx="60" cy="60" r="58" fill="none" stroke="rgba(231,214,192,.5)" stroke-width="1"/>
               <circle cx="60" cy="60" r="34" fill="none" stroke="rgba(231,214,192,.35)" stroke-width="1" stroke-dasharray="3 3"/>
-              <text fill="currentColor" font-size="9.5" font-weight="800" font-family="Arial, Helvetica, sans-serif">
+              <text fill="currentColor" font-size="9.5" font-weight="800" style="font-family:Figtree,Arial,sans-serif;letter-spacing:.5px">
                 <textPath href="#ring" textLength="286" lengthAdjust="spacing">HOT FROM THE OVEN · FRESH DOUGH ·</textPath>
               </text>
             </svg>
-            <div class="core">
-              <svg width="26" height="24" viewBox="0 0 26 24"><path d="M13 22 C3 15 0 9 3.5 5 C6.5 1.8 11 3 13 6.5 C15 3 19.5 1.8 22.5 5 C26 9 23 15 13 22 Z" fill="#B8663E"/></svg>
-            </div>
+            <div class="core"><svg viewBox="0 0 26 24"><path d="M13 22 C3 15 0 9 3.5 5 C6.5 1.8 11 3 13 6.5 C15 3 19.5 1.8 22.5 5 C26 9 23 15 13 22 Z" fill="#B8663E"/></svg></div>
           </div>
 
-          <svg class="scene" viewBox="0 0 600 700" aria-hidden="true">
+          <svg class="scene" viewBox="0 0 600 700" aria-hidden="true" focusable="false">
             <defs>
               <path id="leaf" d="M0 0 C 9 -12 25 -15 38 -11 C 29 2 13 6 0 0 Z"/>
               <clipPath id="topping"><ellipse cx="300" cy="528" rx="104" ry="31"/></clipPath>
-              <linearGradient id="window" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#232C24"/>
-                <stop offset="1" stop-color="#2B3729"/>
-              </linearGradient>
+              <linearGradient id="window" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#232C24"/><stop offset="1" stop-color="#2B3729"/></linearGradient>
             </defs>
-
-            <!-- Arched window (echoes the logo) -->
             <path d="M110 700 V300 A190 190 0 0 1 490 300 V700" fill="url(#window)" stroke="#E7D6C0" stroke-width="3"/>
             <path d="M126 700 V300 A174 174 0 0 1 474 300 V700" fill="none" stroke="rgba(231,214,192,.35)" stroke-width="1.5"/>
-
-            <!-- Heart -->
             <path d="M300 236 C 263 210 255 185 270 171 C 284 159 298 166 300 180 C 302 166 316 159 330 171 C 345 185 337 210 300 236 Z" fill="#B8663E"/>
-
-            <!-- Za'atar sprigs -->
             <g fill="none" stroke="#E7D6C0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
               <path d="M160 592 C 150 520 158 450 196 382"/>
-              <use href="#leaf" transform="translate(156 548) rotate(-35)"/>
-              <use href="#leaf" transform="translate(155 520) rotate(-150)"/>
-              <use href="#leaf" transform="translate(157 488) rotate(-40)"/>
-              <use href="#leaf" transform="translate(162 458) rotate(-148)"/>
-              <use href="#leaf" transform="translate(171 430) rotate(-45)"/>
-              <use href="#leaf" transform="translate(182 405) rotate(-140)"/>
-              <use href="#leaf" transform="translate(196 382) rotate(-70) scale(.8)"/>
+              <use href="#leaf" transform="translate(156 548) rotate(-35)"/><use href="#leaf" transform="translate(155 520) rotate(-150)"/><use href="#leaf" transform="translate(157 488) rotate(-40)"/><use href="#leaf" transform="translate(162 458) rotate(-148)"/><use href="#leaf" transform="translate(171 430) rotate(-45)"/><use href="#leaf" transform="translate(182 405) rotate(-140)"/><use href="#leaf" transform="translate(196 382) rotate(-70) scale(.8)"/>
             </g>
             <g fill="none" stroke="#E7D6C0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" transform="translate(600 0) scale(-1 1)">
               <path d="M160 592 C 152 540 158 490 184 440"/>
-              <use href="#leaf" transform="translate(157 556) rotate(-38)"/>
-              <use href="#leaf" transform="translate(156 526) rotate(-150)"/>
-              <use href="#leaf" transform="translate(162 494) rotate(-42)"/>
-              <use href="#leaf" transform="translate(171 466) rotate(-145)"/>
-              <use href="#leaf" transform="translate(184 440) rotate(-72) scale(.8)"/>
+              <use href="#leaf" transform="translate(157 556) rotate(-38)"/><use href="#leaf" transform="translate(156 526) rotate(-150)"/><use href="#leaf" transform="translate(162 494) rotate(-42)"/><use href="#leaf" transform="translate(171 466) rotate(-145)"/><use href="#leaf" transform="translate(184 440) rotate(-72) scale(.8)"/>
             </g>
-
-            <!-- Steam -->
             <g class="steam" fill="none" stroke="#E7D6C0" stroke-width="3" stroke-linecap="round">
               <path d="M264 470 C 250 446 278 426 264 402 C 250 378 278 358 264 334"/>
               <path d="M300 462 C 286 436 314 414 300 388 C 286 362 314 340 300 314"/>
               <path d="M336 470 C 322 446 350 426 336 402 C 322 378 350 358 336 334"/>
             </g>
-
-            <!-- Counter -->
             <path d="M126 594 H474" stroke="#E7D6C0" stroke-width="3" stroke-linecap="round"/>
             <path d="M150 610 H210 M390 610 H450" stroke="rgba(231,214,192,.45)" stroke-width="2" stroke-linecap="round"/>
-
-            <!-- Man'oushe: half za'atar, half cheese -->
             <ellipse cx="300" cy="548" rx="138" ry="40" fill="rgba(0,0,0,.25)"/>
             <ellipse cx="300" cy="536" rx="132" ry="40" fill="#A8552F"/>
             <ellipse cx="300" cy="526" rx="132" ry="40" fill="#D9A46A"/>
@@ -547,81 +206,15 @@
             <ellipse cx="300" cy="528" rx="104" ry="31" fill="#F1E2C4"/>
             <g clip-path="url(#topping)">
               <path d="M180 480 H300 C 290 494 309 506 299 520 C 290 534 310 546 300 580 H180 Z" fill="#4F5533"/>
-              <circle cx="263.4" cy="506.4" r="1.8" fill="#A9A36A"/>
-              <circle cx="211.1" cy="530.2" r="1.5" fill="#A9A36A"/>
-              <circle cx="208.1" cy="528.5" r="1.1" fill="#A9A36A"/>
-              <circle cx="286.2" cy="501.3" r="1.2" fill="#A9A36A"/>
-              <circle cx="284.3" cy="548.3" r="1.2" fill="#A9A36A"/>
-              <circle cx="242.4" cy="535.9" r="2.0" fill="#A9A36A"/>
-              <circle cx="256.2" cy="505.9" r="1.2" fill="#A9A36A"/>
-              <circle cx="260.2" cy="547.6" r="1.3" fill="#A9A36A"/>
-              <ellipse cx="317.0" cy="536.6" rx="5.2" ry="1.6" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="337.5" cy="523.5" rx="5.3" ry="2.2" fill="#D9A46A" opacity=".75"/>
-              <circle cx="258.4" cy="546.3" r="1.8" fill="#A9A36A"/>
-              <circle cx="246.8" cy="532.6" r="1.6" fill="#A9A36A"/>
-              <ellipse cx="378.0" cy="542.2" rx="6.9" ry="1.7" fill="#D9A46A" opacity=".75"/>
-              <circle cx="283.0" cy="543.9" r="1.3" fill="#A9A36A"/>
-              <ellipse cx="367.0" cy="514.6" rx="5.7" ry="1.5" fill="#D9A46A" opacity=".75"/>
-              <circle cx="292.0" cy="507.4" r="1.2" fill="#A9A36A"/>
-              <circle cx="222.9" cy="512.4" r="1.5" fill="#A9A36A"/>
-              <circle cx="289.4" cy="531.1" r="2.0" fill="#A9A36A"/>
-              <circle cx="253.9" cy="522.7" r="1.5" fill="#A9A36A"/>
-              <circle cx="227.4" cy="507.9" r="1.3" fill="#A9A36A"/>
-              <circle cx="244.5" cy="527.1" r="1.7" fill="#A9A36A"/>
-              <circle cx="283.1" cy="519.9" r="1.7" fill="#A9A36A"/>
-              <circle cx="277.6" cy="521.7" r="1.2" fill="#A9A36A"/>
-              <ellipse cx="327.9" cy="500.9" rx="3.8" ry="1.7" fill="#D9A46A" opacity=".75"/>
-              <circle cx="266.7" cy="500.3" r="1.1" fill="#A9A36A"/>
-              <ellipse cx="377.9" cy="535.1" rx="4.0" ry="2.0" fill="#D9A46A" opacity=".75"/>
-              <circle cx="271.7" cy="504.6" r="1.9" fill="#A9A36A"/>
-              <circle cx="296.6" cy="502.3" r="1.2" fill="#A9A36A"/>
-              <circle cx="267.3" cy="513.4" r="1.9" fill="#A9A36A"/>
-              <ellipse cx="393.8" cy="529.8" rx="5.2" ry="1.5" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="340.8" cy="513.2" rx="3.7" ry="2.7" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="306.8" cy="545.3" rx="3.9" ry="2.7" fill="#D9A46A" opacity=".75"/>
-              <circle cx="243.2" cy="529.1" r="1.5" fill="#A9A36A"/>
-              <circle cx="254.1" cy="513.1" r="1.8" fill="#A9A36A"/>
-              <circle cx="271.8" cy="510.7" r="1.3" fill="#A9A36A"/>
-              <circle cx="236.9" cy="509.7" r="1.7" fill="#A9A36A"/>
-              <ellipse cx="352.0" cy="526.6" rx="6.2" ry="2.0" fill="#D9A46A" opacity=".75"/>
-              <circle cx="278.3" cy="521.9" r="2.0" fill="#A9A36A"/>
-              <ellipse cx="346.8" cy="507.5" rx="3.6" ry="2.9" fill="#D9A46A" opacity=".75"/>
-              <circle cx="268.9" cy="531.0" r="1.2" fill="#A9A36A"/>
-              <circle cx="286.2" cy="551.0" r="1.9" fill="#A9A36A"/>
-              <circle cx="239.9" cy="512.6" r="1.4" fill="#A9A36A"/>
-              <circle cx="246.0" cy="533.4" r="1.4" fill="#A9A36A"/>
-              <circle cx="283.2" cy="505.1" r="2.0" fill="#A9A36A"/>
-              <circle cx="269.6" cy="525.4" r="1.7" fill="#A9A36A"/>
-              <circle cx="287.5" cy="508.4" r="1.1" fill="#A9A36A"/>
-              <ellipse cx="346.8" cy="531.5" rx="5.1" ry="2.3" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="312.5" cy="512.4" rx="6.1" ry="2.3" fill="#D9A46A" opacity=".75"/>
-              <circle cx="288.2" cy="535.0" r="1.6" fill="#A9A36A"/>
-              <circle cx="250.0" cy="531.7" r="2.0" fill="#A9A36A"/>
-              <circle cx="221.3" cy="524.4" r="1.2" fill="#A9A36A"/>
-              <circle cx="228.1" cy="541.4" r="1.8" fill="#A9A36A"/>
-              <circle cx="229.6" cy="523.8" r="1.6" fill="#A9A36A"/>
-              <circle cx="266.5" cy="509.1" r="1.4" fill="#A9A36A"/>
-              <ellipse cx="311.2" cy="524.3" rx="4.3" ry="2.4" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="358.0" cy="513.8" rx="4.7" ry="2.9" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="366.3" cy="513.0" rx="6.7" ry="2.4" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="341.7" cy="502.5" rx="5.8" ry="2.1" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="328.0" cy="546.7" rx="6.4" ry="1.6" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="375.5" cy="525.1" rx="5.2" ry="2.9" fill="#D9A46A" opacity=".75"/>
-              <circle cx="251.7" cy="505.0" r="1.6" fill="#A9A36A"/>
-              <circle cx="245.6" cy="503.8" r="1.3" fill="#A9A36A"/>
-              <circle cx="260.9" cy="515.9" r="1.9" fill="#A9A36A"/>
-              <circle cx="256.3" cy="528.0" r="1.3" fill="#A9A36A"/>
-              <ellipse cx="348.5" cy="531.2" rx="4.9" ry="2.9" fill="#D9A46A" opacity=".75"/>
-              <circle cx="285.9" cy="527.7" r="1.9" fill="#A9A36A"/>
-              <circle cx="277.8" cy="528.4" r="1.8" fill="#A9A36A"/>
-              <circle cx="280.2" cy="518.5" r="1.2" fill="#A9A36A"/>
-              <ellipse cx="350.1" cy="512.8" rx="3.3" ry="2.8" fill="#D9A46A" opacity=".75"/>
-              <ellipse cx="377.1" cy="538.6" rx="4.0" ry="1.9" fill="#D9A46A" opacity=".75"/>
+              <g fill="#A9A36A">
+                <circle cx="263.4" cy="506.4" r="1.8"/><circle cx="211.1" cy="530.2" r="1.5"/><circle cx="208.1" cy="528.5" r="1.1"/><circle cx="286.2" cy="501.3" r="1.2"/><circle cx="284.3" cy="548.3" r="1.2"/><circle cx="242.4" cy="535.9" r="2.0"/><circle cx="256.2" cy="505.9" r="1.2"/><circle cx="260.2" cy="547.6" r="1.3"/><circle cx="258.4" cy="546.3" r="1.8"/><circle cx="246.8" cy="532.6" r="1.6"/><circle cx="283.0" cy="543.9" r="1.3"/><circle cx="292.0" cy="507.4" r="1.2"/><circle cx="222.9" cy="512.4" r="1.5"/><circle cx="289.4" cy="531.1" r="2.0"/><circle cx="253.9" cy="522.7" r="1.5"/><circle cx="227.4" cy="507.9" r="1.3"/><circle cx="244.5" cy="527.1" r="1.7"/><circle cx="283.1" cy="519.9" r="1.7"/><circle cx="277.6" cy="521.7" r="1.2"/><circle cx="266.7" cy="500.3" r="1.1"/><circle cx="271.7" cy="504.6" r="1.9"/><circle cx="296.6" cy="502.3" r="1.2"/><circle cx="267.3" cy="513.4" r="1.9"/><circle cx="243.2" cy="529.1" r="1.5"/><circle cx="254.1" cy="513.1" r="1.8"/><circle cx="271.8" cy="510.7" r="1.3"/><circle cx="236.9" cy="509.7" r="1.7"/><circle cx="278.3" cy="521.9" r="2.0"/><circle cx="268.9" cy="531.0" r="1.2"/><circle cx="286.2" cy="551.0" r="1.9"/><circle cx="239.9" cy="512.6" r="1.4"/><circle cx="246.0" cy="533.4" r="1.4"/><circle cx="283.2" cy="505.1" r="2.0"/><circle cx="269.6" cy="525.4" r="1.7"/><circle cx="287.5" cy="508.4" r="1.1"/><circle cx="288.2" cy="535.0" r="1.6"/><circle cx="250.0" cy="531.7" r="2.0"/><circle cx="221.3" cy="524.4" r="1.2"/><circle cx="228.1" cy="541.4" r="1.8"/><circle cx="229.6" cy="523.8" r="1.6"/><circle cx="266.5" cy="509.1" r="1.4"/><circle cx="251.7" cy="505.0" r="1.6"/><circle cx="245.6" cy="503.8" r="1.3"/><circle cx="260.9" cy="515.9" r="1.9"/><circle cx="256.3" cy="528.0" r="1.3"/><circle cx="285.9" cy="527.7" r="1.9"/><circle cx="277.8" cy="528.4" r="1.8"/><circle cx="280.2" cy="518.5" r="1.2"/>
+              </g>
+              <g fill="#D9A46A" opacity=".75">
+                <ellipse cx="317.0" cy="536.6" rx="5.2" ry="1.6"/><ellipse cx="337.5" cy="523.5" rx="5.3" ry="2.2"/><ellipse cx="378.0" cy="542.2" rx="6.9" ry="1.7"/><ellipse cx="367.0" cy="514.6" rx="5.7" ry="1.5"/><ellipse cx="327.9" cy="500.9" rx="3.8" ry="1.7"/><ellipse cx="377.9" cy="535.1" rx="4.0" ry="2.0"/><ellipse cx="393.8" cy="529.8" rx="5.2" ry="1.5"/><ellipse cx="340.8" cy="513.2" rx="3.7" ry="2.7"/><ellipse cx="306.8" cy="545.3" rx="3.9" ry="2.7"/><ellipse cx="352.0" cy="526.6" rx="6.2" ry="2.0"/><ellipse cx="346.8" cy="507.5" rx="3.6" ry="2.9"/><ellipse cx="346.8" cy="531.5" rx="5.1" ry="2.3"/><ellipse cx="312.5" cy="512.4" rx="6.1" ry="2.3"/><ellipse cx="311.2" cy="524.3" rx="4.3" ry="2.4"/><ellipse cx="358.0" cy="513.8" rx="4.7" ry="2.9"/><ellipse cx="366.3" cy="513.0" rx="6.7" ry="2.4"/><ellipse cx="341.7" cy="502.5" rx="5.8" ry="2.1"/><ellipse cx="328.0" cy="546.7" rx="6.4" ry="1.6"/><ellipse cx="375.5" cy="525.1" rx="5.2" ry="2.9"/><ellipse cx="348.5" cy="531.2" rx="4.9" ry="2.9"/><ellipse cx="350.1" cy="512.8" rx="3.3" ry="2.8"/><ellipse cx="377.1" cy="538.6" rx="4.0" ry="1.9"/>
+              </g>
             </g>
             <path d="M300 497 C 290 511 309 523 299 537 C 294 545 300 552 300 559" fill="none" stroke="#C9894F" stroke-width="1.5" opacity=".6"/>
-
-            <!-- Base line -->
-            <text x="300" y="660" text-anchor="middle" fill="rgba(231,214,192,.55)" font-size="11" font-weight="800" letter-spacing="4" font-family="Arial, Helvetica, sans-serif">BEIRUT · EST. 2026</text>
+            <text class="est" x="300" y="660" text-anchor="middle" fill="rgba(231,214,192,.6)">BEIRUT · EST. 2026</text>
           </svg>
         </div>
       </section>
@@ -629,119 +222,180 @@
       <div class="ticker" aria-hidden="true">
         <div class="ticker-track">
           <div class="ticker-group">
-            <span>AJEENTY · Now open · Ras El Nabeh · Beirut</span>
-            <span>Man’oushe · Mo3ajanat · Fresh dough</span>
-            <span>Order on WhatsApp · +961 76 770 026</span>
+            <span data-i18n="tk1">AJEENTY · Ras El Nabeh · Beirut</span>
+            <span data-i18n="tk2">Man’oushe · Mo3ajanat · Fresh dough</span>
+            <span data-i18n="tk3">Mon–Sat · 7 AM – 8 PM</span>
+            <span data-i18n="tk4">Order online · pickup &amp; delivery</span>
           </div>
           <div class="ticker-group">
-            <span>AJEENTY · Now open · Ras El Nabeh · Beirut</span>
-            <span>Man’oushe · Mo3ajanat · Fresh dough</span>
-            <span>Order on WhatsApp · +961 76 770 026</span>
+            <span data-i18n="tk1">AJEENTY · Ras El Nabeh · Beirut</span>
+            <span data-i18n="tk2">Man’oushe · Mo3ajanat · Fresh dough</span>
+            <span data-i18n="tk3">Mon–Sat · 7 AM – 8 PM</span>
+            <span data-i18n="tk4">Order online · pickup &amp; delivery</span>
           </div>
         </div>
       </div>
 
-      <section class="info" aria-label="About and contact">
-        <div class="info-main">
-          <p class="kicker">The neighborhood oven</p>
-          <h2>Fresh dough.<br>Hot oven.<br>That’s the point.</h2>
-          <p>AJEENTY is open in Ras El Nabeh, Beirut, near Bechara El Khoury and Al Amliyeh School. Order for delivery or pick it up hot from the counter.</p>
+      <section class="oven" id="oven" aria-labelledby="oven-title">
+        <div class="oven-head">
+          <div>
+            <p class="kicker" data-i18n="ovenKicker">On the menu</p>
+            <h2 class="title" id="oven-title" data-i18n="ovenTitle">Out of the oven.</h2>
+            <p data-i18n="ovenP">A few favourites from the furn. Every man’oushe comes as a man’oushe or a mashrouha.</p>
+          </div>
+          <a class="link-arrow" href="menu/index.html"><span data-i18n="fullMenu">See the full menu</span> <span class="ar" aria-hidden="true">→</span></a>
         </div>
 
-        <div class="contact">
-          <div>
-            <p class="kicker">Order &amp; say marhaba</p>
-            <a class="big" href="https://wa.me/96176770026?text=Marhaba%20AJEENTY!" target="_blank" rel="noopener">+961 76 770 026</a>
-            <p class="note">Message us on WhatsApp to order, ask what’s coming out of the oven, or plan a group breakfast.</p>
-            <a class="btn btn-wa" href="https://wa.me/96176770026?text=Marhaba%20AJEENTY!" target="_blank" rel="noopener">
-              <svg class="wa-icon" aria-hidden="true"><use href="#wa"/></svg>Message on WhatsApp
-            </a>
+        <!-- Shop photos: shown only when data-photos="on" and the files exist in /photos/ -->
+        <div class="photo-band">
+          <figure><img data-src="photos/oven.jpg" alt="AJEENTY’s oven" width="1600" height="1000" loading="lazy" data-i18n-attr="alt:altOven"><figcaption data-i18n="capOven">The oven</figcaption></figure>
+          <figure><img data-src="photos/counter.jpg" alt="The AJEENTY counter in Ras El Nabeh" width="1600" height="1000" loading="lazy" data-i18n-attr="alt:altCounter"><figcaption data-i18n="capCounter">The counter</figcaption></figure>
+        </div>
+
+        <ul class="dishes">
+          <li class="dish"><a href="menu/index.html#it-thyme">
+            <div class="media glow-tile"><img class="art" src="img/menu/thyme.svg" alt="" width="230" height="230" loading="lazy"><img class="photo" data-src="photos/thyme.jpg" alt="" loading="lazy"></div>
+            <div class="body"><h3 data-i18n="dThyme">Thyme</h3><p class="alt" lang="ar" data-alt="dThyme">زعتر</p><p class="price"><span><span data-i18n="from">from</span> 80,000 <small data-i18n="lbp">LBP</small></span><span class="go" data-i18n="view">View</span></p></div>
+          </a></li>
+          <li class="dish"><a href="menu/index.html#it-akawi">
+            <div class="media glow-tile"><img class="art" src="img/menu/akawi.svg" alt="" width="230" height="230" loading="lazy"><img class="photo" data-src="photos/akawi.jpg" alt="" loading="lazy"></div>
+            <div class="body"><h3 data-i18n="dAkawi">Cheese akawi</h3><p class="alt" lang="ar" data-alt="dAkawi">جبنة عكاوي</p><p class="price"><span><span data-i18n="from">from</span> 250,000 <small data-i18n="lbp">LBP</small></span><span class="go" data-i18n="view">View</span></p></div>
+          </a></li>
+          <li class="dish"><a href="menu/index.html#it-doublex">
+            <div class="media glow-tile"><span class="tag" data-i18n="tagHalf">Half &amp; half</span><img class="art" src="img/menu/doublex.svg" alt="" width="230" height="230" loading="lazy"><img class="photo" data-src="photos/doublex.jpg" alt="" loading="lazy"></div>
+            <div class="body"><h3 data-i18n="dDoublex">Doublex (cheese &amp; thyme)</h3><p class="alt" lang="ar" data-alt="dDoublex">دوبليكس (جبنة وزعتر)</p><p class="price"><span><span data-i18n="from">from</span> 450,000 <small data-i18n="lbp">LBP</small></span><span class="go" data-i18n="view">View</span></p></div>
+          </a></li>
+          <li class="dish"><a href="menu/index.html#it-keshek">
+            <div class="media glow-tile"><img class="art" src="img/menu/keshek.svg" alt="" width="230" height="230" loading="lazy"><img class="photo" data-src="photos/keshek.jpg" alt="" loading="lazy"></div>
+            <div class="body"><h3 data-i18n="dKeshek">Keshek</h3><p class="alt" lang="ar" data-alt="dKeshek">كشك</p><p class="price"><span><span data-i18n="from">from</span> 200,000 <small data-i18n="lbp">LBP</small></span><span class="go" data-i18n="view">View</span></p></div>
+          </a></li>
+          <li class="dish"><a href="menu/index.html#it-lahme">
+            <div class="media glow-tile"><img class="art" src="img/menu/lahme.svg" alt="" width="230" height="230" loading="lazy"><img class="photo" data-src="photos/lahme.jpg" alt="" loading="lazy"></div>
+            <div class="body"><h3 data-i18n="dLahme">Lahme baajin</h3><p class="alt" lang="ar" data-alt="dLahme">لحم بعجين</p><p class="price"><span><span data-i18n="from">from</span> 280,000 <small data-i18n="lbp">LBP</small></span><span class="go" data-i18n="view">View</span></p></div>
+          </a></li>
+          <li class="dish"><a href="menu/index.html#it-mixed">
+            <div class="media glow-tile"><span class="tag" data-i18n="tagDozen">By the dozen</span><img class="art" src="img/menu/mixed.svg" alt="" width="230" height="230" loading="lazy"><img class="photo" data-src="photos/mixed.jpg" alt="" loading="lazy"></div>
+            <div class="body"><h3 data-i18n="dMixed">Mixed dozen pastries</h3><p class="alt" lang="ar" data-alt="dMixed">معجنات دزينة مشكل</p><p class="price"><span>550,000 <small data-i18n="lbp">LBP</small></span><span class="go" data-i18n="view">View</span></p></div>
+          </a></li>
+        </ul>
+
+        <div class="oven-foot">
+          <div class="band band-terra">
+            <svg aria-hidden="true"><use href="#i-wheat"/></svg>
+            <p><span data-i18n="jreesh">Any item can be made on jreesh (whole-wheat) dough</span> <b class="ltr">+100,000 <span data-i18n="lbp">LBP</span></b></p>
           </div>
-          <div class="email">
-            <span>Email</span>
-            <a href="mailto:marhaba@ajeenty.com">marhaba@ajeenty.com</a>
+          <div class="band band-sage">
+            <svg aria-hidden="true"><use href="#i-box"/></svg>
+            <p data-i18n="group">Feeding a crowd? Mo3ajanat come by the dozen or boxed.</p>
+            <span class="act"><a class="btn" href="menu/index.html#sec-moajanat" data-i18n="planIt">Order by the dozen</a></span>
           </div>
         </div>
       </section>
 
-      <section class="map-section" id="visit" aria-label="Find AJEENTY">
-        <a class="map" id="mapLink" href="https://maps.app.goo.gl/8EuMrwrfKrTEsUth9" target="_blank" rel="noopener" aria-label="Open AJEENTY’s location in Google Maps">
-          <div id="map" aria-hidden="true"></div>
-          <div class="map-fallback" aria-hidden="true">
-            <div class="pin">
-              <svg viewBox="0 0 46 58"><path d="M4 54 V22 A19 19 0 0 1 42 22 V54 Z" fill="#2E3A2F" stroke="#E7D6C0" stroke-width="2.5"/><path d="M23 40 C14 34 12 28 15.5 25 C18.5 22.5 22 24 23 27 C24 24 27.5 22.5 30.5 25 C34 28 32 34 23 40 Z" fill="#B8663E"/></svg>
+      <section class="info" aria-label="About and contact" data-i18n-attr="aria-label:infoLabel">
+        <div class="info-main">
+          <p class="kicker" data-i18n="infoKicker">The neighborhood oven</p>
+          <h2 class="title" data-i18n-html="infoTitle">Fresh dough.<br>Hot oven.<br>That’s the point.</h2>
+          <p data-i18n="infoP">AJEENTY is in Ras El Nabeh, Beirut, near Bechara El Khoury and Al Amliyeh School. Pick it up hot from the counter, or have it delivered.</p>
+        </div>
+
+        <div class="contact" id="contact">
+          <p class="kicker" data-i18n="contactKicker">Questions? Say marhaba</p>
+          <a class="big" href="https://wa.me/96176770026?text=Marhaba%20AJEENTY!" data-wa="hello" target="_blank" rel="noopener">76 77 00 26</a>
+          <p class="note" data-i18n="contactNote">WhatsApp or call to order delivery, ask what’s coming out of the oven, or plan a group breakfast.</p>
+          <ul class="lines">
+            <li>
+              <span class="lbl" data-i18n="lblMobile">Mobile · WhatsApp</span>
+              <a class="val ltr" href="tel:+96176770026">76 77 00 26</a>
+              <span class="acts">
+                <a class="chip" href="tel:+96176770026"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="call">Call</span></a>
+                <a class="chip" href="https://wa.me/96176770026?text=Marhaba%20AJEENTY!" data-wa="hello" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+              </span>
+            </li>
+            <li>
+              <span class="lbl" data-i18n="lblLand">Landline</span>
+              <a class="val ltr" href="tel:+9611633433">01 633 433</a>
+              <span class="acts"><a class="chip" href="tel:+9611633433"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="call">Call</span></a></span>
+            </li>
+            <li>
+              <span class="lbl" data-i18n="lblEmail">Email</span>
+              <a class="val mail ltr" href="mailto:marhaba@ajeenty.com">marhaba@ajeenty.com</a>
+              <span class="acts"><a class="chip" href="mailto:marhaba@ajeenty.com"><svg aria-hidden="true"><use href="#i-mail"/></svg><span data-i18n="write">Email</span></a></span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="visit" id="visit" aria-labelledby="visit-title">
+        <div class="visit-grid">
+          <div class="visit-card">
+            <div>
+              <p class="kicker" data-i18n="visitKicker">Find us</p>
+              <h2 class="title" id="visit-title" data-i18n="visitTitle">Come by the counter.</h2>
+            </div>
+            <p class="addr"><strong data-i18n="addrA">Ras El Nabeh, Beirut</strong><span data-i18n="addrB">Near Bechara El Khoury and Al Amliyeh School.</span></p>
+            <dl class="hours" aria-label="Opening hours" data-i18n-attr="aria-label:hoursLabel">
+              <div data-days="1,2,3,4,5,6"><dt data-i18n="monSat" data-today="Today">Monday – Saturday</dt><dd data-i18n="monSatH">7:00 AM – 8:00 PM</dd></div>
+              <div data-days="0"><dt data-i18n="sun" data-today="Today">Sunday</dt><dd data-i18n="closed">Closed</dd></div>
+            </dl>
+            <div class="acts">
+              <a class="btn btn-sage" href="https://maps.app.goo.gl/8EuMrwrfKrTEsUth9" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Get directions</span></a>
+              <a class="btn btn-line" href="tel:+96176770026"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="callUs">Call us</span></a>
             </div>
           </div>
-          <span class="map-hint" aria-hidden="true">Tap to open in Google Maps ↗</span>
-          <div class="map-card">
-            <p class="kicker">Find us</p>
-            <strong>AJEENTY<br>Ras El Nabeh, Beirut</strong>
-            <p>Near Bechara El Khoury and Al Amliyeh School.</p>
-            <span class="go">Get directions <span aria-hidden="true">↗</span></span>
-          </div>
-        </a>
-        <div class="map-credit">Map © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a></div>
+          <a class="map" id="mapLink" href="https://maps.app.goo.gl/8EuMrwrfKrTEsUth9" target="_blank" rel="noopener" aria-label="Open AJEENTY’s location in Google Maps" data-i18n-attr="aria-label:mapAria">
+            <div id="map" aria-hidden="true"></div>
+            <div class="map-fallback" aria-hidden="true">
+              <div class="pin"><svg viewBox="0 0 46 58"><path d="M4 54 V22 A19 19 0 0 1 42 22 V54 Z" fill="#2E3A2F" stroke="#E7D6C0" stroke-width="2.5"/><path d="M23 40 C14 34 12 28 15.5 25 C18.5 22.5 22 24 23 27 C24 24 27.5 22.5 30.5 25 C34 28 32 34 23 40 Z" fill="#B8663E"/></svg></div>
+            </div>
+            <span class="map-hint" aria-hidden="true" data-i18n="mapHint">Open in Google Maps ↗</span>
+          </a>
+        </div>
+        <p class="map-credit">Map © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a></p>
       </section>
     </main>
 
-    <footer>
-      <img class="footer-logo" src="https://ajeenty.com/AJEENTY_EN_FullColor.svg" alt="AJEENTY" width="310" height="82" loading="lazy" />
-      <div class="footer-right">
-        <a href="https://wa.me/96176770026?text=Marhaba%20AJEENTY!" target="_blank" rel="noopener">WhatsApp +961 76 770 026</a><br>
-        <a href="https://maps.app.goo.gl/8EuMrwrfKrTEsUth9" target="_blank" rel="noopener">Ras El Nabeh · Beirut</a><br>
-        Now open · © 2026 AJEENTY
+    <footer class="foot">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <svg class="wm" viewBox="0 0 338 68" role="img" aria-label="AJEENTY"><use href="#i-wordmark"/></svg>
+          <span class="ar-wm" lang="ar">عجينتي</span>
+          <p data-i18n="footTag">Fresh dough. Hot oven.</p>
+        </div>
+        <div class="foot-cols">
+          <div>
+            <h2 data-i18n="fVisit">Visit</h2>
+            <p data-i18n-html="fAddr">Ras El Nabeh, Beirut<br>Near Bechara El Khoury &amp; Al Amliyeh School</p>
+          </div>
+          <div>
+            <h2 data-i18n="fHours">Hours</h2>
+            <p data-i18n-html="fHoursP">Monday – Saturday<br>7:00 AM – 8:00 PM<br>Sunday closed</p>
+          </div>
+          <div>
+            <h2 data-i18n="fOrder">Call us</h2>
+            <a class="tel" href="tel:+96176770026"><span class="ltr">76 77 00 26</span><small data-i18n="fMobile">Mobile &amp; WhatsApp</small></a>
+            <a class="tel" href="tel:+9611633433"><span class="ltr">01 633 433</span><small data-i18n="fLand">Landline</small></a>
+          </div>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <ul class="foot-links">
+          <li><a href="menu/index.html" data-i18n="orderOnline">Order online</a></li>
+          <li><a href="menu/index.html" data-i18n="navMenu">Menu</a></li>
+          <li><a href="https://wa.me/96176770026?text=Marhaba%20AJEENTY!" data-wa="hello" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="https://maps.app.goo.gl/8EuMrwrfKrTEsUth9" target="_blank" rel="noopener" data-i18n="gmaps">Google Maps</a></li>
+          <li><a href="mailto:marhaba@ajeenty.com">marhaba@ajeenty.com</a></li>
+        </ul>
+        <small>© 2026 AJEENTY · <span lang="ar">عجينتي</span></small>
       </div>
     </footer>
   </div>
 
-  <a class="wa-float" href="https://wa.me/96176770026?text=Marhaba%20AJEENTY!" target="_blank" rel="noopener" aria-label="Order on WhatsApp">
-    <svg class="wa-icon" aria-hidden="true"><use href="#wa"/></svg><span class="label">Order</span>
+  <a class="wa-float" id="waFloat" href="menu/index.html">
+    <svg class="ic" aria-hidden="true"><use href="#i-bag"/></svg><span data-i18n="orderOnline">Order online</span>
   </a>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
-  <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      var wrap = document.getElementById('mapLink');
-      if (typeof L === 'undefined') { wrap.classList.add('no-map'); return; }
-
-      var spot = [33.8799516, 35.5068473];
-      var map = L.map('map', {
-        center: spot,
-        zoom: 16,
-        zoomControl: false,
-        attributionControl: false,
-        dragging: false,
-        scrollWheelZoom: false,
-        doubleClickZoom: false,
-        boxZoom: false,
-        keyboard: false,
-        touchZoom: false,
-        tap: false
-      });
-
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
-        maxZoom: 19
-      }).addTo(map);
-
-      var pin = L.divIcon({
-        className: '',
-        iconSize: [46, 58],
-        iconAnchor: [23, 56],
-        html: '<div class="pin"><svg viewBox="0 0 46 58"><path d="M4 54 V22 A19 19 0 0 1 42 22 V54 Z" fill="#2E3A2F" stroke="#E7D6C0" stroke-width="2.5"/><path d="M23 40 C14 34 12 28 15.5 25 C18.5 22.5 22 24 23 27 C24 24 27.5 22.5 30.5 25 C34 28 32 34 23 40 Z" fill="#B8663E"/></svg></div>'
-      });
-      L.marker(spot, { icon: pin, interactive: false, keyboard: false }).addTo(map);
-
-      // Keep the pin clear of the address card on wide screens
-      function frame() {
-        var w = wrap.clientWidth;
-        map.setView(spot, 16, { animate: false });
-        if (w > 620) map.panBy([-w * 0.12, 0], { animate: false });
-        else map.panBy([0, 70], { animate: false });
-      }
-      frame();
-      window.addEventListener('resize', frame);
-    });
-  </script>
+  <script src="assets/common.js" defer></script>
+  <script src="assets/home.js" defer></script>
 </body>
 </html>
