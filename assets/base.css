@@ -78,13 +78,15 @@ img,svg{display:block;max-width:100%}
 .band .act .btn:hover{background:var(--terra);color:#FFF7EC}
 
 /* live open/closed status */
-.status{display:inline-flex;align-items:center;gap:8px;font:800 11px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--terra-ink);white-space:nowrap}
+.status{position:relative;z-index:0;display:inline-flex;align-items:center;gap:8px;font:800 11px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--terra-ink);white-space:nowrap}
 :root[lang="ar"] .status{letter-spacing:0;font-size:13px;font-weight:700}
 .status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--terra);flex:none}
-.status.open::before{animation:ping 2s infinite}
+/* The pulse is its own ring under the dot, animated with transform + opacity so it runs on the GPU.
+   (Animating box-shadow repainted the whole page every frame and kept phones busy.) */
+.status.open::after{content:"";position:absolute;z-index:-1;inset-inline-start:0;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--terra);opacity:0;animation:ping 2s infinite}
 .status.closed{color:var(--muted)}
 .status.closed::before{background:#9AA39B}
-@keyframes ping{0%{box-shadow:0 0 0 0 rgba(184,102,62,.55)}70%{box-shadow:0 0 0 9px rgba(184,102,62,0)}100%{box-shadow:0 0 0 0 rgba(184,102,62,0)}}
+@keyframes ping{0%{transform:scale(1);opacity:.55}70%{transform:scale(3.25);opacity:0}100%{transform:scale(1);opacity:0}}  /* 8px dot + 9px ring each side */
 
 /* ---------- header ---------- */
 .nav{position:sticky;top:0;z-index:1500;height:var(--nav-h);display:flex;align-items:center;gap:20px;padding:0 32px;background:rgba(244,235,221,.94);-webkit-backdrop-filter:saturate(1.2) blur(8px);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--line)}
@@ -134,9 +136,9 @@ img,svg{display:block;max-width:100%}
 /* ---------- "your order" chip: follows an active order on every page ---------- */
 .order-chip{position:fixed;z-index:1950;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:inline-flex;align-items:center;gap:10px;min-height:50px;max-width:calc(100vw - 28px);padding:0 20px;border:0;border-radius:99px;background:var(--terra);color:#FFF7EC;font:800 13px/1.2 var(--f-body);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 14px 30px -10px rgba(30,37,31,.5);cursor:pointer;animation:chip-in .45s cubic-bezier(.2,.9,.3,1.2)}
 :root[lang="ar"] .order-chip{letter-spacing:0;font-size:15px;font-weight:700;text-transform:none}
-.order-chip .dot{width:9px;height:9px;border-radius:50%;background:#FFF7EC;flex:none;animation:ping 2s infinite}
+.order-chip .dot{width:9px;height:9px;border-radius:50%;background:#FFF7EC;flex:none}
 .order-chip.final{background:var(--sage)}
-.order-chip.final .dot{animation:none;background:var(--terra-lt)}
+.order-chip.final .dot{background:var(--terra-lt)}
 .order-chip:hover{filter:brightness(1.06)}
 @keyframes chip-in{from{transform:translate(-50%,140%)}}
 body.has-order .wa-float{display:none}
@@ -211,7 +213,7 @@ html.arriving .into-glow{opacity:1}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .status::before,.order-chip,.order-chip .dot{animation:none}
+  .status::after,.order-chip{animation:none}
   .btn,.link-arrow .ar,.wa-float{transition:none}
   .into,html.arriving .into{display:none!important}
 }
