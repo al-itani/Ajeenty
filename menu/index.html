@@ -1198,7 +1198,7 @@ form.addEventListener('submit', async e => {
     state.tray = []; save(); update();
     form.reset(); delete form.dataset.touched;
     const u = new URL(location.href); u.searchParams.set('order', res.id); history.replaceState(null, '', u);
-    setView('track'); startPolling();
+    setView('track'); startPolling(false);
     announce(T[L()].ordered(res.id));
   } catch (err) {
     // Sheet failed: the order still reaches you on WhatsApp if that tab is open.
@@ -1240,7 +1240,8 @@ function renderChip() {
   $('#chipTxt').textContent = `${t('yourOrder')} · ${AJ.order.chipLabel(o.status || 'Received', L())}`;
   chip.classList.toggle('final', AJ.order.isFinal(o.status));
 }
-function startPolling() {
+// checkNow = false right after sending: the order was just saved as "Received", so the first check can wait.
+function startPolling(checkNow = true) {
   clearInterval(pollT);
   const o = AJ.order.get();
   if (!o || AJ.order.isFinal(o.status)) return;
@@ -1250,7 +1251,7 @@ function startPolling() {
     if (!n || AJ.order.isFinal(n.status)) clearInterval(pollT);
   };
   pollT = setInterval(tick, o.preview ? 3000 : 30000);   // the Sheet is checked every 30 seconds
-  tick();
+  if (checkNow) tick();
 }
 document.addEventListener('visibilitychange', () => { if (!document.hidden) startPolling(); });
 $('#orderBar').addEventListener('click', () => openChit('form'));
