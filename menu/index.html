@@ -430,7 +430,7 @@
 (() => {
 'use strict';
 const $ = s => document.querySelector(s);
-const WA = '96176770026';
+const WA = AJ.WA;
 const JREESH = 100000;
 const LBP = n => Number(n).toLocaleString('en-US');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -439,22 +439,18 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* ---------------- words ---------------- */
 const T = {
   en:{
-    tagline:'Hot from the oven · Ras El Nabeh, Beirut', open:'Open now', closedNow:'Closed now', home:'Home', skip:'Skip to the menu', h1:'The <span class="t">menu.</span>', title:'Menu | AJEENTY, Ras El Nabeh, Beirut', hours:'Open Monday – Saturday, 7 AM – 8 PM. Closed Sunday.',
+    skip:'Skip to the menu', h1:'The <span class="t">menu.</span>', title:'Menu | AJEENTY, Ras El Nabeh, Beirut',
     jreesh:'Any item can be made with jreesh (whole-wheat) dough', jreeshHow:'Switch it on for any line in your tray.',
     manoushe:"Man'oushe", mashrouha:'Mashrouha', dozen:'Dozen', jreeshDough:'Jreesh dough', lbp:'LBP',
-    tray:'Your tray', order:'Order on WhatsApp', orderShort:'Order', clear:'Clear tray', clearConfirm:'Tap again to clear',
+    tray:'Your tray', orderShort:'Order', clear:'Clear tray', clearConfirm:'Tap again to clear',
     copy:'Copy order', copied:'Copied', total:'Total', note:'Prices in Lebanese pounds.',
     empty:'Nothing on the tray yet. Tap the peel on any item and it comes out of the oven onto your tray.',
-    close:'Close', flavor:'Flavor', jreeshTag:'Jreesh', each:'each',
-    visit:'Find us', address:'Ras El Nabeh, Beirut. Near Bechara El Khoury and Al Amliyeh School.',
-    addressAlt:'راس النبع - بيروت - قرب ساحة البشارة الخوري ومدرسة العاملية',
-    takeaway:'Takeaway & delivery. For delivery, call or WhatsApp 76 77 00 26.', maps:'Google Maps', landline:'Landline', mobile:'Mobile · WhatsApp · Delivery', email:'Email',
-    copyNum:'Copy', prices:'All prices in Lebanese pounds (LBP).', slip:'Order slip',
+    close:'Close', flavor:'Flavor', jreeshTag:'Jreesh', each:'each', slip:'Order slip',
     add:(n,v,p)=>`Bake ${n}${v?', '+v:''}, ${p} LBP`, grab:(n,p)=>`Add ${n}, ${p} LBP`, remove:n=>`Remove one ${n}`,
     added:(n,c,t)=>`${n} added. ${c} on your tray, ${t} LBP.`, items:c=>c===1?'1 item':`${c} items`,
     heatHint:'Tap a peel to bake your first one', heatNext:(n,x)=>`${n} more for ${x}`, heatMax:'Oven at full blast',
     waHead:"Marhaba AJEENTY! I'd like to order:", waName:'Name:', waHow:'Pickup or delivery:', waTime:'Time:', waAddr:'Delivery address:',
-    navMenu:'Menu', navVisit:'Visit us', orderWa:'Order on WhatsApp', askWa:'Questions on WhatsApp', kicker:'The full menu', lede:'Tap the peel on anything you fancy. It bakes in the oven above and lands on your tray. Then order right here, for pickup or delivery.',
+    navMenu:'Menu', navVisit:'Visit us', askWa:'Questions on WhatsApp', kicker:'The full menu', lede:'Tap the peel on anything you fancy. It bakes in the oven above and lands on your tray. Then order right here, for pickup or delivery.',
     footTag:'Fresh dough. Hot oven.', fVisit:'Visit', fAddr:'Ras El Nabeh, Beirut<br>Near Bechara El Khoury &amp; Al Amliyeh School', fHours:'Hours', fHoursP:'Monday – Saturday<br>7:00 AM – 8:00 PM<br>Sunday closed', fOrder:'Call us', fMobile:'Mobile & WhatsApp', fLand:'Landline', gmaps:'Google Maps',
     placeOrder:'Place order', details:'Your details', confirmed:'Order confirmed', orderNo:'Order', back:'Back',
     pickup:'Pickup', delivery:'Delivery', fType:'Pickup or delivery', fName:'Your name', fPhone:'Phone number', fAddress:'Delivery address', fAddressPh:'Area, street, building, floor', fTime:'Pickup time', fNote:'Notes (optional)', fNotePh:'Extra crispy, no onions…',
@@ -469,23 +465,19 @@ const T = {
     errSendWa:'We couldn’t save your order online, so it opened in WhatsApp instead. Press send there and we’ll take it from there.'
   },
   ar:{
-    tagline:'طازة من الفرن · راس النبع، بيروت', open:'فاتحين هلّق', closedNow:'مسكّرين هلّق', home:'الرئيسية', skip:'انتقل للمنيو', h1:'منيو <span class="t">الفرن.</span>', title:'المنيو | عجينتي، راس النبع، بيروت', hours:'فاتحين من الإثنين للسبت، 7 الصبح – 8 المسا. الأحد مسكّرين.',
+    skip:'انتقل للمنيو', h1:'منيو <span class="t">الفرن.</span>', title:'المنيو | عجينتي، راس النبع، بيروت',
     jreesh:'أي صنف منحضّره على عجينة الجريش (قمحة كاملة)', jreeshHow:'فعّلها لأي صنف بصينيتك.',
     manoushe:'منقوشة', mashrouha:'مشروحة', dozen:'دزينة', jreeshDough:'عجينة جريش', lbp:'ل.ل.',
-    tray:'صينيتك', order:'اطلب عالواتساب', orderShort:'اطلب', clear:'فضّي الصينية', clearConfirm:'اكبس كمان مرة للتأكيد',
+    tray:'صينيتك', orderShort:'اطلب', clear:'فضّي الصينية', clearConfirm:'اكبس كمان مرة للتأكيد',
     copy:'انسخ الطلب', copied:'انتسخ', total:'المجموع', note:'الأسعار بالليرة اللبنانية.',
     empty:'الصينية فاضية. اكبس الزر حد أي صنف وبيطلع من الفرن لصينيتك.',
-    close:'سكّر', flavor:'النكهة', jreeshTag:'جريش', each:'الحبة',
-    visit:'زورونا', address:'راس النبع - بيروت - قرب ساحة البشارة الخوري ومدرسة العاملية',
-    addressAlt:'Ras El Nabeh, Beirut. Near Bechara El Khoury and Al Amliyeh School.',
-    takeaway:'تيك أواي ودليفري. للدليفري اتصل أو ابعت واتساب على 76 77 00 26.', maps:'خرائط Google', landline:'أرضي', mobile:'خلوي · واتساب · دليفري', email:'إيميل',
-    copyNum:'نسخ', prices:'كل الأسعار بالليرة اللبنانية.', slip:'ورقة الطلب',
+    close:'سكّر', flavor:'النكهة', jreeshTag:'جريش', each:'الحبة', slip:'ورقة الطلب',
     add:(n,v,p)=>`خبّز ${n}${v?'، '+v:''}، ${p} ل.ل.`, grab:(n,p)=>`زيد ${n}، ${p} ل.ل.`, remove:n=>`شيل واحد ${n}`,
     added:(n,c,t)=>`زدنا ${n}. عندك ${c} بالصينية، ${t} ل.ل.`,
     items:c=>c===1?'صنف واحد':c===2?'صنفين':c<=10?`${c} أصناف`:`${c} صنف`,
     heatHint:'اكبس عأي صنف لتبلّش', heatNext:(n,x)=>`${n} كمان ليصير ${x}`, heatMax:'الفرن عالآخر',
     waHead:'مرحبا عجينتي! بدي اطلب:', waName:'الاسم:', waHow:'استلام أو دليفري:', waTime:'الوقت:', waAddr:'عنوان الدليفري:',
-    navMenu:'المنيو', navVisit:'زورونا', orderWa:'اطلب عالواتساب', askWa:'اسألنا عالواتساب', kicker:'المنيو كلّه', lede:'اكبس عالمطرحة حد أي صنف بيعجبك. بيخبز بالفرن فوق وبينزل عصينيتك. وبعدين اطلب من هون، استلام أو دليفري.',
+    navMenu:'المنيو', navVisit:'زورونا', askWa:'اسألنا عالواتساب', kicker:'المنيو كلّه', lede:'اكبس عالمطرحة حد أي صنف بيعجبك. بيخبز بالفرن فوق وبينزل عصينيتك. وبعدين اطلب من هون، استلام أو دليفري.',
     footTag:'عجينة طازة. فرن حامي.', fVisit:'العنوان', fAddr:'راس النبع، بيروت<br>قرب ساحة البشارة الخوري ومدرسة العاملية', fHours:'الدوام', fHoursP:'الإثنين – السبت<br>7:00 الصبح – 8:00 المسا<br>الأحد مسكّرين', fOrder:'اتصل فينا', fMobile:'خلوي وواتساب', fLand:'أرضي', gmaps:'Google Maps',
     placeOrder:'اطلب', details:'تفاصيلك', confirmed:'تأكّد طلبك', orderNo:'طلب رقم', back:'رجوع',
     pickup:'استلام من المحل', delivery:'دليفري', fType:'استلام أو دليفري', fName:'الاسم', fPhone:'رقم التلفون', fAddress:'عنوان الدليفري', fAddressPh:'المنطقة، الشارع، البناية، الطابق', fTime:'وقت الاستلام', fNote:'ملاحظات (اختياري)', fNotePh:'مقرمشة زيادة، بلا بصل…',
@@ -1027,13 +1019,12 @@ function buildScene() {
 /* ---------------- chit ---------------- */
 const sheet = $('#sheet'), linesEl = $('#lines');
 function renderChit() {
-  const lg = L();
   if (!state.tray.length) linesEl.innerHTML = `<p class="empty">${esc(t('empty'))}</p>`;
   else linesEl.innerHTML = state.tray.map((l, i) => {
     const it = ITEMS[l.id], id = `jr-${l.id}-${l.v}-${l.f ?? 'x'}`;
     let jr = '';
     if (it.jr) jr = `<span class="jr fixed">${esc(t('jreeshDough'))}</span>`;
-    else if (!it.cold) jr = `<label class="jr${l.j ? ' on' : ''}" for="${id}"><input type="checkbox" id="${id}" data-jr="${i}"${l.j ? ' checked' : ''}><span>${esc(t('jreeshTag'))} +100,000</span></label>`;
+    else if (!it.cold) jr = `<label class="jr${l.j ? ' on' : ''}" for="${id}"><input type="checkbox" id="${id}" data-jr="${i}"${l.j ? ' checked' : ''}><span>${esc(t('jreeshTag'))} +${LBP(JREESH)}</span></label>`;
     return `<div class="line"><span class="q">${l.q}×</span><div class="ln"><span class="n">${esc(lineName(l))}</span><span class="sub">${LBP(unit(l))} ${t('lbp')} ${t('each')}</span></div><b class="lt">${LBP(unit(l)*l.q)}</b><div class="ops">${jr}<div class="step"><button type="button" data-step="-1" data-i="${i}" aria-label="−">−</button><span>${l.q}</span><button type="button" data-step="1" data-i="${i}" aria-label="+">+</button></div></div></div>`;
   }).join('');
   $('#totVal').innerHTML = `${LBP(total())}<small>${t('lbp')}</small>`;
@@ -1053,7 +1044,6 @@ function disarm() { clearTimeout(armT); $('#clearBtn').classList.remove('armed')
 
 /* ---------------- ordering: details form → Google Sheet → live tracker ---------------- */
 const chit = $('.chit'), form = $('#vForm'), CUST_KEY = 'ajeenty-customer-v1';
-const EN_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 let view = 'tray', sending = false, pollT = 0;
 
 function setView(v) {
@@ -1088,7 +1078,7 @@ function timeSlots() {
     let d = 0;
     if (!(h && mins < h[0] * 60)) { d = 1; while (d < 8 && !AJ.HOURS[(day + d) % 7]) d++; }
     const nd = (day + d) % 7, H = AJ.HOURS[nd];
-    const en = d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : EN_DAYS[nd], lbl = d === 0 ? W.today : d === 1 ? W.tomorrow : W.days[nd];
+    const en = d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : T.en.days[nd], lbl = d === 0 ? W.today : d === 1 ? W.tomorrow : W.days[nd];
     out.push({ v: 'When you open', label: W.whenOpen });
     for (let m = H[0] * 60 + 15; m <= H[1] * 60 - 15; m += 15) out.push({ v: `${en} ${clock(m, 'en')}`, label: `${lbl} ${clock(m, lg)}` });
   }

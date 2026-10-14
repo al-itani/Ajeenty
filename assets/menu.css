@@ -172,8 +172,8 @@ html.locked{overflow:hidden}
 .chit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .chit-eyebrow{margin:0;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 :root[lang="ar"] .chit-eyebrow{letter-spacing:0;font-size:12px}
-.chit h2{margin:2px 0 0;font-family:var(--f-display);font-weight:900;font-stretch:120%;font-size:30px;line-height:1.05;text-transform:uppercase}
-:root[lang="ar"] .chit h2{text-transform:none;font-weight:800}
+.chit h2{margin:2px 0 0;font:900 32px/1.05 var(--f-display);letter-spacing:-.03em;text-transform:none}  /* same type as the rest of the site */
+:root[lang="ar"] .chit h2{font-weight:800;letter-spacing:0}
 .x{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:20px;line-height:1;cursor:pointer}
 .lines{flex:1;overflow:auto;margin:14px -18px 0;padding:0 18px;border-top:2px dashed var(--line);overscroll-behavior:contain}
 .line{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:baseline;padding:13px 0;border-bottom:1px dashed var(--line)}
@@ -209,14 +209,11 @@ html.locked{overflow:hidden}
 .flyer svg{width:100%;height:100%;overflow:visible}
 
 @media (prefers-reduced-motion:reduce){
-  .flame,.ember,.smoke path,#steam path,.nowopen i,.art.hop,.peelbtn.shove svg,.traybadge.bump,.traybar-in,.chit,.sheet-bg{animation:none}
+  .flame,.ember,.smoke path,#steam path,.art.hop,.peelbtn.shove svg,.traybadge.bump,.traybar-in,.chit,.sheet-bg{animation:none}
   .ember{opacity:0}.smoke path{opacity:.3}#steam path{opacity:.6}
-  .fire,.needle,.door,.scene,.brandrow,.heat-bar i{transition:none}
+  .fire,.needle,.door,.scene,.heat-bar i{transition:none}
 }
 
-/* order slip heading in the same type as the rest of the site */
-.chit h2{font:900 32px/1.05 var(--f-display);letter-spacing:-.03em;text-transform:none;font-stretch:100%}
-:root[lang="ar"] .chit h2{font-weight:800;letter-spacing:0}
 .traybar{z-index:1900}
 .sheet{z-index:2100}
 

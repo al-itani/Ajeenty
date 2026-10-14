@@ -8,10 +8,10 @@
   /* ---------- words ---------- */
   const T = {
     en: {
-      skip: 'Skip to content', navMenu: 'Menu', navVisit: 'Visit us', orderWa: 'Order on WhatsApp', orderShort: 'Order',
+      skip: 'Skip to content', navMenu: 'Menu', navVisit: 'Visit us',
       h1a: 'Beirut,', h1b: 'we’re open.',
       heroP: 'Man’oushe, mo3ajanat and fresh dough, straight from the oven. Order online for pickup or delivery, or grab it hot from the counter.', orderOnline: 'Order online', findUs: 'Find us',
-      seeMenu: 'See the menu', hoursShort: 'Mon–Sat · 7 AM – 8 PM', deliveryShort: 'Pickup & delivery', whereShort: 'Ras El Nabeh, Beirut',
+      hoursShort: 'Mon–Sat · 7 AM – 8 PM', deliveryShort: 'Pickup & delivery', whereShort: 'Ras El Nabeh, Beirut',
       artAlt: 'Illustration of a fresh zaatar and cheese man’oushe steaming under an arched window',
       artLabelA: 'Hot from the oven', artLabelB: 'Ras El Nabeh<br>Beirut',
       tk1: 'AJEENTY · Ras El Nabeh · Beirut', tk2: 'Man’oushe · Mo3ajanat · Fresh dough', tk3: 'Mon–Sat · 7 AM – 8 PM', tk4: 'Order online · pickup & delivery',
@@ -33,10 +33,10 @@
       title: 'AJEENTY | Man’oushe & mo3ajanat in Ras El Nabeh, Beirut'
     },
     ar: {
-      skip: 'انتقل للمحتوى', navMenu: 'المنيو', navVisit: 'زورونا', orderWa: 'اطلب عالواتساب', orderShort: 'اطلب',
+      skip: 'انتقل للمحتوى', navMenu: 'المنيو', navVisit: 'زورونا',
       h1a: 'بيروت،', h1b: 'فتحنا.',
       heroP: 'مناقيش ومعجنات وعجينة طازة، طالعين سخنين من الفرن. اطلب أونلاين استلام أو دليفري، أو مرّ خدهن سخنين من المحل.', orderOnline: 'اطلب أونلاين', findUs: 'كيف توصلنا',
-      seeMenu: 'شوف المنيو', hoursShort: 'الإثنين – السبت · 7 الصبح – 8 المسا', deliveryShort: 'استلام ودليفري', whereShort: 'راس النبع، بيروت',
+      hoursShort: 'الإثنين – السبت · 7 الصبح – 8 المسا', deliveryShort: 'استلام ودليفري', whereShort: 'راس النبع، بيروت',
       artAlt: 'رسمة منقوشة زعتر وجبنة طالعة سخنة تحت قنطرة',
       artLabelA: 'طازة من الفرن', artLabelB: 'راس النبع<br>بيروت',
       tk1: 'عجينتي · راس النبع · بيروت', tk2: 'مناقيش · معجنات · عجينة طازة', tk3: 'الإثنين – السبت · 7 الصبح – 8 المسا', tk4: 'اطلب أونلاين · استلام ودليفري',
@@ -58,7 +58,6 @@
       title: 'عجينتي | مناقيش ومعجنات براس النبع، بيروت'
     }
   };
-
   const root = document.documentElement;
   let lang = 'en';
 
