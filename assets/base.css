@@ -1,157 +1,147 @@
-/* AJEENTY — shared styles for every page (header, footer, buttons, cards, page transition)
-   Brand: Deep Sage #2E3A2F · Warm Beige #E7D6C0 · Terracotta #B8663E (marketing plan, visual identity) */
+/* AJEENTY — shared styles for every page: colours, type, header, footer, buttons, status, page transition.
+   Brand: Deep Sage #2E3A2F · Warm Beige (sand) #E7D6C0 · Terracotta #B8663E · Charcoal #2B2B2B.
+   Two surfaces only: sage (the oven, the frame) and sand (the counter). Terracotta is for the one
+   action on a screen (deepened to #AC5B33 so white text passes contrast) and for brand moments. */
 :root{
   --sage:#2E3A2F;
-  --sage-deep:#263027;
-  --beige:#E7D6C0;
-  --terra:#B8663E;
-  --terra-ink:#99502C;      /* terracotta darkened for small text on cream (WCAG AA) */
-  --terra-lt:#E39A6C;       /* terracotta lightened for text on sage */
-  --ink:#1E251F;
-  --paper:#F4EBDD;
-  --paper-2:#EFE3D1;
-  --card:#FBF6EE;
-  --muted:#56625A;
-  --line:rgba(46,58,47,.20);
-  --max:1420px;
-  --f-display:"Archivo","Arial Black",Impact,system-ui,sans-serif;
-  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --f-ar:"Alexandria","Noto Sans Arabic","Geeza Pro",Tahoma,sans-serif;
-  --nav-h:76px;
-  --wall:#263027;
-  --tile:rgba(244,235,221,.045);
+  --sage-2:#27322A;          /* a step deeper, for panels on sage */
+  --furnace:#1C231D;         /* inside the oven */
+  --sand:#E7D6C0;
+  --sand-2:#DCC8AD;          /* hover / quiet fills on sand */
+  --flour:#F5EDE1;           /* paper: cards, inputs and slips on sand */
+  --terra:#B8663E;           /* brand terracotta: heart, brick, illustrations */
+  --terra-ink:#8E4424;       /* terracotta deep enough for text on sand (4.9:1) and for big terracotta panels */
+  --action:#AC5B33;          /* button fill, white label 4.9:1 */
+  --action-2:#934826;        /* hover */
+  --ink:#2B2B2B;             /* charcoal: text on sand (9.9:1) */
+  --ink-2:#57524A;           /* secondary text on sand (5.3:1) */
+  --on-sage:#E7D6C0;         /* text on sage (8.4:1) */
+  --on-sage-2:#B9AD9A;       /* secondary text on sage (5.4:1) */
+  --ember:#F2A35E;           /* oven light: glows only, never text on sand */
+  --line:rgba(43,43,43,.14);
+  --line-sage:rgba(231,214,192,.16);
+  --f-display:"Reem Kufi","Noto Kufi Arabic","Segoe UI",system-ui,sans-serif;
+  --f-body:"Readex Pro",system-ui,-apple-system,"Segoe UI",Roboto,Tahoma,sans-serif;
+  --max:1360px;
+  --gut:clamp(18px,4vw,56px);
+  --nav-h:72px;
+  --r:14px;
+  /* kept for the menu's oven wall and the page transition */
+  --wall:#27322A;
+  --tile:rgba(231,214,192,.045);
   color-scheme:light;
 }
-:root[lang="ar"]{--f-display:var(--f-ar);--f-body:var(--f-ar)}
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 8px);-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--paper);color:var(--sage);font:500 16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 12px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--sand);color:var(--ink);font:400 17px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+:root[lang="ar"] body{line-height:1.75}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit}
-:focus-visible{outline:3px solid var(--terra);outline-offset:3px;border-radius:4px}
-img,svg{display:block;max-width:100%}
+:focus-visible{outline:3px solid var(--action);outline-offset:3px;border-radius:6px}
+.on-sage :focus-visible,.nav :focus-visible,.foot :focus-visible{outline-color:var(--on-sage)}
+img,svg,video{display:block;max-width:100%}
 [hidden]{display:none!important}
 .sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.num{font-variant-numeric:tabular-nums lining-nums}
 .ic{width:20px;height:20px;flex:none}
 
-.skip{position:fixed;inset-inline-start:-9999px;top:12px;z-index:6000;background:var(--sage);color:var(--paper);padding:12px 16px;font-weight:800;border-radius:8px}
+.skip{position:fixed;inset-inline-start:-9999px;top:12px;z-index:6000;background:var(--sage);color:var(--on-sage);padding:12px 16px;font-weight:600;border-radius:10px}
 .skip:focus{inset-inline-start:12px}
 
-.page{width:min(var(--max),100%);margin:0 auto;border-inline:1px solid var(--line);background:var(--paper);overflow-x:clip}
+.wrap{width:min(var(--max),100%);margin-inline:auto;padding-inline:var(--gut)}
 
-/* ---------- headings, labels, buttons ---------- */
-.kicker{margin:0 0 22px;font:800 11px/1.3 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--terra-ink)}
-:root[lang="ar"] .kicker{letter-spacing:0;font-size:14px;font-weight:700}
-.title{margin:0;font:900 clamp(42px,5vw,76px)/.95 var(--f-display);letter-spacing:-.04em;text-wrap:balance}
-.title .t{color:var(--terra)}
-:root[lang="ar"] .title{font-weight:800;letter-spacing:0;line-height:1.2}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;font:800 13px/1 var(--f-body);letter-spacing:.09em;text-transform:uppercase;transition:transform .2s ease,background-color .2s ease,color .2s ease;white-space:nowrap;cursor:pointer;border:0}
-:root[lang="ar"] .btn{letter-spacing:0;font-size:15px;font-weight:700}
-.btn-sage{background:var(--sage);color:var(--paper)}
-.btn-sage:hover{background:var(--terra);transform:translateY(-2px)}
-.btn-line{border:2px solid var(--sage);color:var(--sage);background:transparent}
-.btn-line:hover{background:var(--sage);color:var(--paper);transform:translateY(-2px)}
-.btn-terra{background:var(--terra);color:#FFF7EC}
-.btn-terra:hover{background:var(--sage)}
-.link-arrow{display:inline-flex;align-items:center;gap:12px;min-height:44px;font:800 13px/1 var(--f-body);letter-spacing:.09em;text-transform:uppercase;border-bottom:2px solid currentColor}
-:root[lang="ar"] .link-arrow{letter-spacing:0;font-size:15px}
-.link-arrow .ar{font-size:18px;transition:transform .2s ease}
-.link-arrow:hover .ar{transform:translateX(5px)}
-:root[dir="rtl"] .link-arrow .ar{transform:scaleX(-1)}
-:root[dir="rtl"] .link-arrow:hover .ar{transform:scaleX(-1) translateX(5px)}
+/* ---------- type ---------- */
+.h1,.h2{margin:0;font-family:var(--f-display);font-weight:700;letter-spacing:-.015em;text-wrap:balance}
+.h2{font-size:clamp(38px,4.6vw,66px);line-height:1}
+:root[lang="ar"] .h1,:root[lang="ar"] .h2{letter-spacing:0;line-height:1.25}
+.lede{margin:0;max-width:36em;font-size:clamp(17px,1.35vw,19px);line-height:1.6;color:var(--ink-2)}
+.on-sage .lede{color:var(--on-sage-2)}
 
-/* sage tile with an oven glow — used behind food art on every page */
-.glow-tile{background:radial-gradient(ellipse 60% 55% at 50% 58%,rgba(184,102,62,.30),transparent 72%),var(--sage)}
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;border:0;font:500 16px/1 var(--f-body);white-space:nowrap;cursor:pointer;transition:background-color .2s ease,color .2s ease,transform .2s ease,border-color .2s ease}
+.btn:active{transform:scale(.97)}
+.btn-action{background:var(--action);color:#fff}
+.btn-action:hover{background:var(--action-2)}
+.btn-sage{background:var(--sage);color:var(--on-sage)}
+.btn-sage:hover{background:var(--furnace)}
+.btn-line{border:1.5px solid currentColor;background:transparent}
+.btn-line:hover{background:rgba(43,43,43,.06)}
+.on-sage .btn-line:hover{background:rgba(231,214,192,.1)}
+.btn .ic{width:19px;height:19px}
+.link{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-weight:500;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px;text-decoration-color:var(--terra)}
+.on-sage .link,.on-terra .link{text-decoration-color:rgba(231,214,192,.55)}
+.link:hover{text-decoration-color:currentColor}
 
-/* coloured info bands */
-.band{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:8px;min-height:84px;margin:0}
-.band>svg{width:34px;height:34px;flex:none}
-.band p{margin:0;font-weight:600;line-height:1.4}
-.band b{font-family:"Archivo","Arial Black",sans-serif;font-weight:900;white-space:nowrap}
-.band small{display:block;font-weight:500;opacity:.85;font-size:13.5px;margin-top:2px}
-.band-terra{background:var(--terra);color:#FFF7EC}
-.band-sage{background:var(--sage);color:var(--paper)}
-.band .act{margin-inline-start:auto;flex:none}
-.band .act .btn{min-height:44px;padding:0 16px;font-size:12px;background:var(--paper);color:var(--sage)}
-.band .act .btn:hover{background:var(--terra);color:#FFF7EC}
-
-/* live open/closed status */
-.status{position:relative;z-index:0;display:inline-flex;align-items:center;gap:8px;font:800 11px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--terra-ink);white-space:nowrap}
-:root[lang="ar"] .status{letter-spacing:0;font-size:13px;font-weight:700}
-.status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--terra);flex:none}
-/* The pulse is its own ring under the dot, animated with transform + opacity so it runs on the GPU.
-   (Animating box-shadow repainted the whole page every frame and kept phones busy.) */
-.status.open::after{content:"";position:absolute;z-index:-1;inset-inline-start:0;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--terra);opacity:0;animation:ping 2s infinite}
-.status.closed{color:var(--muted)}
+/* ---------- live open / closed status ---------- */
+.status{position:relative;z-index:0;display:inline-flex;align-items:center;gap:9px;font:500 14px/1.2 var(--f-body);white-space:nowrap}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:#7FB069;flex:none}
 .status.closed::before{background:#9AA39B}
-@keyframes ping{0%{transform:scale(1);opacity:.55}70%{transform:scale(3.25);opacity:0}100%{transform:scale(1);opacity:0}}  /* 8px dot + 9px ring each side */
+/* the pulse is its own ring under the dot, animated with transform + opacity so it stays on the GPU */
+.status.open::after{content:"";position:absolute;z-index:-1;inset-inline-start:0;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#7FB069;opacity:0;animation:ping 2.2s infinite}
+@keyframes ping{0%{transform:scale(1);opacity:.6}70%{transform:scale(3);opacity:0}100%{transform:scale(1);opacity:0}}
 
 /* ---------- header ---------- */
-.nav{position:sticky;top:0;z-index:1500;height:var(--nav-h);display:flex;align-items:center;gap:20px;padding:0 32px;background:rgba(244,235,221,.94);-webkit-backdrop-filter:saturate(1.2) blur(8px);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--line)}
+.nav{position:sticky;top:0;z-index:1500;height:var(--nav-h);background:var(--sage);color:var(--on-sage);border-bottom:3px solid var(--terra)}
+.nav-in{height:100%;display:flex;align-items:center;gap:22px}
 .nav-logo{display:flex;align-items:center;gap:12px;min-height:48px;flex:none}
-.nav-logo .wm{width:142px;height:auto;color:var(--sage)}
-.nav-logo .ar-wm{font:700 19px/1 var(--f-ar);color:var(--terra)}
-.nav-links{display:flex;gap:4px;margin-inline-start:18px}
-.nav-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;font:800 13px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase}
-:root[lang="ar"] .nav-links a{letter-spacing:0;font-size:15px;font-weight:700}
-.nav-links a:hover{background:var(--paper-2)}
-.nav-links a[aria-current="page"]{background:var(--sage);color:var(--paper)}
+.nav-logo .wm{width:132px;height:auto;color:var(--on-sage)}
+.nav-logo .ar-wm{font:600 21px/1 var(--f-display);color:var(--on-sage);opacity:.92}
+.nav-links{display:flex;gap:2px;margin-inline-start:14px}
+.nav-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;font-weight:500;font-size:16px;color:var(--on-sage-2);transition:color .2s,background-color .2s}
+.nav-links a:hover{color:var(--on-sage);background:rgba(231,214,192,.08)}
+.nav-links a[aria-current="page"]{color:var(--on-sage);background:rgba(231,214,192,.12)}
 .nav-right{margin-inline-start:auto;display:flex;align-items:center;gap:14px}
-.lang{display:flex;padding:3px;border-radius:99px;background:var(--paper-2);border:1px solid var(--line)}
-.lang button{border:0;background:transparent;min-width:44px;height:44px;border-radius:99px;font:800 13px/1 var(--f-body);cursor:pointer;color:var(--muted)}
-.lang button[aria-pressed="true"]{background:var(--sage);color:var(--paper)}
-.lang button[data-lang="ar"]{font-family:var(--f-ar);font-size:16px}
-.nav .btn{min-height:44px;padding:0 18px;font-size:12px}
+.nav .status{color:var(--on-sage-2)}
+.lang{display:flex;padding:3px;border-radius:99px;border:1px solid var(--line-sage)}
+.lang button{border:0;background:transparent;min-width:42px;height:40px;border-radius:99px;font:500 14px/1 var(--f-body);cursor:pointer;color:var(--on-sage-2)}
+.lang button[aria-pressed="true"]{background:var(--on-sage);color:var(--sage)}
+.lang button[data-lang="ar"]{font-size:17px}
+.nav .btn{min-height:44px;padding:0 18px;font-size:15px}
 
 /* ---------- footer ---------- */
-.foot{background:var(--beige);padding:56px 34px 40px}
-.foot-top{display:grid;grid-template-columns:1.1fr 2fr;gap:40px;align-items:start}
-.foot-brand .wm{width:min(290px,60vw);height:auto;color:var(--sage)}
-.foot-brand .ar-wm{display:block;margin-top:10px;font:700 30px/1 var(--f-ar);color:var(--terra)}
-.foot-brand p{margin:16px 0 0;font-weight:700;color:var(--sage)}
+.foot{background:var(--sage);color:var(--on-sage);padding:72px 0 36px}
+.foot-top{display:grid;grid-template-columns:1.1fr 2fr;gap:48px;align-items:start}
+.foot-brand .wm{width:min(280px,64vw);height:auto;color:var(--on-sage)}
+.foot-brand .ar-wm{display:block;margin-top:14px;font:600 38px/1 var(--f-display);color:var(--on-sage)}
+.foot-brand p{margin:18px 0 0;color:var(--on-sage-2)}
 .foot-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
-.foot-cols h2{margin:0 0 12px;font:800 11px/1.2 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--terra-ink)}
-:root[lang="ar"] .foot-cols h2{letter-spacing:0;font-size:14px}
-.foot-cols p{margin:0;font-size:15px;line-height:1.6;color:var(--ink)}
-.foot-cols a.tel{display:flex;flex-direction:column;justify-content:center;min-height:52px;font:800 19px/1.15 "Archivo","Arial Black",sans-serif;color:var(--sage)}
-.foot-cols a.tel .ltr{align-self:flex-start}
-.foot-cols a.tel small{font:600 12px/1.3 var(--f-body);color:var(--muted)}
-.foot-cols a.tel:hover{color:var(--terra)}
-.foot-bottom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;margin-top:40px;padding-top:18px;border-top:1px solid rgba(46,58,47,.25)}
-.foot-links{display:flex;flex-wrap:wrap;gap:4px 6px;margin:0;margin-inline-start:-12px;padding:0;list-style:none}
-.foot-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:99px;font:800 12px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase}
-:root[lang="ar"] .foot-links a{letter-spacing:0;font-size:14px;font-weight:700}
-.foot-links a:hover{background:rgba(46,58,47,.08)}
-.foot-bottom small{font:700 12px/1.4 var(--f-body);letter-spacing:.06em;color:var(--sage)}
+.foot-cols h2{margin:0 0 10px;font:500 14px/1.3 var(--f-body);color:var(--on-sage-2)}
+.foot-cols p{margin:0;font-size:16px;line-height:1.65}
+.foot-cols a.tel{display:flex;flex-direction:column;justify-content:center;min-height:52px}
+.foot-cols a.tel .ltr{align-self:flex-start;font:500 19px/1.2 var(--f-body);font-variant-numeric:tabular-nums}
+.foot-cols a.tel small{font-size:13px;color:var(--on-sage-2)}
+.foot-cols a.tel:hover .ltr{text-decoration:underline;text-underline-offset:4px}
+.foot-bottom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;margin-top:56px;padding-top:18px;border-top:1px solid var(--line-sage)}
+.foot-links{display:flex;flex-wrap:wrap;gap:2px 4px;margin:0;margin-inline-start:-12px;padding:0;list-style:none}
+.foot-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:99px;font-size:15px;color:var(--on-sage-2)}
+.foot-links a:hover{color:var(--on-sage);background:rgba(231,214,192,.08)}
+.foot-bottom small{font-size:13px;color:var(--on-sage-2)}
 
-/* ---------- floating WhatsApp ---------- */
-.wa-float{position:fixed;inset-inline-end:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:2000;display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 20px;border-radius:999px;background:var(--terra);color:#FFF7EC;font:800 13px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;box-shadow:0 12px 28px rgba(30,37,31,.3);transition:transform .3s cubic-bezier(.2,.9,.3,1.2),opacity .25s,background-color .2s;transform:translateY(140%);opacity:0;pointer-events:none}
-:root[lang="ar"] .wa-float{letter-spacing:0;font-size:15px}
-.wa-float.show{transform:none;opacity:1;pointer-events:auto}
-.wa-float:hover{background:var(--sage)}
-.wa-float .ic{width:22px;height:22px}
+/* ---------- floating "Order online" (homepage, after the hero) ---------- */
+.order-float{position:fixed;inset-inline-end:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:2000;display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:0 22px;border-radius:999px;background:var(--action);color:#fff;font:500 16px/1 var(--f-body);box-shadow:0 14px 30px -10px rgba(28,35,29,.55);transition:transform .35s cubic-bezier(.2,.9,.3,1.2),opacity .25s,background-color .2s;transform:translateY(140%);opacity:0;pointer-events:none}
+.order-float.show{transform:none;opacity:1;pointer-events:auto}
+.order-float:hover{background:var(--action-2)}
+.order-float .ic{width:21px;height:21px}
 
 /* ---------- "your order" chip: follows an active order on every page ---------- */
-.order-chip{position:fixed;z-index:1950;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:inline-flex;align-items:center;gap:10px;min-height:50px;max-width:calc(100vw - 28px);padding:0 20px;border:0;border-radius:99px;background:var(--terra);color:#FFF7EC;font:800 13px/1.2 var(--f-body);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 14px 30px -10px rgba(30,37,31,.5);cursor:pointer;animation:chip-in .45s cubic-bezier(.2,.9,.3,1.2)}
-:root[lang="ar"] .order-chip{letter-spacing:0;font-size:15px;font-weight:700;text-transform:none}
-.order-chip .dot{width:9px;height:9px;border-radius:50%;background:#FFF7EC;flex:none}
-.order-chip.final{background:var(--sage)}
-.order-chip.final .dot{background:var(--terra-lt)}
+.order-chip{position:fixed;z-index:1950;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:inline-flex;align-items:center;gap:10px;min-height:52px;max-width:calc(100vw - 28px);padding:0 22px;border:0;border-radius:99px;background:var(--action);color:#fff;font:500 15px/1.2 var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 14px 30px -10px rgba(28,35,29,.55);cursor:pointer;animation:chip-in .45s cubic-bezier(.2,.9,.3,1.2)}
+.order-chip .dot{width:9px;height:9px;border-radius:50%;background:#fff;flex:none}
+.order-chip.final{background:var(--sage);color:var(--on-sage)}
+.order-chip.final .dot{background:#7FB069}
 .order-chip:hover{filter:brightness(1.06)}
 @keyframes chip-in{from{transform:translate(-50%,140%)}}
-body.has-order .wa-float{display:none}
+body.has-order .order-float{display:none}
 
-/* ---------- "into the furn" page transition (home → menu) ---------- */
+/* ---------- "into the oven" page transition (any page → menu) ---------- */
 .into{position:fixed;inset:0;z-index:5000;display:none;overflow:hidden;pointer-events:none}
 .into.on{display:block;pointer-events:auto;cursor:progress}
 html.arriving .into{display:block}
-.into-arch{position:absolute;left:var(--x,50vw);top:var(--y,50vh);width:var(--d,300vmax);height:var(--d,300vmax);margin-left:calc(var(--d,300vmax) / -2);margin-top:calc(var(--d,300vmax) / -2);border-radius:50% 50% 0 0 / 50% 50% 0 0;background-color:var(--wall);background-image:linear-gradient(var(--tile) 1px,transparent 1px),linear-gradient(90deg,var(--tile) 1px,transparent 1px);background-size:30px 30px;background-position:center;transform:scale(.02);will-change:transform}
+.into-arch{position:absolute;left:var(--x,50vw);top:var(--y,50vh);width:var(--d,300vmax);height:var(--d,300vmax);margin-left:calc(var(--d,300vmax) / -2);margin-top:calc(var(--d,300vmax) / -2);border-radius:50% 50% 0 0 / 50% 50% 0 0;background:radial-gradient(circle at 50% 70%,#3a2a1c,var(--furnace) 45%);transform:scale(.02);will-change:transform}
 .into-oven{position:absolute;left:50%;top:50%;width:min(58vw,250px);transform:translate(-50%,-56%) scale(.86);opacity:0;will-change:transform,opacity}
 .into-oven svg{width:100%;height:auto;overflow:visible}
-.into-txt{margin:58px 0 0;text-align:center;color:var(--paper);font:800 12px/1.3 "Figtree",system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;opacity:0}
-:root[lang="ar"] .into-txt{font:700 16px/1.4 var(--f-ar);letter-spacing:0}
+.into-txt{margin:58px 0 0;text-align:center;color:var(--on-sage);font:500 15px/1.4 var(--f-body);opacity:0}
 .into-txt::after{content:"";display:inline-block;width:1.2em;text-align:start;animation:dots 1s steps(4) infinite}
 @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
 .into .flame{transform-box:fill-box;transform-origin:50% 100%;animation:into-flick .8s ease-in-out infinite alternate}
@@ -160,7 +150,6 @@ html.arriving .into{display:block}
 @keyframes into-flick{0%{transform:scale(1,1) skewX(0)}50%{transform:scale(.9,1.12) skewX(5deg)}100%{transform:scale(1.06,.9) skewX(-4deg)}}
 .into-glow{transform-box:fill-box;transform-origin:50% 100%;opacity:.75}
 .into-steam path{opacity:0}
-/* leaving the homepage */
 .into.on .into-arch{animation:into-grow .58s cubic-bezier(.7,0,.25,1) forwards}
 .into.on .into-oven{animation:into-oven-in .34s cubic-bezier(.2,.8,.3,1) .22s forwards}
 .into.on .into-txt{animation:into-fade-in .3s ease .5s forwards}
@@ -175,7 +164,6 @@ html.arriving .into{display:block}
 @keyframes into-peel{from{transform:translate(150px,120px) rotate(8deg)}to{transform:none}}
 @keyframes into-flare{0%{opacity:.75;transform:scale(1)}40%{opacity:1;transform:scale(1.25,1.4)}100%{opacity:.95;transform:scale(1.1,1.15)}}
 @keyframes into-steam{0%{opacity:0;transform:translateY(6px)}30%{opacity:.85}100%{opacity:0;transform:translateY(-18px)}}
-/* arriving on the menu: the oven rushes towards you and opens onto the page */
 html.arriving .into-arch{transform:none;animation:into-open .6s cubic-bezier(.5,0,.3,1) .12s forwards}
 html.arriving .into-oven{opacity:1;transform:translate(-50%,-56%);animation:into-zoom .58s cubic-bezier(.55,0,.25,1) .05s forwards}
 html.arriving .into-glow{opacity:1}
@@ -188,35 +176,41 @@ html.arriving .into-glow{opacity:1}
   .nav .status{display:none}
 }
 @media (max-width:980px){
-  :root{--nav-h:68px}
-  .nav{padding:0 18px;gap:10px}
-  .nav-links{margin-inline-start:4px}
+  :root{--nav-h:64px}
+  .nav-in{gap:10px}
+  .nav-links{margin-inline-start:2px}
   .nav-links .nl-visit{display:none}
   .foot-top{grid-template-columns:1fr}
 }
 @media (max-width:620px){
-  .page{border:0}
-  .nav-logo .wm{width:112px}
+  .nav-logo .wm{width:108px}
   .nav .btn{width:44px;padding:0;gap:0}
   .nav .btn .lbl{display:none}
-  .lang button{min-width:42px;height:42px}
   .nav-links a{padding:0 12px}
-  .band-sage{flex-wrap:wrap}
-  .band-sage .act{margin-inline-start:50px}
-  .foot{padding:44px 18px calc(96px + env(safe-area-inset-bottom,0px))}
-  .foot-cols{grid-template-columns:1fr;gap:22px}
-  .wa-float{inset-inline-end:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));padding:0 18px}
+  .lang button{min-width:40px;height:38px}
+  .foot{padding:56px 0 calc(100px + env(safe-area-inset-bottom,0px))}
+  .foot-cols{grid-template-columns:1fr;gap:24px}
+  .order-float{inset-inline-end:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 }
 @media (max-width:360px){
-  .nav-links a{padding:0 9px;font-size:12px}
-  .nav-logo .wm{width:98px}
+  .nav-links a{padding:0 9px;font-size:15px}
+  .nav-logo .wm{width:94px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .status::after,.order-chip{animation:none}
-  .btn,.link-arrow .ar,.wa-float{transition:none}
+  .btn,.order-float{transition:none}
   .into,html.arriving .into{display:none!important}
 }
 @media print{
-  .nav,.wa-float,.into{display:none}
+  .nav,.order-float,.into{display:none}
 }
+
+/* Reem Kufi's Arabic is a display Kufi: keep it for big headlines, use Readex Pro for Arabic at text sizes */
+:root[lang="ar"] .nm,:root[lang="ar"] .pick-name,:root[lang="ar"] .heat-name,:root[lang="ar"] .fresh-tag b,:root[lang="ar"] .addr strong,:root[lang="ar"] .chit h2{font-family:var(--f-body);font-weight:600}
+.alt:lang(ar),.alt-nm:lang(ar),.pick-alt:lang(ar){font-family:var(--f-body)}
+
+/* terracotta panels (the dough story on the homepage) */
+.on-terra{background:var(--terra-ink);color:var(--flour);--on-sage:#F5EDE1;--on-sage-2:#E7D6C0;--line-sage:rgba(245,237,225,.22)}
+.on-terra :focus-visible{outline-color:var(--flour)}
+.on-terra .lede{color:var(--on-sage-2)}

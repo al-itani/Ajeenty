@@ -1,65 +1,67 @@
-/* AJEENTY — homepage behaviour: words in both languages, map, floating WhatsApp, photos.
-   Hours, opening status, WhatsApp number and the menu transition live in common.js. */
+/* AJEENTY — homepage behaviour: words in both languages, the live headline, the oven video, map,
+   floating "Order online". Hours, opening status, WhatsApp number and the menu transition live in common.js. */
 (() => {
   'use strict';
 
   const MAP = { lat: 33.8799516, lng: 35.5068473 };
+  const $ = s => document.querySelector(s);
 
   /* ---------- words ---------- */
   const T = {
     en: {
-      skip: 'Skip to content', navMenu: 'Menu', navVisit: 'Visit us',
-      h1a: 'Beirut,', h1b: 'we’re open.',
-      heroP: 'Man’oushe, mo3ajanat and fresh dough, straight from the oven. Order online for pickup or delivery, or grab it hot from the counter.', orderOnline: 'Order online', findUs: 'Find us',
-      hoursShort: 'Mon–Sat · 7 AM – 8 PM', deliveryShort: 'Pickup & delivery', whereShort: 'Ras El Nabeh, Beirut',
-      artAlt: 'Illustration of a fresh zaatar and cheese man’oushe steaming under an arched window',
-      artLabelA: 'Hot from the oven', artLabelB: 'Ras El Nabeh<br>Beirut',
-      tk1: 'AJEENTY · Ras El Nabeh · Beirut', tk2: 'Man’oushe · Mo3ajanat · Fresh dough', tk3: 'Mon–Sat · 7 AM – 8 PM', tk4: 'Order online · pickup & delivery',
-      ovenKicker: 'On the menu', ovenTitle: 'Out of the oven.',
-      ovenP: 'A few favourites from the furn. Every man’oushe comes as a man’oushe or a mashrouha.',
-      fullMenu: 'See the full menu', altOven: 'AJEENTY’s oven', altCounter: 'The AJEENTY counter in Ras El Nabeh', capOven: 'The oven', capCounter: 'The counter',
-      from: 'from', lbp: 'LBP', view: 'View', tagHalf: 'Half & half', tagDozen: 'By the dozen',
-      dThyme: 'Thyme', dAkawi: 'Cheese akawi', dDoublex: 'Doublex (cheese & thyme)', dKeshek: 'Keshek', dLahme: 'Lahme baajin', dMixed: 'Mixed dozen pastries',
-      jreesh: 'Any item can be made on jreesh (whole-wheat) dough', group: 'Feeding a crowd? Mo3ajanat come by the dozen or boxed.', planIt: 'Order by the dozen',
-      infoLabel: 'About and contact', infoKicker: 'The neighborhood oven', infoTitle: 'Fresh dough.<br>Hot oven.<br>That’s the point.',
-      infoP: 'AJEENTY is in Bchara al Khoury, Haraty Street, Moazzen Building, Beirut. Order online and pick it up hot from the counter, or have it delivered.',
-      contactKicker: 'Questions? Say marhaba', contactNote: 'WhatsApp or call us to ask what’s coming out of the oven, check on an order, or plan a group breakfast.',
-      lblMobile: 'Mobile · WhatsApp', lblLand: 'Landline', lblEmail: 'Email', call: 'Call', write: 'Email',
-      visitKicker: 'Find us', visitTitle: 'Come by the counter.', addrA: 'Bchara al Khoury, Beirut', addrB: 'Haraty Street, Moazzen Building.',
-      hoursLabel: 'Opening hours', monSat: 'Monday – Saturday', monSatH: '7:00 AM – 8:00 PM', sun: 'Sunday', closed: 'Closed', today: 'Today',
-      directions: 'Get directions', callUs: 'Call us', mapAria: 'Open AJEENTY’s location in Google Maps', mapHint: 'Open in Google Maps ↗',
-      footTag: 'Fresh dough. Hot oven.', fVisit: 'Visit', fAddr: 'Bchara al Khoury, Beirut<br>Haraty Street, Moazzen Building',
-      fHours: 'Hours', fHoursP: 'Monday – Saturday<br>7:00 AM – 8:00 PM<br>Sunday closed', fOrder: 'Call us', fMobile: 'Mobile & WhatsApp', fLand: 'Landline', gmaps: 'Google Maps',
+      skip: 'Skip to content', navMenu: 'Menu', navVisit: 'Visit us', orderOnline: 'Order online',
+      hlOpen: ['Beirut,', 'we’re open.'], hlToday: o => ['Beirut,', `see you at ${o}.`], hlTomorrow: ['Beirut,', 'see you tomorrow.'], hlDay: d => ['Beirut,', `see you ${d}.`],
+      heroP: 'Man’oushe and mo3ajanat from our oven in Ras El Nabeh. Order online for pickup or delivery, or grab it hot from the counter.',
+      findUs: 'Find us', hoursShort: 'Mon–Sat, 7 AM – 8 PM', deliveryShort: 'Pickup and delivery',
+      videoAlt: 'Our oven: a man’oushe is spread by hand, slid in on the peel and baked', pause: 'Pause the video', play: 'Play the video',
+      freshAlt: 'A cheese akawi man’oushe, fresh out of the oven', dAkawi: 'Cheese akawi', from: 'from', lbp: 'LBP',
+      picksTitle: 'Out of the oven.', picksP: 'A few favourites from the counter. Tap one to see it on the menu and add it to your order.', fullMenu: 'See the full menu',
+      pZaatar: 'Zaatar man’oushe', pLahme: 'Lahme baajin', pSpinach: 'Spinach fatayer', pSfiha: 'Sfiha', pPizza: 'Mini pizzas', pMixed: 'Mixed dozen', perDozen: 'a dozen',
+      altZaatar: 'Zaatar man’oushe baking on the oven floor', altLahme: 'A whole lahme baajin, just baked', altSpinach: 'Trays of spinach fatayer', altSfiha: 'Open meat sfiha on a tray',
+      altPizza: 'Mini pizzas with melted cheese and an olive', altMixed: 'Our counter, full of mo3ajanat', altPeel: 'Two cheese man’oushe on a wooden peel, ready for the oven', altOven: 'The AJEENTY brick oven, lit, with mini pizzas inside',
+      storyMeans: 'means “my dough”.', storyP: 'Fresh dough, a hot oven, and every topping spread by hand. That’s the whole idea.',
+      jrTitle: 'Jreesh dough for manakish', jrP: 'Whole-wheat dough, for', crowdLink: 'Order by the dozen',
+      gatherTitle: 'For your next gathering.', gatherP: 'A mixed dozen for the family, pastries for the office, or a spread for the weekend. Tell us what you have in mind and we’ll help you choose.', gatherCta: 'Plan a group order', altGather: 'A tray of spinach and pizza shakhtoura',
+      visitTitle: 'Real taste has an address.', addrA: 'Haraty Street, Moazzen Building', addrB: 'Bchara al Khoury, Ras El Nabeh, Beirut',
+      hoursLabel: 'Opening hours', monSat: 'Monday to Saturday', monSatH: '7:00 AM – 8:00 PM', sun: 'Sunday', closed: 'Closed', today: 'Today',
+      directions: 'Get directions', callUs: 'Call us', lblMobile: 'Mobile and WhatsApp', lblLand: 'Landline', lblEmail: 'Email',
+      mapAria: 'Open AJEENTY’s location in Google Maps', mapHint: 'Open in Google Maps',
+      footTag: 'Fresh dough. Hot oven.', fVisit: 'Visit', fAddr: 'Haraty Street, Moazzen Building<br>Bchara al Khoury, Beirut',
+      fHours: 'Hours', fHoursP: 'Monday to Saturday<br>7:00 AM – 8:00 PM<br>Closed on Sunday', fOrder: 'Call us', fMobile: 'Mobile and WhatsApp', fLand: 'Landline', gmaps: 'Google Maps',
       title: 'AJEENTY | Man’oushe & mo3ajanat in Ras El Nabeh, Beirut'
     },
     ar: {
-      skip: 'انتقل للمحتوى', navMenu: 'المنيو', navVisit: 'زورونا',
-      h1a: 'بيروت،', h1b: 'فتحنا.',
-      heroP: 'مناقيش ومعجنات وعجينة طازة، طالعين سخنين من الفرن. اطلب أونلاين استلام أو دليفري، أو مرّ خدهن سخنين من المحل.', orderOnline: 'اطلب أونلاين', findUs: 'كيف توصلنا',
-      hoursShort: 'الإثنين – السبت · 7 الصبح – 8 المسا', deliveryShort: 'استلام ودليفري', whereShort: 'راس النبع، بيروت',
-      artAlt: 'رسمة منقوشة زعتر وجبنة طالعة سخنة تحت قنطرة',
-      artLabelA: 'طازة من الفرن', artLabelB: 'راس النبع<br>بيروت',
-      tk1: 'عجينتي · راس النبع · بيروت', tk2: 'مناقيش · معجنات · عجينة طازة', tk3: 'الإثنين – السبت · 7 الصبح – 8 المسا', tk4: 'اطلب أونلاين · استلام ودليفري',
-      ovenKicker: 'من المنيو', ovenTitle: 'طالع من الفرن.',
-      ovenP: 'شوية من الأصناف يلي بتحبوها. كل منقوشة فيك تطلبها منقوشة أو مشروحة.',
-      fullMenu: 'شوف المنيو كلّه', altOven: 'فرن عجينتي', altCounter: 'محل عجينتي براس النبع', capOven: 'الفرن', capCounter: 'المحل',
-      from: 'من', lbp: 'ل.ل.', view: 'شوف', tagHalf: 'نص ونص', tagDozen: 'بالدزينة',
-      dThyme: 'زعتر', dAkawi: 'جبنة عكاوي', dDoublex: 'دوبليكس (جبنة وزعتر)', dKeshek: 'كشك', dLahme: 'لحم بعجين', dMixed: 'معجنات دزينة مشكل',
-      jreesh: 'أي صنف منحضّره على عجينة الجريش (قمحة كاملة)', group: 'عندك عزيمة أو ترويقة للشغل؟ المعجنات بالدزينة أو بالعلبة.', planIt: 'اطلب بالدزينة',
-      infoLabel: 'عنّا وكيف تحكونا', infoKicker: 'فرن الحي', infoTitle: 'عجينة طازة.<br>فرن حامي.<br>وهيدا كل شي.',
-      infoP: 'عجينتي ببشارة الخوري، شارع حاراتي، بناية المؤذن، بيروت. اطلب أونلاين وخدها سخنة من المحل، أو منوصّلك ياها.',
-      contactKicker: 'عندك سؤال؟ قول مرحبا', contactNote: 'ابعتلنا واتساب أو اتصل فينا لتسأل شو طالع من الفرن، أو عن طلبك، أو لترتّب ترويقة للجمعة.',
-      lblMobile: 'خلوي · واتساب', lblLand: 'أرضي', lblEmail: 'إيميل', call: 'اتصل', write: 'إيميل',
-      visitKicker: 'زورونا', visitTitle: 'مرّوا عالمحل.', addrA: 'بشارة الخوري، بيروت', addrB: 'شارع حاراتي، بناية المؤذن.',
+      skip: 'انتقل للمحتوى', navMenu: 'المنيو', navVisit: 'زورونا', orderOnline: 'اطلب أونلاين',
+      hlOpen: ['بيروت،', 'فتحنا.'], hlToday: o => ['بيروت،', `منشوفكن الساعة ${o}.`], hlTomorrow: ['بيروت،', 'منشوفكن بكرا.'], hlDay: d => ['بيروت،', `منشوفكن ${d}.`],
+      heroP: 'مناقيش ومعجنات طالعين من فرننا براس النبع. اطلب أونلاين استلام أو دليفري، أو مرّ خدهن سخنين من المحل.',
+      findUs: 'كيف توصلنا', hoursShort: 'الإثنين – السبت، 7 الصبح – 8 المسا', deliveryShort: 'استلام ودليفري',
+      videoAlt: 'فرننا: منقوشة عم تنفرد بالإيد، بتفوت عالمطرحة وبتنخبز', pause: 'وقّف الفيديو', play: 'شغّل الفيديو',
+      freshAlt: 'منقوشة جبنة عكاوي طالعة سخنة من الفرن', dAkawi: 'جبنة عكاوي', from: 'من', lbp: 'ل.ل.',
+      picksTitle: 'طالع من الفرن.', picksP: 'شوية من الأصناف يلي بتحبوها. اكبس على أي صنف لتشوفه بالمنيو وتزيده عطلبك.', fullMenu: 'شوف المنيو كلّه',
+      pZaatar: 'منقوشة زعتر', pLahme: 'لحم بعجين', pSpinach: 'فطاير سبانخ', pSfiha: 'صفيحة', pPizza: 'بيتزا صغار', pMixed: 'دزينة مشكّل', perDozen: 'الدزينة',
+      altZaatar: 'مناقيش زعتر عم تنخبز بأرض الفرن', altLahme: 'لحم بعجين طالع هلّق من الفرن', altSpinach: 'صواني فطاير سبانخ', altSfiha: 'صفيحة لحمة بالصينية',
+      altPizza: 'بيتزا صغار بجبنة دايبة وحبة زيتون', altMixed: 'البرّاد عنّا مليان معجنات', altPeel: 'منقوشتين جبنة عالمطرحة، جاهزين للفرن', altOven: 'فرن عجينتي الحجر، والع وفيه بيتزا صغار',
+      storyMeans: 'عجينة طازة، فرن حامي، وإيد بتعرف شغلها.', storyP: 'كل منقوشة بتنفرد بالإيد وبتنخبز وحدة وحدة. وهيدا كل شي.',
+      jrTitle: 'عجينة جريش للمناقيش', jrP: 'عجينة قمحة كاملة، بزيادة', crowdLink: 'اطلب بالدزينة',
+      gatherTitle: 'للّمة الجاية.', gatherP: 'دزينة مشكّل للعيلة، معجنات للشغل، أو سفرة لويكند. قلّنا شو ببالك ومنساعدك تختار.', gatherCta: 'رتّب طلبية لجمعة', altGather: 'صينية شختورة سبانخ وبيتزا',
+      visitTitle: 'الطعمة الأصلية إلها عنوان.', addrA: 'شارع حاراتي، بناية المؤذن', addrB: 'بشارة الخوري، راس النبع، بيروت',
       hoursLabel: 'أوقات الدوام', monSat: 'الإثنين – السبت', monSatH: '7:00 الصبح – 8:00 المسا', sun: 'الأحد', closed: 'مسكّرين', today: 'اليوم',
-      directions: 'دلّني عالطريق', callUs: 'اتصل فينا', mapAria: 'افتح موقع عجينتي على Google Maps', mapHint: 'افتح على Google Maps ↗',
-      footTag: 'عجينة طازة. فرن حامي.', fVisit: 'العنوان', fAddr: 'بشارة الخوري، بيروت<br>شارع حاراتي، بناية المؤذن',
+      directions: 'دلّني عالطريق', callUs: 'اتصل فينا', lblMobile: 'خلوي وواتساب', lblLand: 'أرضي', lblEmail: 'إيميل',
+      mapAria: 'افتح موقع عجينتي على Google Maps', mapHint: 'افتح على Google Maps',
+      footTag: 'عجينة طازة. فرن حامي.', fVisit: 'العنوان', fAddr: 'شارع حاراتي، بناية المؤذن<br>بشارة الخوري، بيروت',
       fHours: 'الدوام', fHoursP: 'الإثنين – السبت<br>7:00 الصبح – 8:00 المسا<br>الأحد مسكّرين', fOrder: 'اتصل فينا', fMobile: 'خلوي وواتساب', fLand: 'أرضي', gmaps: 'Google Maps',
       title: 'عجينتي | مناقيش ومعجنات براس النبع، بيروت'
     }
   };
   const root = document.documentElement;
   let lang = 'en';
+
+  /* ---------- the headline follows the oven: "we’re open" only when we are ---------- */
+  function headline() {
+    const W = T[lang], s = AJ.status(lang);
+    const words = s.open ? W.hlOpen : s.inDays === 0 ? W.hlToday(s.opens) : s.inDays === 1 ? W.hlTomorrow : W.hlDay(AJ.dayName(s.nextDay, lang));
+    document.querySelectorAll('[data-hl]').forEach(el => { el.textContent = words[el.dataset.hl === 'a' ? 0 : 1]; });
+  }
 
   function apply(lg) {
     lang = lg;
@@ -77,29 +79,51 @@
       el.lang = other; el.dir = other === 'ar' ? 'rtl' : 'ltr';
     });
     AJ.waLinks(lg);
-    document.querySelectorAll('[data-today]').forEach(el => el.setAttribute('data-today', W.today));
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lg)));
     AJ.paintStatus(lg);
+    headline();
+    syncVideoBtn();
     AJ.order.chip(lg);
   }
-
   function setLang(lg) { AJ.saveLang(lg); apply(lg); }
 
-  /* ---------- photos (body data-photos="on") ---------- */
-  function photos() {
-    if (document.body.dataset.photos !== 'on') return;
-    document.querySelectorAll('img[data-src]').forEach(img => {
-      const holder = img.closest('.media') || img.closest('.photo-band');
-      img.addEventListener('load', () => holder && holder.classList.add('has-img'), { once: true });
-      img.addEventListener('error', () => (img.closest('figure') || img).remove(), { once: true });
-      if (holder && holder.classList.contains('photo-band')) img.loading = 'eager'; // hidden until loaded, so lazy-loading would never fire
-      img.src = img.dataset.src;
-    });
+  /* ---------- the oven video: plays only on screen, never for reduced motion or data saver, always pausable ---------- */
+  const vid = $('#ovenVideo'), vbtn = $('#videoBtn');
+  let wanted = false;
+  function syncVideoBtn() {
+    if (!vid || !vbtn) return;
+    const paused = vid.paused;
+    vbtn.classList.toggle('paused', paused);
+    vbtn.setAttribute('aria-label', paused ? T[lang].play : T[lang].pause);
+  }
+  function video() {
+    if (!vid || !vbtn) return;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saver = !!(navigator.connection && navigator.connection.saveData);
+    wanted = !reduce && !saver;
+    let loaded = false;
+    const load = () => {
+      if (loaded) return; loaded = true;
+      vid.querySelectorAll('source[data-src]').forEach(src => { src.src = src.dataset.src; });
+      vid.load();
+    };
+    const play = () => { load(); const p = vid.play(); if (p && p.catch) p.catch(() => syncVideoBtn()); };
+    vbtn.hidden = false;
+    vbtn.addEventListener('click', () => { if (vid.paused) { wanted = true; play(); } else { wanted = false; vid.pause(); } });
+    vid.addEventListener('play', syncVideoBtn);
+    vid.addEventListener('pause', syncVideoBtn);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) { if (wanted) play(); }
+        else if (!vid.paused) vid.pause();
+      }, { threshold: 0.15 }).observe(vid);
+    } else if (wanted) play();
+    syncVideoBtn();
   }
 
-  /* ---------- floating WhatsApp: only once the hero buttons are off screen ---------- */
+  /* ---------- floating "Order online": only once the hero buttons are off screen ---------- */
   function floater() {
-    const btn = document.getElementById('waFloat'), hero = document.getElementById('heroActions');
+    const btn = $('#orderFloat'), hero = $('#heroActions');
     if (!btn || !hero) return;
     if (!('IntersectionObserver' in window)) { btn.classList.add('show'); return; }
     new IntersectionObserver(([e]) => btn.classList.toggle('show', !e.isIntersecting && e.boundingClientRect.top < 0)).observe(hero);
@@ -107,7 +131,7 @@
 
   /* ---------- map: load Leaflet only when the map comes near the screen ---------- */
   function map() {
-    const wrap = document.getElementById('mapLink');
+    const wrap = $('#mapLink');
     if (!wrap) return;
     let started = false;
     const start = () => {
@@ -135,6 +159,6 @@
   /* ---------- boot ---------- */
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => { if (b.dataset.lang !== lang) setLang(b.dataset.lang); }));
   apply(AJ.pickLang());
-  photos(); floater(); map();
-  setInterval(() => AJ.paintStatus(lang), 60 * 1000);
+  video(); floater(); map();
+  setInterval(() => { AJ.paintStatus(lang); headline(); }, 60 * 1000);
 })();

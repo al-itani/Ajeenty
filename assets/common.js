@@ -14,16 +14,18 @@ window.AJ = (() => {
     en: {
       days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       time: h => (h % 12 || 12) + (h < 12 ? ' AM' : ' PM'),
-      open: c => `Open now · until ${c}`, soon: c => `Closing soon · ${c}`,
-      later: o => `Opens today at ${o}`, tomorrow: o => `Closed · opens tomorrow ${o}`, day: (d, o) => `Closed · opens ${d} ${o}`,
+      open: c => `Open now, until ${c}`, soon: c => `Closing soon, at ${c}`,
+      later: o => `Closed, opens today at ${o}`, tomorrow: o => `Closed, opens tomorrow at ${o}`, day: (d, o) => `Closed, opens ${d} at ${o}`,
+      wLater: o => `opens today at ${o}`, wTomorrow: o => `opens tomorrow at ${o}`, wDay: (d, o) => `opens ${d} at ${o}`,
       waHello: 'Marhaba AJEENTY!', waGroup: 'Marhaba AJEENTY! I’d like to plan a group order.',
       firing: 'Firing up the menu'
     },
     ar: {
       days: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
       time: h => (h % 12 || 12) + (h < 12 ? ' الصبح' : ' المسا'),
-      open: c => `فاتحين هلّق · لـ ${c}`, soon: c => `منسكّر قريب · ${c}`,
-      later: o => `منفتح اليوم ${o}`, tomorrow: o => `مسكّرين · منفتح بكرا ${o}`, day: (d, o) => `مسكّرين · منفتح ${d} ${o}`,
+      open: c => `فاتحين هلّق، لـ ${c}`, soon: c => `منسكّر قريب، ${c}`,
+      later: o => `مسكّرين، منفتح اليوم ${o}`, tomorrow: o => `مسكّرين، منفتح بكرا ${o}`, day: (d, o) => `مسكّرين، منفتح ${d} ${o}`,
+      wLater: o => `منفتح اليوم ${o}`, wTomorrow: o => `منفتح بكرا ${o}`, wDay: (d, o) => `منفتح ${d} ${o}`,
       waHello: 'مرحبا عجينتي!', waGroup: 'مرحبا عجينتي! بدي رتّب طلبية لجمعة.',
       firing: 'عم نحمّي الفرن'
     }
@@ -48,14 +50,17 @@ window.AJ = (() => {
     const get = t => parts.find(p => p.type === t).value;
     return { day: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday')), mins: (+get('hour') % 24) * 60 + (+get('minute')) };
   }
+  // open:   { open, day, closes, text }
+  // closed: { open, day, inDays (0 = later today), nextDay, opens, text, when }  — `when` is "opens tomorrow at 7 AM" on its own
   function status(lang) {
     const t = W[lang] || W.en, { day, mins } = beirutNow(), h = HOURS[day];
-    if (h && mins >= h[0] * 60 && mins < h[1] * 60) return { open: true, day, text: (h[1] * 60 - mins <= 30 ? t.soon : t.open)(t.time(h[1])) };
-    if (h && mins < h[0] * 60) return { open: false, day, text: t.later(t.time(h[0])) };
+    if (h && mins >= h[0] * 60 && mins < h[1] * 60) return { open: true, day, closes: t.time(h[1]), text: (h[1] * 60 - mins <= 30 ? t.soon : t.open)(t.time(h[1])) };
+    if (h && mins < h[0] * 60) { const o = t.time(h[0]); return { open: false, day, inDays: 0, nextDay: day, opens: o, text: t.later(o), when: t.wLater(o) }; }
     let d = 1; while (d < 8 && !HOURS[(day + d) % 7]) d++;
     const nd = (day + d) % 7, o = t.time(HOURS[nd][0]);
-    return { open: false, day, text: d === 1 ? t.tomorrow(o) : t.day(t.days[nd], o) };
+    return { open: false, day, inDays: d, nextDay: nd, opens: o, text: d === 1 ? t.tomorrow(o) : t.day(t.days[nd], o), when: d === 1 ? t.wTomorrow(o) : t.wDay(t.days[nd], o) };
   }
+  const dayName = (d, lang) => (W[lang] || W.en).days[d];
   function paintStatus(lang) {
     const s = status(lang);
     document.querySelectorAll('[data-status]').forEach(el => {
@@ -79,32 +84,37 @@ window.AJ = (() => {
       <radialGradient id="intoGlow" cx="120" cy="270" r="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFD07A"/><stop offset=".3" stop-color="#F08A37"/><stop offset=".62" stop-color="#9A3A14" stop-opacity=".7"/><stop offset="1" stop-color="#1E261F" stop-opacity="0"/></radialGradient>
       <linearGradient id="intoFlame" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFF4C8"/><stop offset=".38" stop-color="#FFC247"/><stop offset=".78" stop-color="#F26A1B"/><stop offset="1" stop-color="#C2320F" stop-opacity=".1"/></linearGradient>
       <linearGradient id="intoWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E3B57E"/><stop offset="1" stop-color="#A9743F"/></linearGradient>
-      <clipPath id="intoMouth"><path d="M30 290 V120 A90 90 0 0 1 210 120 V290 Z"/></clipPath>
+      <pattern id="intoBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="#9C5640"/><rect x=".6" y=".6" width="22.8" height="4.8" rx=".8" fill="#C47A5E"/><rect x="-11.4" y="6.6" width="22.8" height="4.8" rx=".8" fill="#BE7358"/><rect x="12.6" y="6.6" width="22.8" height="4.8" rx=".8" fill="#C98064"/></pattern>
+      <clipPath id="intoMouth"><path d="M54 292 V218 A66 56 0 0 1 186 218 V292 Z"/></clipPath>
     </defs>
-    <path d="M30 290 V120 A90 90 0 0 1 210 120 V290 Z" fill="#1A211B"/>
+    <path d="M16 292 V98 Q120 40 224 98 V292 Z" fill="url(#intoBrick)"/>
+    <path d="M18 99 Q120 44 222 99" fill="none" stroke="#7F786E" stroke-width="9"/>
+    <path d="M18 99 Q120 44 222 99" fill="none" stroke="#D2CDC2" stroke-width="7" stroke-dasharray="5 1.2"/>
+    <rect x="10" y="96" width="8" height="196" fill="#C6CACB"/><rect x="222" y="96" width="8" height="196" fill="#A9AEB0"/>
+    <path d="M54 292 V218 A66 56 0 0 1 186 218 V292 Z" fill="#1A211B"/>
     <g clip-path="url(#intoMouth)">
-      <ellipse class="into-glow" cx="120" cy="290" rx="130" ry="120" fill="url(#intoGlow)"/>
+      <ellipse class="into-glow" cx="120" cy="292" rx="130" ry="120" fill="url(#intoGlow)"/>
       <g>
-        <path class="flame" d="M46 286 C38 262 52 246 50 226 C62 240 72 220 68 200 C86 224 92 256 86 286 Z" fill="url(#intoFlame)"/>
-        <path class="flame" d="M154 286 C148 262 162 246 160 228 C172 242 186 222 182 204 C198 230 200 260 194 286 Z" fill="url(#intoFlame)"/>
-        <path class="flame" d="M96 286 C92 270 102 260 102 246 C112 258 118 270 114 286 Z" fill="url(#intoFlame)"/>
+        <path class="flame" d="M56 288 C50 264 62 248 60 228 C72 242 82 222 78 204 C96 228 100 258 94 288 Z" fill="url(#intoFlame)"/>
+        <path class="flame" d="M146 288 C140 264 154 248 152 230 C164 244 176 224 172 206 C188 232 190 262 184 288 Z" fill="url(#intoFlame)"/>
+        <path class="flame" d="M100 288 C96 272 106 262 106 248 C116 260 122 272 118 288 Z" fill="url(#intoFlame)"/>
       </g>
     </g>
-    <path d="M30 292 V120 A90 90 0 0 1 210 120 V292" fill="none" stroke="#E7D6C0" stroke-width="3"/>
-    <path d="M44 292 V122 A76 76 0 0 1 196 122 V292" fill="none" stroke="rgba(231,214,192,.3)" stroke-width="1.5"/>
-    <path d="M120 86 C103 74 99 62 106 56 C112 51 118.6 53.6 120 60 C121.4 53.6 128 51 134 56 C141 62 137 74 120 86 Z" fill="#B8663E"/>
+    <path d="M47 292 V218 A73 63 0 0 1 193 218 V292" fill="none" stroke="#7F786E" stroke-width="13"/>
+    <path d="M47 292 V218 A73 63 0 0 1 193 218 V292" fill="none" stroke="#D2CDC2" stroke-width="11" stroke-dasharray="8 1.4"/>
+    <g transform="translate(120 100)"><path d="M-12 16 V-2 A12 12 0 0 1 12 -2 V16 Z" fill="#2E3A2F" stroke="#E7D6C0" stroke-width="1.6"/><path d="M0 10 C-5.5 6 -6.6 2.8 -4.6 1.1 C-2.9 -.3 -.8 .4 0 2 C.8 .4 2.9 -.3 4.6 1.1 C6.6 2.8 5.5 6 0 10 Z" fill="#B8663E"/></g>
     <g class="into-steam" fill="none" stroke="#F4EBDD" stroke-width="2.6" stroke-linecap="round">
-      <path d="M104 238 c-5 -7 5 -11 0 -18 c-5 -7 5 -11 0 -18"/><path d="M120 234 c-5 -7 5 -11 0 -18 c-5 -7 5 -11 0 -18"/><path d="M136 238 c-5 -7 5 -11 0 -18 c-5 -7 5 -11 0 -18"/>
+      <path d="M104 240 c-5 -7 5 -11 0 -18 c-5 -7 5 -11 0 -18"/><path d="M120 236 c-5 -7 5 -11 0 -18 c-5 -7 5 -11 0 -18"/><path d="M136 240 c-5 -7 5 -11 0 -18 c-5 -7 5 -11 0 -18"/>
     </g>
     <g class="into-peel">
-      <path d="M160 272 L300 340" stroke="url(#intoWood)" stroke-width="8" stroke-linecap="round"/>
-      <ellipse cx="120" cy="268" rx="50" ry="13" fill="url(#intoWood)"/>
-      <ellipse cx="120" cy="265" rx="40" ry="10.5" fill="#A8552F"/>
-      <ellipse cx="120" cy="262" rx="40" ry="10.5" fill="#D9A46A"/>
-      <path d="M86 262 A34 8.4 0 0 1 120 253.6 V270.4 A34 8.4 0 0 1 86 262 Z" fill="#4F5533"/>
-      <path d="M120 253.6 A34 8.4 0 0 1 154 262 A34 8.4 0 0 1 120 270.4 Z" fill="#F1E2C4"/>
-      <g fill="#A9A36A"><circle cx="100" cy="260" r="1.1"/><circle cx="108" cy="264" r="1"/><circle cx="96" cy="264" r=".9"/><circle cx="112" cy="258" r="1"/></g>
-      <g fill="#D9A46A" opacity=".8"><ellipse cx="132" cy="260" rx="3" ry="1.1"/><ellipse cx="142" cy="264" rx="3.4" ry="1.2"/><ellipse cx="128" cy="266" rx="2.6" ry="1"/></g>
+      <path d="M160 274 L300 342" stroke="url(#intoWood)" stroke-width="8" stroke-linecap="round"/>
+      <ellipse cx="120" cy="270" rx="50" ry="13" fill="url(#intoWood)"/>
+      <ellipse cx="120" cy="267" rx="40" ry="10.5" fill="#A8552F"/>
+      <ellipse cx="120" cy="264" rx="40" ry="10.5" fill="#D9A46A"/>
+      <path d="M86 264 A34 8.4 0 0 1 120 255.6 V272.4 A34 8.4 0 0 1 86 264 Z" fill="#4F5533"/>
+      <path d="M120 255.6 A34 8.4 0 0 1 154 264 A34 8.4 0 0 1 120 272.4 Z" fill="#F1E2C4"/>
+      <g fill="#A9A36A"><circle cx="100" cy="262" r="1.1"/><circle cx="108" cy="266" r="1"/><circle cx="96" cy="266" r=".9"/><circle cx="112" cy="260" r="1"/></g>
+      <g fill="#D9A46A" opacity=".8"><ellipse cx="132" cy="262" rx="3" ry="1.1"/><ellipse cx="142" cy="266" rx="3.4" ry="1.2"/><ellipse cx="128" cy="268" rx="2.6" ry="1"/></g>
     </g>
   </svg>`;
   const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -191,10 +201,11 @@ window.AJ = (() => {
       'Cancelled': ['انلغى', 'الطلب انلغى. اتصل فينا على 76 77 00 26 إذا في شي غلط.']
     }
   };
-  // live:     orders go to the Sheet.
+  // live:     on ajeenty.com, orders go to the Sheet.
   // whatsapp: on ajeenty.com before the Sheet is connected, so a real order is never lost.
-  // preview:  anywhere else (your computer, a test address): nothing is sent, statuses move on their own.
-  const orderMode = () => ORDER_URL ? 'live' : (LIVE_HOSTS.includes(location.hostname) ? 'whatsapp' : 'preview');
+  // preview:  anywhere else (your computer, a test address): nothing is sent, statuses move on their own,
+  //           so testing a copy of the site never reaches the Sheet.
+  const orderMode = () => LIVE_HOSTS.includes(location.hostname) ? (ORDER_URL ? 'live' : 'whatsapp') : 'preview';
   const alsoWa = () => ALSO_WHATSAPP && orderMode() === 'live';
   const isFinal = s => FINAL.includes(s);
   const label = (s, lang) => ((ST[lang] || ST.en)[s] || [s])[0];
@@ -259,7 +270,7 @@ window.AJ = (() => {
   }
 
   return {
-    WA, HOURS, pickLang, saveLang, status, paintStatus, waLinks, OVEN, now: beirutNow,
+    WA, HOURS, pickLang, saveLang, status, dayName, paintStatus, waLinks, OVEN, now: beirutNow,
     order: { mode: orderMode, alsoWa, get: getOrder, set: setOrder, send: sendOrder, refresh: refreshOrder, isFinal, label, chipLabel, STEPS, ST, chipVisible, chip: orderChip }
   };
 })();
