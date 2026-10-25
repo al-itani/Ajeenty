@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>AJEENTY | Man’oushe &amp; mo3ajanat in Ras El Nabeh, Beirut</title>
-  <meta name="description" content="AJEENTY (عجينتي) bakes man’oushe, mo3ajanat and fresh dough in Ras El Nabeh, Beirut. Open Monday to Saturday, 7 AM to 8 PM. Order online for pickup or delivery.">
+  <meta name="description" content="AJEENTY (عجينتي) bakes man’oushe, mo3ajanat and fresh dough in Ras El Nabeh, Beirut. Open every day, 7 AM to 8 PM (Sunday until 7 PM). Order online for pickup or delivery.">
   <meta name="theme-color" content="#2E3A2F">
   <link rel="canonical" href="https://ajeenty.com/">
   <link rel="alternate" hreflang="en" href="https://ajeenty.com/">
@@ -20,7 +20,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AJEENTY">
   <meta property="og:title" content="AJEENTY — Beirut, we’re open.">
-  <meta property="og:description" content="Man’oushe, mo3ajanat and fresh dough, straight from the oven. Ras El Nabeh, Beirut · Mon–Sat 7 AM–8 PM.">
+  <meta property="og:description" content="Man’oushe, mo3ajanat and fresh dough, straight from the oven. Ras El Nabeh, Beirut · Daily 7 AM–8 PM (Sun to 7 PM).">
   <meta property="og:url" content="https://ajeenty.com/">
   <meta property="og:image" content="https://ajeenty.com/og.jpg">
   <meta property="og:image:secure_url" content="https://ajeenty.com/og.jpg">
@@ -73,6 +73,12 @@
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         "opens": "07:00",
         "closes": "20:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Sunday",
+        "opens": "07:00",
+        "closes": "19:00"
       }
     ],
     "contactPoint": [
@@ -113,6 +119,7 @@
   <header class="nav">
     <div class="nav-in wrap">
       <a class="nav-logo" href="index.html" aria-label="AJEENTY home">
+        <img class="emblem" src="img/logo-emblem.png" width="110" height="144" alt="">
         <svg class="wm" viewBox="0 0 338 68" aria-hidden="true"><use href="#i-wordmark"/></svg>
         <span class="ar-wm" lang="ar" aria-hidden="true">عجينتي</span>
       </a>
@@ -121,7 +128,7 @@
         <a class="nl-visit" href="#visit" data-i18n="navVisit">Visit us</a>
       </nav>
       <div class="nav-right">
-        <span class="status" data-status>Mon–Sat, 7 AM – 8 PM</span>
+        <span class="status" data-status>Daily, 7 AM – 8 PM · Sun to 7 PM</span>
         <div class="lang" role="group" aria-label="Language">
           <button type="button" data-lang="en" aria-pressed="true">EN</button>
           <button type="button" data-lang="ar" aria-pressed="false" lang="ar">ع</button>
@@ -138,7 +145,7 @@
     <section class="hero on-sage" aria-labelledby="hero-title">
       <div class="hero-in wrap">
         <div class="hero-copy">
-          <p class="hero-status"><span class="status" data-status>Mon–Sat, 7 AM – 8 PM</span></p>
+          <p class="hero-status"><span class="status" data-status>Daily, 7 AM – 8 PM · Sun to 7 PM</span></p>
           <h1 class="h1 hero-title" id="hero-title"><span class="l1" data-hl="a">Beirut,</span> <span class="l2" data-hl="b">we’re open.</span></h1>
           <p class="lede hero-lede" data-i18n="heroP">Man’oushe and mo3ajanat from our oven in Ras El Nabeh. Order online for pickup or delivery, or grab it hot from the counter.</p>
           <div class="hero-actions" id="heroActions">
@@ -146,7 +153,7 @@
             <a class="btn btn-line" href="#visit" data-i18n="findUs">Find us</a>
           </div>
           <ul class="hero-meta">
-            <li><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="hoursShort">Mon–Sat, 7 AM – 8 PM</span></li>
+            <li><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="hoursShort">Daily, 7 AM – 8 PM · Sun to 7 PM</span></li>
             <li><svg aria-hidden="true"><use href="#i-bike"/></svg><span data-i18n="deliveryShort">Pickup and delivery</span></li>
           </ul>
         </div>
@@ -259,7 +266,7 @@
           <p class="addr"><strong data-i18n="addrA">Haraty Street, Moazzen Building</strong><span data-i18n="addrB">Bchara al Khoury, Ras El Nabeh, Beirut</span></p>
           <dl class="hours" aria-label="Opening hours" data-i18n-attr="aria-label:hoursLabel">
             <div data-days="1,2,3,4,5,6"><dt><span data-i18n="monSat">Monday to Saturday</span><em data-i18n="today">Today</em></dt><dd class="num" data-i18n="monSatH">7:00 AM – 8:00 PM</dd></div>
-            <div data-days="0"><dt><span data-i18n="sun">Sunday</span><em data-i18n="today">Today</em></dt><dd data-i18n="closed">Closed</dd></div>
+            <div data-days="0"><dt><span data-i18n="sun">Sunday</span><em data-i18n="today">Today</em></dt><dd class="num" data-i18n="sunH">7:00 AM – 7:00 PM</dd></div>
           </dl>
           <div class="visit-acts">
             <a class="btn btn-action" href="https://maps.app.goo.gl/8EuMrwrfKrTEsUth9" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Get directions</span></a>
@@ -286,6 +293,7 @@
     <div class="wrap">
       <div class="foot-top">
         <div class="foot-brand">
+          <img class="emblem" src="img/emblem.png" width="322" height="420" alt="" loading="lazy">
           <svg class="wm" viewBox="0 0 338 68" role="img" aria-label="AJEENTY"><use href="#i-wordmark"/></svg>
           <span class="ar-wm" lang="ar">عجينتي</span>
           <p data-i18n="footTag">Fresh dough. Hot oven.</p>
@@ -297,7 +305,7 @@
           </div>
           <div>
             <h2 data-i18n="fHours">Hours</h2>
-            <p data-i18n-html="fHoursP">Monday to Saturday<br>7:00 AM – 8:00 PM<br>Closed on Sunday</p>
+            <p data-i18n-html="fHoursP">Monday to Saturday<br>7:00 AM – 8:00 PM<br>Sunday 7:00 AM – 7:00 PM</p>
           </div>
           <div>
             <h2 data-i18n="fOrder">Call us</h2>

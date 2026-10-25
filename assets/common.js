@@ -6,7 +6,7 @@ window.AJ = (() => {
   /* ---------- business facts: edit here, every page follows ---------- */
   const WA = '96176770026';
   // Opening hours by weekday (0 = Sunday … 6 = Saturday), 24h clock, Beirut time. null = closed.
-  const HOURS = { 0: null, 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: [7, 20], 6: [7, 20] };
+  const HOURS = { 0: [7, 19], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: [7, 20], 6: [7, 20] };
   const TZ = 'Asia/Beirut';
   const LANG_KEY = 'ajeenty-lang';
 
@@ -221,7 +221,7 @@ window.AJ = (() => {
   const newId = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 32]).join('');
   async function sendOrder(payload) {
     if (orderMode() !== 'live') { await new Promise(r => setTimeout(r, 700)); return { ok: true, id: newId(), preview: true }; }
-    const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 20000);
+    const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 25000);
     try {
       // No Content-Type header on purpose: a plain-text POST skips the CORS check that Google Apps Script can't answer.
       const r = await fetch(ORDER_URL, { method: 'POST', body: JSON.stringify(payload), signal: ctrl.signal });
@@ -269,8 +269,31 @@ window.AJ = (() => {
     if (!isFinal(o.status)) chipTimer = setTimeout(async () => { await refreshOrder(); orderChip(document.documentElement.lang || 'en'); }, o.preview ? 3000 : 30000);
   }
 
+  // "Order online" buttons on the other pages show how many items are waiting on the tray
+  const TRAY_KEY = 'ajeenty-furn-v1';
+  function trayCount() {
+    try {
+      const d = JSON.parse(localStorage.getItem(TRAY_KEY) || 'null');
+      if (!d || !Array.isArray(d.tray) || (d.at && Date.now() - d.at > 7 * 864e5)) return 0;
+      return d.tray.reduce((a, l) => a + (l && l.q > 0 ? Math.min(99, l.q | 0) : 0), 0);
+    } catch (e) { return 0; }
+  }
+  function trayBadges() {
+    if (document.body.dataset.page === 'menu') return;
+    const n = trayCount();
+    document.querySelectorAll('a.btn-action[href$="menu/index.html"], #orderFloat').forEach(a => {
+      let b = a.querySelector('[data-tray-count]');
+      if (!n) { if (b) b.remove(); return; }
+      if (!b) { b = document.createElement('span'); b.className = 'tray-n'; b.dataset.trayCount = ''; a.appendChild(b); }
+      b.textContent = n > 99 ? '99+' : n;
+    });
+  }
+  addEventListener('storage', e => { if (e.key === TRAY_KEY || e.key === null) trayBadges(); if (e.key === ORDER_KEY) orderChip(document.documentElement.lang || 'en'); });
+  addEventListener('pageshow', () => trayBadges());
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', trayBadges); else trayBadges();
+
   return {
     WA, HOURS, pickLang, saveLang, status, dayName, paintStatus, waLinks, OVEN, now: beirutNow,
-    order: { mode: orderMode, alsoWa, get: getOrder, set: setOrder, send: sendOrder, refresh: refreshOrder, isFinal, label, chipLabel, STEPS, ST, chipVisible, chip: orderChip }
+    order: { KEY: ORDER_KEY, mode: orderMode, alsoWa, get: getOrder, set: setOrder, send: sendOrder, refresh: refreshOrder, isFinal, label, chipLabel, STEPS, ST, chipVisible, chip: orderChip }
   };
 })();

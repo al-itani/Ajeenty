@@ -25,11 +25,11 @@ const T = {
     heatHint:'Tap Add on anything to start baking', heatNext:(n,x)=>`${n} more for ${x}`, heatMax:'Oven at full blast',
     waHead:"Marhaba AJEENTY! I'd like to order:", waName:'Name:', waHow:'Pickup or delivery:', waTime:'Time:', waAddr:'Delivery address:',
     navMenu:'Menu', navVisit:'Visit us', askWa:'Questions on WhatsApp', kicker:'The full menu', lede:'Tap the peel on anything you fancy. It bakes in the oven above and lands on your tray. Then order right here, for pickup or delivery.',
-    footTag:'Fresh dough. Hot oven.', fVisit:'Visit', fAddr:'Haraty Street, Moazzen Building<br>Bchara al Khoury, Beirut', fHours:'Hours', fHoursP:'Monday to Saturday<br>7:00 AM – 8:00 PM<br>Closed on Sunday', fOrder:'Call us', fMobile:'Mobile and WhatsApp', fLand:'Landline', gmaps:'Google Maps',
+    footTag:'Fresh dough. Hot oven.', fVisit:'Visit', fAddr:'Haraty Street, Moazzen Building<br>Bchara al Khoury, Beirut', fHours:'Hours', fHoursP:'Monday to Saturday<br>7:00 AM – 8:00 PM<br>Sunday 7:00 AM – 7:00 PM', fOrder:'Call us', fMobile:'Mobile and WhatsApp', fLand:'Landline', gmaps:'Google Maps',
     placeOrder:'Place order', details:'Your details', confirmed:'Order confirmed', orderNo:'Order', back:'Back',
     pickup:'Pickup', delivery:'Delivery', fType:'Pickup or delivery', fName:'Your name', fPhone:'Phone number', fAddress:'Delivery address', fAddressPh:'Area, street, building, floor', fTime:'Pickup time', fNote:'Notes (optional)', fNotePh:'Extra crispy, no onions…',
     asap:'As soon as possible', whenOpen:'As soon as you open', today:'Today', tomorrow:'Tomorrow', days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-    send:'Send order', sending:'Sending…', sendWa:'Send on WhatsApp', errName:'Please add your name.', errPhone:'Please add a phone number we can reach you on.', errAddress:'Please add your delivery address.',
+    send:'Send order', sending:'Sending…', sendWa:'Send on WhatsApp', errName:'Please add your name.', errPhone:'Please add a phone number we can reach you on.', errTime:'That pickup time has passed. Please pick another one.', errAddress:'Please add your delivery address.',
     errSend:'We couldn’t send your order. Check your connection and try again, or send the same order on WhatsApp.',
     previewNote:'Preview mode: orders aren’t sent anywhere from this copy of the site.', previewTrack:'Preview mode: this order wasn’t sent. The steps move on their own so you can see the tracker.',
     waModeNote:'Online ordering is almost ready. For now, sending opens WhatsApp with your order already written.', sendViaWa:'Send on WhatsApp',
@@ -53,11 +53,11 @@ const T = {
     heatHint:'اكبس «زيد» عأي صنف ليبلّش الخبز', heatNext:(n,x)=>`${n} كمان ليصير ${x}`, heatMax:'الفرن عالآخر',
     waHead:'مرحبا عجينتي! بدي اطلب:', waName:'الاسم:', waHow:'استلام أو دليفري:', waTime:'الوقت:', waAddr:'عنوان الدليفري:',
     navMenu:'المنيو', navVisit:'زورونا', askWa:'اسألنا عالواتساب', kicker:'المنيو كلّه', lede:'اكبس عالمطرحة حد أي صنف بيعجبك. بيخبز بالفرن فوق وبينزل عصينيتك. وبعدين اطلب من هون، استلام أو دليفري.',
-    footTag:'عجينة طازة. فرن حامي.', fVisit:'العنوان', fAddr:'شارع حاراتي، بناية المؤذن<br>بشارة الخوري، بيروت', fHours:'الدوام', fHoursP:'الإثنين – السبت<br>7:00 الصبح – 8:00 المسا<br>الأحد مسكّرين', fOrder:'اتصل فينا', fMobile:'خلوي وواتساب', fLand:'أرضي', gmaps:'Google Maps',
+    footTag:'عجينة طازة. فرن حامي.', fVisit:'العنوان', fAddr:'شارع حاراتي، بناية المؤذن<br>بشارة الخوري، بيروت', fHours:'الدوام', fHoursP:'الإثنين – السبت<br>7:00 الصبح – 8:00 المسا<br>الأحد 7:00 الصبح – 7:00 المسا', fOrder:'اتصل فينا', fMobile:'خلوي وواتساب', fLand:'أرضي', gmaps:'Google Maps',
     placeOrder:'اطلب', details:'تفاصيلك', confirmed:'تأكّد طلبك', orderNo:'طلب رقم', back:'رجوع',
     pickup:'استلام من المحل', delivery:'دليفري', fType:'استلام أو دليفري', fName:'الاسم', fPhone:'رقم التلفون', fAddress:'عنوان الدليفري', fAddressPh:'المنطقة، الشارع، البناية، الطابق', fTime:'وقت الاستلام', fNote:'ملاحظات (اختياري)', fNotePh:'مقرمشة زيادة، بلا بصل…',
     asap:'بأسرع وقت', whenOpen:'أول ما تفتحوا', today:'اليوم', tomorrow:'بكرا', days:['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],
-    send:'ابعت الطلب', sending:'عم نبعت…', sendWa:'ابعت عالواتساب', errName:'زيد اسمك.', errPhone:'زيد رقم تلفون فينا نحكيك عليه.', errAddress:'زيد عنوان الدليفري.',
+    send:'ابعت الطلب', sending:'عم نبعت…', sendWa:'ابعت عالواتساب', errName:'زيد اسمك.', errPhone:'زيد رقم تلفون فينا نحكيك عليه.', errTime:'هالوقت مرق. نقّي وقت تاني للاستلام.', errAddress:'زيد عنوان الدليفري.',
     errSend:'ما قدرنا نبعت طلبك. شيّك عالانترنت وجرّب مرة تانية، أو ابعت نفس الطلب عالواتساب.',
     previewNote:'وضع التجربة: هالنسخة من الموقع ما بتبعت طلبات.', previewTrack:'وضع التجربة: هالطلب ما انبعت. الخطوات عم تمشي لحالها لتشوف كيف بيشتغل التتبّع.',
     waModeNote:'الطلب أونلاين صار قريب. هلّق، لمّا تبعت بيفتح الواتساب وطلبك مكتوب جاهز.', sendViaWa:'ابعت عالواتساب',
@@ -354,16 +354,24 @@ function artFor(it, fi) {
 }
 
 /* ---------------- state ---------------- */
+// The tray lives in this browser (localStorage): it survives a reload, closing the tab and coming back later,
+// and every open tab shares it. It is emptied once an order goes through, and forgotten after TRAY_DAYS untouched.
 const KEY = 'ajeenty-furn-v1';
-const state = { lang:'en', tray:[], flav:{} };
+const TRAY_DAYS = 7;
+const state = { lang:'en', tray:[], flav:{}, note:'', at:0, sent:null };
 function load(d) {
   if (!d) { try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { d = null; } }
+  state.tray = []; state.note = ''; state.sent = null; state.at = 0;
   if (!d) return;
   if (d.lang === 'ar' || d.lang === 'en') state.lang = d.lang;
   if (d.flav && typeof d.flav === 'object') state.flav = d.flav;
+  if (d.at && Date.now() - d.at > TRAY_DAYS * 864e5) return;   // a tray left for over a week starts fresh
+  state.at = +d.at || 0;
   if (Array.isArray(d.tray)) state.tray = d.tray.filter(l => l && ITEMS[l.id] && ITEMS[l.id].p[l.v] != null && l.q > 0).map(l => ({id:l.id, v:+l.v||0, f:l.f ?? null, j:!!l.j, q:Math.min(99, l.q|0), ts:l.ts||0}));
+  if (typeof d.note === 'string') state.note = d.note.slice(0, 300);
+  if (d.sent && typeof d.sent.ref === 'string') state.sent = { ref: d.sent.ref, sig: String(d.sent.sig || '') };
 }
-function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+function save() { state.at = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 const L = () => state.lang;
 const t = k => T[L()][k];
 const count = () => state.tray.reduce((a,l) => a + l.q, 0);
@@ -783,6 +791,7 @@ function renderForm() {
   if (!st.open) $('#closedNote').textContent = W.closedNote(st.when);
   const cust = loadCustomer(), el = form.elements;
   ['name', 'phone', 'address'].forEach(k => { if (!el[k].value && cust[k]) el[k].value = cust[k]; });
+  if (!el.note.value && state.note) el.note.value = state.note;
   if (!form.dataset.touched && (cust.type === 'delivery' || cust.type === 'pickup')) el.type.value = cust.type;
   const keep = el.time.value;
   el.time.innerHTML = timeSlots().map(o => `<option value="${esc(o.v)}">${esc(o.label)}</option>`).join('');
@@ -826,14 +835,32 @@ function showSendError(d, waSent) {
   $('#formErr').scrollIntoView({ block: 'nearest' });
 }
 form.addEventListener('change', e => {
-  if (e.target.name === 'type') { form.dataset.touched = '1'; toggleType(); fieldError('address', ''); }
+  if (e.target.name === 'type') { form.dataset.touched = '1'; toggleType(); fieldError('address', ''); saveDraft(); }
+  if (e.target.name === 'time') fieldError('time', '');
 });
-form.addEventListener('input', e => { if (e.target.getAttribute('aria-invalid')) fieldError(e.target.name, ''); });
+form.addEventListener('input', e => { if (e.target.getAttribute('aria-invalid')) fieldError(e.target.name, ''); saveDraft(); });
+// A half-filled form is kept as it's typed: details for next time, the note with this tray.
+let draftT = 0;
+function saveDraft() {
+  clearTimeout(draftT);
+  draftT = setTimeout(() => {
+    if (form.hidden) return;
+    const d = readForm(), cust = loadCustomer();
+    saveCustomer({ name: d.name || cust.name, phone: d.phone || cust.phone, address: d.address || cust.address, type: d.type });
+    if (state.note !== d.note) { state.note = d.note; save(); }
+  }, 250);
+}
 form.addEventListener('submit', async e => {
   e.preventDefault();
   if (sending || !state.tray.length) return;
   const d = readForm();
   if (!validate(d)) return;
+  // the form may have been open a while: a pickup time that has already gone by is refused, never sent
+  if (d.type === 'pickup' && !timeSlots().some(o => o.v === d.time)) {
+    const el = form.elements.time;
+    el.innerHTML = timeSlots().map(o => `<option value="${esc(o.v)}">${esc(o.label)}</option>`).join('');
+    fieldError('time', t('errTime')); el.focus(); return;
+  }
   saveCustomer(d);
   $('#formErr').hidden = true;
   const mode = AJ.order.mode();
@@ -854,6 +881,11 @@ form.addEventListener('submit', async e => {
     note: d.note, lang: L(), website: d.website,
     items: state.tray.map(l => ({ name: lineName(l, 'en'), qty: l.q }))   // English names for the kitchen, no prices
   };
+  // Same order sent again (a retry after a timeout or a dropped connection) keeps the same reference,
+  // so the Sheet saves it once. Any change to the tray or the details makes it a new order.
+  const sig = JSON.stringify([payload.type, payload.name, payload.phone, payload.address, payload.time, payload.note, payload.items]);
+  if (!state.sent || state.sent.sig !== sig) { state.sent = { ref: newRef(), sig }; save(); }
+  payload.ref = state.sent.ref;
   try {
     const res = await AJ.order.send(payload);
     const wa = AJ.order.alsoWa() ? orderText(L(), d, res.id) : '';
@@ -862,7 +894,7 @@ form.addEventListener('submit', async e => {
       id: res.id, type: d.type, at: Date.now(), checked: Date.now(), status: 'Received', preview: !!res.preview,
       total: total(), time: d.timeLabel, wa, waOpened: !!waWin, lines: state.tray.map(l => ({ q: l.q, en: lineName(l, 'en'), ar: lineName(l, 'ar') }))
     });
-    state.tray = []; save(); update();
+    state.tray = []; state.note = ''; state.sent = null; save(); update();
     form.reset(); delete form.dataset.touched;
     const u = new URL(location.href); u.searchParams.set('order', res.id); history.replaceState(null, '', u);
     setView('track'); startPolling(false);
@@ -999,6 +1031,26 @@ function spy() {
   }
 }
 addEventListener('scroll', () => { if (!spyRaf) spyRaf = requestAnimationFrame(spy); }, {passive:true});
+
+/* ---------------- other tabs ---------------- */
+// Another tab (or this page coming back from the back/forward cache) may have changed the tray or placed
+// the order: always take the saved copy, so an old tab can never put already-ordered items back.
+function resync() {
+  const lg = state.lang;
+  load(null); state.lang = lg;
+  update();
+  if (!sheet.hidden) {
+    if (view === 'form' && !state.tray.length && !sending) setView(AJ.order.get() ? 'track' : 'tray');
+    else if (view === 'form') renderForm();
+    else if (view === 'track') renderTrack();
+  }
+}
+addEventListener('storage', e => {
+  if (e.key === KEY || e.key === null) resync();
+  if (e.key === AJ.order.KEY || e.key === null) { renderChip(); startPolling(false); if (!sheet.hidden && view === 'track') renderTrack(); }
+});
+addEventListener('pageshow', e => { if (e.persisted) { resync(); renderChip(); startPolling(); } });
+const newRef = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), b => 'abcdefghijkmnpqrstuvwxyz23456789'[b % 32]).join('');
 
 /* ---------------- boot ---------------- */
 function start() {
