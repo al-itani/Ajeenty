@@ -238,8 +238,14 @@
     <!-- 4 · The dough -->
     <section class="story on-terra" aria-labelledby="story-title">
       <div class="wrap story-in">
-        <figure class="story-photo">
-          <img src="img/photos/story-peel-sm.jpg" srcset="img/photos/story-peel-sm.jpg 540w, img/photos/story-peel.jpg 900w" sizes="(max-width:980px) 90vw, 480px" width="900" height="1125" loading="lazy" alt="Two cheese man’oushe on a wooden peel, ready for the oven" data-i18n-attr="alt:altPeel">
+        <figure class="story-photo is-video">
+          <video class="story-video" id="doughVideo" muted playsinline loop preload="none" poster="img/photos/dough-loop.jpg" width="646" height="808" aria-label="Hands pressing a ball of dough flat on a floured wooden board" data-i18n-attr="aria-label:altDough">
+            <source data-src="img/photos/dough-loop.mp4" type="video/mp4">
+          </video>
+          <button class="window-btn" type="button" id="doughBtn" aria-label="Pause the video" hidden>
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+          </button>
         </figure>
         <div class="story-copy">
           <h2 class="story-word" id="story-title" lang="ar">عجينتي</h2>

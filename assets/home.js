@@ -18,7 +18,7 @@
       picksTitle: 'Out of the oven.', picksP: 'A few favourites from the counter. Tap one to see it on the menu and add it to your order.', fullMenu: 'See the full menu',
       pZaatar: 'Zaatar man’oushe', pLahme: 'Lahme baajin', pSpinach: 'Spinach fatayer', pSfiha: 'Sfiha', pPizza: 'Mini pizzas', pMixed: 'Mixed dozen', perDozen: 'a dozen',
       altZaatar: 'Zaatar man’oushe baking on the oven floor', altLahme: 'A whole lahme baajin, just baked', altSpinach: 'Trays of spinach fatayer', altSfiha: 'Open meat sfiha on a tray',
-      altPizza: 'Mini pizzas with melted cheese and an olive', altMixed: 'Our counter, full of mo3ajanat', altPeel: 'Two cheese man’oushe on a wooden peel, ready for the oven', altOven: 'The AJEENTY brick oven, lit, with mini pizzas inside',
+      altPizza: 'Mini pizzas with melted cheese and an olive', altMixed: 'Our counter, full of mo3ajanat', altPeel: 'Two cheese man’oushe on a wooden peel, ready for the oven', altDough: 'Hands pressing a ball of dough flat on a floured wooden board', altOven: 'The AJEENTY brick oven, lit, with mini pizzas inside',
       storyMeans: 'means “my dough”.', storyP: 'Fresh dough, a hot oven, and every topping spread by hand. That’s the whole idea.',
       jrTitle: 'Jreesh dough for manakish', jrP: 'Whole-wheat dough, for', crowdLink: 'Order by the dozen',
       gatherTitle: 'For your next gathering.', gatherP: 'A mixed dozen for the family, pastries for the office, or a spread for the weekend. Tell us what you have in mind and we’ll help you choose.', gatherCta: 'Plan a group order', altGather: 'A tray of spinach and pizza shakhtoura',
@@ -40,7 +40,7 @@
       picksTitle: 'طالع من الفرن.', picksP: 'شوية من الأصناف يلي بتحبوها. اكبس على أي صنف لتشوفه بالمنيو وتزيده عطلبك.', fullMenu: 'شوف المنيو كلّه',
       pZaatar: 'منقوشة زعتر', pLahme: 'لحم بعجين', pSpinach: 'فطاير سبانخ', pSfiha: 'صفيحة', pPizza: 'بيتزا صغار', pMixed: 'دزينة مشكّل', perDozen: 'الدزينة',
       altZaatar: 'مناقيش زعتر عم تنخبز بأرض الفرن', altLahme: 'لحم بعجين طالع هلّق من الفرن', altSpinach: 'صواني فطاير سبانخ', altSfiha: 'صفيحة لحمة بالصينية',
-      altPizza: 'بيتزا صغار بجبنة دايبة وحبة زيتون', altMixed: 'البرّاد عنّا مليان معجنات', altPeel: 'منقوشتين جبنة عالمطرحة، جاهزين للفرن', altOven: 'فرن عجينتي الحجر، والع وفيه بيتزا صغار',
+      altPizza: 'بيتزا صغار بجبنة دايبة وحبة زيتون', altMixed: 'البرّاد عنّا مليان معجنات', altDough: 'إيدين عم يفردوا طابة عجين على لوح خشب مرشوش طحين', altPeel: 'منقوشتين جبنة عالمطرحة، جاهزين للفرن', altOven: 'فرن عجينتي الحجر، والع وفيه بيتزا صغار',
       storyMeans: 'عجينة طازة، فرن حامي، وإيد بتعرف شغلها.', storyP: 'كل منقوشة بتنفرد بالإيد وبتنخبز وحدة وحدة. وهيدا كل شي.',
       jrTitle: 'عجينة جريش للمناقيش', jrP: 'عجينة قمحة كاملة، بزيادة', crowdLink: 'اطلب بالدزينة',
       gatherTitle: 'للّمة الجاية.', gatherP: 'دزينة مشكّل للعيلة، معجنات للشغل، أو سفرة لويكند. قلّنا شو ببالك ومنساعدك تختار.', gatherCta: 'رتّب طلبية لجمعة', altGather: 'صينية شختورة سبانخ وبيتزا',
@@ -87,20 +87,20 @@
   }
   function setLang(lg) { AJ.saveLang(lg); apply(lg); }
 
-  /* ---------- the oven video: plays only on screen, never for reduced motion or data saver, always pausable ---------- */
-  const vid = $('#ovenVideo'), vbtn = $('#videoBtn');
-  let wanted = false;
+  /* ---------- the oven and dough videos: play only on screen, never for reduced motion or data saver, always pausable ---------- */
+  const players = [[$('#ovenVideo'), $('#videoBtn')], [$('#doughVideo'), $('#doughBtn')]].filter(([v, b]) => v && b);
   function syncVideoBtn() {
-    if (!vid || !vbtn) return;
-    const paused = vid.paused;
-    vbtn.classList.toggle('paused', paused);
-    vbtn.setAttribute('aria-label', paused ? T[lang].play : T[lang].pause);
+    players.forEach(([vid, vbtn]) => {
+      const paused = vid.paused;
+      vbtn.classList.toggle('paused', paused);
+      vbtn.setAttribute('aria-label', paused ? T[lang].play : T[lang].pause);
+    });
   }
-  function video() {
-    if (!vid || !vbtn) return;
+  function video() { players.forEach(([vid, vbtn]) => player(vid, vbtn)); }
+  function player(vid, vbtn) {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const saver = !!(navigator.connection && navigator.connection.saveData);
-    wanted = !reduce && !saver;
+    let wanted = !reduce && !saver;
     let loaded = false;
     const load = () => {
       if (loaded) return; loaded = true;

@@ -76,7 +76,8 @@
 .story{padding:clamp(88px,10vw,140px) 0}
 .story-in{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1fr);gap:clamp(40px,7vw,112px);align-items:center}
 .story-photo{margin:0;border-radius:18px;overflow:hidden;aspect-ratio:4/5;background:rgba(0,0,0,.15);box-shadow:0 30px 50px -30px rgba(40,15,5,.6)}
-.story-photo img{width:100%;height:100%;object-fit:cover}
+.story-photo img,.story-video{width:100%;height:100%;object-fit:cover}
+.story-photo.is-video{position:relative;background:#6B4A2E url(../img/photos/dough-loop.jpg) center/cover}
 .story-word{margin:0;font:700 clamp(88px,11.5vw,176px)/1.45 var(--f-display);color:var(--on-sage)}
 .story-means{margin:0;font:600 clamp(28px,3vw,42px)/1.2 var(--f-display);color:var(--on-sage);text-wrap:balance}
 .story .lede{margin-top:24px}
@@ -141,6 +142,7 @@
   .story-in{grid-template-columns:1fr}
   .gather-in{grid-template-columns:1fr}
   .story-photo{max-width:520px;aspect-ratio:4/3}
+  .story-photo.is-video{max-width:420px;aspect-ratio:4/5}   /* the dough clip is portrait: keep all of it */
   .visit-in{grid-template-columns:1fr;grid-template-areas:"info" "map" "photo"}
   .visit-photo{aspect-ratio:4/3}
 }
