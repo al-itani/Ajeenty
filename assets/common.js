@@ -6,7 +6,7 @@ window.AJ = (() => {
   /* ---------- business facts: edit here, every page follows ---------- */
   const WA = '96176770026';
   // Opening hours by weekday (0 = Sunday … 6 = Saturday), 24h clock, Beirut time. null = closed.
-  const HOURS = { 0: [7, 19], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: [7, 20], 6: [7, 20] };
+  const HOURS = { 0: [8, 15], 1: [7, 19], 2: [7, 19], 3: [7, 19], 4: [7, 19], 5: [7, 19], 6: [7, 19] };
   const TZ = 'Asia/Beirut';
   const LANG_KEY = 'ajeenty-lang';
 
@@ -274,7 +274,7 @@ window.AJ = (() => {
   function trayCount() {
     try {
       const d = JSON.parse(localStorage.getItem(TRAY_KEY) || 'null');
-      if (!d || !Array.isArray(d.tray) || (d.at && Date.now() - d.at > 7 * 864e5)) return 0;
+      if (!d || d.wa || !Array.isArray(d.tray) || (d.at && Date.now() - d.at > 7 * 864e5)) return 0;   // d.wa: already sent on WhatsApp
       return d.tray.reduce((a, l) => a + (l && l.q > 0 ? Math.min(99, l.q | 0) : 0), 0);
     } catch (e) { return 0; }
   }

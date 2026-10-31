@@ -25,7 +25,7 @@ const T = {
     heatHint:'Tap Add on anything to start baking', heatNext:(n,x)=>`${n} more for ${x}`, heatMax:'Oven at full blast',
     waHead:"Marhaba AJEENTY! I'd like to order:", waName:'Name:', waHow:'Pickup or delivery:', waTime:'Time:', waAddr:'Delivery address:',
     navMenu:'Menu', navVisit:'Visit us', askWa:'Questions on WhatsApp', kicker:'The full menu', lede:'Tap the peel on anything you fancy. It bakes in the oven above and lands on your tray. Then order right here, for pickup or delivery.',
-    footTag:'Fresh dough. Hot oven.', fVisit:'Visit', fAddr:'Haraty Street, Moazzen Building<br>Bchara al Khoury, Beirut', fHours:'Hours', fHoursP:'Monday to Saturday<br>7:00 AM – 8:00 PM<br>Sunday 7:00 AM – 7:00 PM', fOrder:'Call us', fMobile:'Mobile and WhatsApp', fLand:'Landline', gmaps:'Google Maps',
+    footTag:'Fresh dough. Hot oven.', fVisit:'Visit', fAddr:'Haraty Street, Moazzen Building<br>Bchara al Khoury, Beirut', fHours:'Hours', fHoursP:'Monday to Saturday<br>7:00 AM – 7:00 PM<br>Sunday 8:00 AM – 3:00 PM', fOrder:'Call us', fMobile:'Mobile and WhatsApp', fLand:'Landline', gmaps:'Google Maps',
     placeOrder:'Place order', details:'Your details', confirmed:'Order confirmed', orderNo:'Order', back:'Back',
     pickup:'Pickup', delivery:'Delivery', fType:'Pickup or delivery', fName:'Your name', fPhone:'Phone number', fAddress:'Delivery address', fAddressPh:'Area, street, building, floor', fTime:'Pickup time', fNote:'Notes (optional)', fNotePh:'Extra crispy, no onions…',
     asap:'As soon as possible', whenOpen:'As soon as you open', today:'Today', tomorrow:'Tomorrow', days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
@@ -53,7 +53,7 @@ const T = {
     heatHint:'اكبس «زيد» عأي صنف ليبلّش الخبز', heatNext:(n,x)=>`${n} كمان ليصير ${x}`, heatMax:'الفرن عالآخر',
     waHead:'مرحبا عجينتي! بدي اطلب:', waName:'الاسم:', waHow:'استلام أو دليفري:', waTime:'الوقت:', waAddr:'عنوان الدليفري:',
     navMenu:'المنيو', navVisit:'زورونا', askWa:'اسألنا عالواتساب', kicker:'المنيو كلّه', lede:'اكبس عالمطرحة حد أي صنف بيعجبك. بيخبز بالفرن فوق وبينزل عصينيتك. وبعدين اطلب من هون، استلام أو دليفري.',
-    footTag:'عجينة طازة. فرن حامي.', fVisit:'العنوان', fAddr:'شارع حاراتي، بناية المؤذن<br>بشارة الخوري، بيروت', fHours:'الدوام', fHoursP:'الإثنين – السبت<br>7:00 الصبح – 8:00 المسا<br>الأحد 7:00 الصبح – 7:00 المسا', fOrder:'اتصل فينا', fMobile:'خلوي وواتساب', fLand:'أرضي', gmaps:'Google Maps',
+    footTag:'عجينة طازة. فرن حامي.', fVisit:'العنوان', fAddr:'شارع حاراتي، بناية المؤذن<br>بشارة الخوري، بيروت', fHours:'الدوام', fHoursP:'الإثنين – السبت<br>7:00 الصبح – 7:00 المسا<br>الأحد 8:00 الصبح – 3:00 المسا', fOrder:'اتصل فينا', fMobile:'خلوي وواتساب', fLand:'أرضي', gmaps:'Google Maps',
     placeOrder:'اطلب', details:'تفاصيلك', confirmed:'تأكّد طلبك', orderNo:'طلب رقم', back:'رجوع',
     pickup:'استلام من المحل', delivery:'دليفري', fType:'استلام أو دليفري', fName:'الاسم', fPhone:'رقم التلفون', fAddress:'عنوان الدليفري', fAddressPh:'المنطقة، الشارع، البناية، الطابق', fTime:'وقت الاستلام', fNote:'ملاحظات (اختياري)', fNotePh:'مقرمشة زيادة، بلا بصل…',
     asap:'بأسرع وقت', whenOpen:'أول ما تفتحوا', today:'اليوم', tomorrow:'بكرا', days:['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],
@@ -356,15 +356,19 @@ function artFor(it, fi) {
 /* ---------------- state ---------------- */
 // The tray lives in this browser (localStorage): it survives a reload, closing the tab and coming back later,
 // and every open tab shares it. It is emptied once an order goes through, and forgotten after TRAY_DAYS untouched.
+// If the Sheet never confirmed an order but it went out on WhatsApp instead (state.wa), the tray is kept for the
+// rest of that visit (so a retry is still possible) and starts empty on the next visit.
 const KEY = 'ajeenty-furn-v1';
 const TRAY_DAYS = 7;
-const state = { lang:'en', tray:[], flav:{}, note:'', at:0, sent:null };
-function load(d) {
+const state = { lang:'en', tray:[], flav:{}, note:'', at:0, sent:null, wa:0 };
+function load(d, boot = false) {
   if (!d) { try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { d = null; } }
-  state.tray = []; state.note = ''; state.sent = null; state.at = 0;
+  state.tray = []; state.note = ''; state.sent = null; state.at = 0; state.wa = 0;
   if (!d) return;
   if (d.lang === 'ar' || d.lang === 'en') state.lang = d.lang;
   if (d.flav && typeof d.flav === 'object') state.flav = d.flav;
+  if (boot && d.wa) { save(); return; }   // last visit's order already went out on WhatsApp: start with an empty tray
+  state.wa = +d.wa || 0;
   if (d.at && Date.now() - d.at > TRAY_DAYS * 864e5) return;   // a tray left for over a week starts fresh
   state.at = +d.at || 0;
   if (Array.isArray(d.tray)) state.tray = d.tray.filter(l => l && ITEMS[l.id] && ITEMS[l.id].p[l.v] != null && l.q > 0).map(l => ({id:l.id, v:+l.v||0, f:l.f ?? null, j:!!l.j, q:Math.min(99, l.q|0), ts:l.ts||0}));
@@ -828,6 +832,8 @@ function validate(d) {
   if (ok.includes(false)) { const bad = form.querySelector('[aria-invalid="true"]'); if (bad) bad.focus(); return false; }
   return true;
 }
+// The order left as a WhatsApp message: remember it, so the next visit doesn't show the same tray again.
+function markWa() { state.wa = Date.now(); save(); }
 function showSendError(d, waSent) {
   $('#formErrMsg').textContent = waSent ? t('errSendWa') : t('errSend');
   $('#waFallback').href = waHref(d);
@@ -864,7 +870,7 @@ form.addEventListener('submit', async e => {
   saveCustomer(d);
   $('#formErr').hidden = true;
   const mode = AJ.order.mode();
-  if (mode === 'whatsapp') { window.open(waHref(d), '_blank', 'noopener'); return; }
+  if (mode === 'whatsapp') { window.open(waHref(d), '_blank', 'noopener'); markWa(); return; }
   // Sheet + WhatsApp: open the WhatsApp tab now, while the tap still counts (phones block pop-ups opened later),
   // then point it at WhatsApp once the Sheet has given the order its number.
   let waWin = null;
@@ -894,14 +900,14 @@ form.addEventListener('submit', async e => {
       id: res.id, type: d.type, at: Date.now(), checked: Date.now(), status: 'Received', preview: !!res.preview,
       total: total(), time: d.timeLabel, wa, waOpened: !!waWin, lines: state.tray.map(l => ({ q: l.q, en: lineName(l, 'en'), ar: lineName(l, 'ar') }))
     });
-    state.tray = []; state.note = ''; state.sent = null; save(); update();
+    state.tray = []; state.note = ''; state.sent = null; state.wa = 0; save(); update();
     form.reset(); delete form.dataset.touched;
     const u = new URL(location.href); u.searchParams.set('order', res.id); history.replaceState(null, '', u);
     setView('track'); startPolling(false);
     announce(T[L()].ordered(res.id));
   } catch (err) {
     // Sheet failed: the order still reaches you on WhatsApp if that tab is open.
-    if (waWin) { try { waWin.location.href = waHref(d); } catch (e2) {} }
+    if (waWin) { try { waWin.location.href = waHref(d); markWa(); } catch (e2) {} }
     showSendError(d, !!waWin);
   } finally {
     sending = false; $('#sendBtn').disabled = false; $('#sendTxt').textContent = AJ.order.mode() === 'whatsapp' ? t('sendViaWa') : t('send');
@@ -983,6 +989,7 @@ catsEl.addEventListener('click', e => {
 });
 document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => { if (b.dataset.lang !== L()) setLang(b.dataset.lang); }));
 $('#trayOpen').addEventListener('click', () => openChit('tray'));
+$('#waFallback').addEventListener('click', () => markWa());
 sheet.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeChit(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.hidden) closeChit(); });
 linesEl.addEventListener('click', e => {
@@ -1003,7 +1010,7 @@ linesEl.addEventListener('change', e => {
 });
 $('#clearBtn').addEventListener('click', e => {
   const b = e.currentTarget;
-  if (b.classList.contains('armed')) { disarm(); state.tray = []; save(); update(); return; }
+  if (b.classList.contains('armed')) { disarm(); state.tray = []; state.wa = 0; save(); update(); return; }
   b.classList.add('armed'); b.textContent = t('clearConfirm');
   clearTimeout(armT); armT = setTimeout(() => { b.classList.remove('armed'); b.textContent = t('clear'); }, 3000);
 });
@@ -1054,7 +1061,7 @@ const newRef = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), b =>
 
 /* ---------------- boot ---------------- */
 function start() {
-  load(null);
+  load(null, true);
   state.lang = AJ.pickLang();
   buildScene();
   setLang(state.lang);
