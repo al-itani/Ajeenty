@@ -123,6 +123,7 @@ img,svg,video{display:block;max-width:100%}
 /* "Powered by Weave": our menu and ordering run on a Weave storefront (weave-lb.com/stores) */
 .foot-end{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px}
 .powered{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px 10px;min-height:44px;padding:6px 16px;border:1px solid rgba(168,132,255,.28);border-radius:99px;background:linear-gradient(135deg,#1C0051,#140637);font-size:13px;color:rgba(255,255,255,.72);box-shadow:0 8px 20px -12px rgba(15,8,28,.9);transition:color .2s,border-color .2s,background .2s}
+.powered-by{display:inline-flex;align-items:center;gap:10px}
 .powered-wm{width:auto;height:17px;color:#fff;flex:none}
 .powered-note{padding-inline-start:10px;border-inline-start:1px solid rgba(255,255,255,.18)}
 .powered:hover{color:#fff;border-color:rgba(240,80,35,.6);background:linear-gradient(135deg,#25006b,#1C0051)}
@@ -139,7 +140,13 @@ img,svg,video{display:block;max-width:100%}
 .nav-weave:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
 @keyframes weave-spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.nav-weave svg{animation:none}}
-@media (max-width:520px){.powered{border-radius:16px;padding:10px 16px}.powered-note{flex-basis:100%;padding:0;border:0}}
+@media (max-width:520px){
+  /* two tight lines: "Powered by WEAVE" / "Our menu is a Weave storefront ↗", hugging the text */
+  .powered{display:grid;grid-template-columns:auto auto;grid-template-areas:"b ." "n o";justify-content:start;align-items:center;gap:6px 8px;width:fit-content;max-width:100%;padding:10px 16px 11px;border-radius:16px}
+  .powered-by{grid-area:b;gap:8px}
+  .powered-note{grid-area:n;padding:0;border:0;color:rgba(255,255,255,.88)}
+  .powered-out{grid-area:o;margin:0}
+}
 
 /* ---------- floating "Order online" (homepage, after the hero) ---------- */
 .order-float{position:fixed;inset-inline-end:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:2000;display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:0 22px;border-radius:999px;background:var(--action);color:#fff;font:500 16px/1 var(--f-body);box-shadow:0 14px 30px -10px rgba(28,35,29,.55);transition:transform .35s cubic-bezier(.2,.9,.3,1.2),opacity .25s,background-color .2s;transform:translateY(140%);opacity:0;pointer-events:none}
