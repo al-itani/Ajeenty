@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sending your order | AJEENTY</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#2E3A2F">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../favicon-48.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/fonts.css">
+  <!-- Opened by the menu the moment "Send order" is tapped. This page saves the order to the Sheet (it is the
+       tab in front, so the phone doesn't pause it), then opens WhatsApp with the order and its number. -->
+  <style>
+    :root{--sage:#2E3A2F;--sand:#E7D6C0;--sand-2:#B9AD9A;--action:#AC5B33;--ember:#F2A35E;color-scheme:light}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;min-height:100svh;display:grid;place-items:center;padding:32px 18px;background:var(--sage);color:var(--sand);font:400 17px/1.6 "Readex Pro",system-ui,sans-serif;
+      background-image:radial-gradient(120% 70% at 50% 100%,rgba(242,163,94,.16),transparent 60%),linear-gradient(rgba(231,214,192,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(231,214,192,.045) 1px,transparent 1px);
+      background-size:auto,30px 30px,30px 30px}
+    html[dir=rtl] body{font-family:"Readex Pro",Tahoma,sans-serif}
+    main{width:min(480px,100%);text-align:center}
+    .logo{display:block;width:auto;height:64px;margin:0 auto 18px}
+    .oven{display:block;width:170px;height:auto;margin:0 auto 22px;overflow:hidden}
+    h1{margin:0;font:700 clamp(30px,7.4vw,44px)/1.15 "Reem Kufi",system-ui,sans-serif;letter-spacing:-.01em;text-wrap:balance}
+    .sub{margin:12px auto 0;max-width:34ch;color:var(--sand-2);text-wrap:pretty}
+    .no{display:inline-flex;gap:10px;align-items:baseline;margin:20px 0 0;padding:8px 16px;border-radius:99px;background:rgba(231,214,192,.1);border:1px solid rgba(231,214,192,.22);font-size:15px}
+    .no b{font:700 18px/1 "Archivo",system-ui,sans-serif;letter-spacing:.08em;color:#fff}
+    .dots{display:flex;justify-content:center;gap:8px;margin:26px 0 0}
+    .dots i{width:9px;height:9px;border-radius:50%;background:var(--ember);animation:pulse 1.2s ease-in-out infinite}
+    .dots i:nth-child(2){animation-delay:.18s}.dots i:nth-child(3){animation-delay:.36s}
+    @keyframes pulse{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-5px)}}
+    .acts{display:flex;flex-direction:column;gap:10px;margin:28px auto 0;max-width:340px}
+    .acts a{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 24px;border-radius:99px;text-decoration:none;font-weight:500}
+    .acts .w{background:var(--action);color:#fff}
+    .acts .w svg{width:20px;height:20px;flex:none}
+    .acts .p{border:1.5px solid rgba(231,214,192,.5);color:var(--sand)}
+    .acts a:hover{filter:brightness(1.08)}
+    :focus-visible{outline:3px solid var(--sand);outline-offset:3px;border-radius:8px}
+    [hidden]{display:none!important}
+    main>*{animation:in .5s cubic-bezier(.2,.7,.2,1) both}
+    main>.oven{animation-delay:.04s}main>h1{animation-delay:.08s}main>.sub{animation-delay:.12s}
+    @keyframes in{from{opacity:0;transform:translateY(8px)}}
+    .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .9s ease-in-out infinite alternate}
+    .flame:nth-child(2){animation-duration:.7s;animation-delay:-.3s}.flame:nth-child(3){animation-duration:1.1s;animation-delay:-.5s}
+    @keyframes flick{0%{transform:scale(1,1) skewX(0)}50%{transform:scale(.9,1.12) skewX(5deg)}100%{transform:scale(1.06,.9) skewX(-4deg)}}
+    .steam path{animation:rise 3s ease-in-out infinite;opacity:0}
+    .steam path:nth-child(2){animation-delay:1s}.steam path:nth-child(3){animation-delay:2s}
+    @keyframes rise{0%{opacity:0;transform:translateY(8px)}35%{opacity:.85}100%{opacity:0;transform:translateY(-14px)}}
+    .peel{animation:slide 1.6s cubic-bezier(.5,0,.2,1) infinite}
+    @keyframes slide{0%{transform:translate(70px,34px);opacity:0}25%{opacity:1}60%,100%{transform:translate(0,0);opacity:1}}
+    body.done .peel{animation:none}
+    @media (prefers-reduced-motion:reduce){.flame,.steam path,.dots i,.peel,main>*{animation:none}.steam path{opacity:.6}}
+  </style>
+</head>
+<body data-page="send">
+  <main aria-live="polite">
+    <img class="logo" src="../img/logo-emblem.png" width="110" height="144" alt="AJEENTY">
+    <svg class="oven" viewBox="0 0 240 300" aria-hidden="true" focusable="false">
+      <defs>
+        <radialGradient id="glow" cx="120" cy="270" r="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFD07A"/><stop offset=".3" stop-color="#F08A37"/><stop offset=".62" stop-color="#9A3A14" stop-opacity=".7"/><stop offset="1" stop-color="#1E261F" stop-opacity="0"/></radialGradient>
+        <linearGradient id="fl" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFF4C8"/><stop offset=".38" stop-color="#FFC247"/><stop offset=".78" stop-color="#F26A1B"/><stop offset="1" stop-color="#C2320F" stop-opacity=".1"/></linearGradient>
+        <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E3B57E"/><stop offset="1" stop-color="#A9743F"/></linearGradient>
+        <pattern id="brick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="#9C5640"/><rect x=".6" y=".6" width="22.8" height="4.8" rx=".8" fill="#C47A5E"/><rect x="-11.4" y="6.6" width="22.8" height="4.8" rx=".8" fill="#BE7358"/><rect x="12.6" y="6.6" width="22.8" height="4.8" rx=".8" fill="#C98064"/></pattern>
+        <clipPath id="mouth"><path d="M54 292 V218 A66 56 0 0 1 186 218 V292 Z"/></clipPath>
+      </defs>
+      <path d="M16 292 V98 Q120 40 224 98 V292 Z" fill="url(#brick)"/>
+      <path d="M18 99 Q120 44 222 99" fill="none" stroke="#7F786E" stroke-width="9"/>
+      <path d="M18 99 Q120 44 222 99" fill="none" stroke="#D2CDC2" stroke-width="7" stroke-dasharray="5 1.2"/>
+      <rect x="10" y="96" width="8" height="196" fill="#C6CACB"/><rect x="222" y="96" width="8" height="196" fill="#A9AEB0"/>
+      <path d="M54 292 V218 A66 56 0 0 1 186 218 V292 Z" fill="#1A211B"/>
+      <g clip-path="url(#mouth)">
+        <ellipse cx="120" cy="292" rx="130" ry="120" fill="url(#glow)"/>
+        <g>
+          <path class="flame" d="M56 288 C50 264 62 248 60 228 C72 242 82 222 78 204 C96 228 100 258 94 288 Z" fill="url(#fl)"/>
+          <path class="flame" d="M146 288 C140 264 154 248 152 230 C164 244 176 224 172 206 C188 232 190 262 184 288 Z" fill="url(#fl)"/>
+          <path class="flame" d="M100 288 C96 272 106 262 106 248 C116 260 122 272 118 288 Z" fill="url(#fl)"/>
+        </g>
+      </g>
+      <path d="M47 292 V218 A73 63 0 0 1 193 218 V292" fill="none" stroke="#7F786E" stroke-width="13"/>
+      <path d="M47 292 V218 A73 63 0 0 1 193 218 V292" fill="none" stroke="#D2CDC2" stroke-width="11" stroke-dasharray="8 1.4"/>
+      <g transform="translate(120 100)"><path d="M-12 16 V-2 A12 12 0 0 1 12 -2 V16 Z" fill="#2E3A2F" stroke="#E7D6C0" stroke-width="1.6"/><path d="M0 10 C-5.5 6 -6.6 2.8 -4.6 1.1 C-2.9 -.3 -.8 .4 0 2 C.8 .4 2.9 -.3 4.6 1.1 C6.6 2.8 5.5 6 0 10 Z" fill="#B8663E"/></g>
+      <g class="steam" fill="none" stroke="#F4EBDD" stroke-width="2.6" stroke-linecap="round">
+        <path d="M104 240 c-5 -7 5 -11 0 -18 c-5 -7 5 -11 0 -18"/><path d="M120 236 c-5 -7 5 -11 0 -18 c-5 -7 5 -11 0 -18"/><path d="M136 240 c-5 -7 5 -11 0 -18 c-5 -7 5 -11 0 -18"/>
+      </g>
+      <g class="peel">
+        <path d="M160 274 L300 342" stroke="url(#wood)" stroke-width="8" stroke-linecap="round"/>
+        <ellipse cx="120" cy="270" rx="50" ry="13" fill="url(#wood)"/>
+        <ellipse cx="120" cy="267" rx="40" ry="10.5" fill="#A8552F"/>
+        <ellipse cx="120" cy="264" rx="40" ry="10.5" fill="#D9A46A"/>
+        <path d="M86 264 A34 8.4 0 0 1 120 255.6 V272.4 A34 8.4 0 0 1 86 264 Z" fill="#4F5533"/>
+        <path d="M120 255.6 A34 8.4 0 0 1 154 264 A34 8.4 0 0 1 120 272.4 Z" fill="#F1E2C4"/>
+      </g>
+    </svg>
+    <h1 id="h">Sending your order…</h1>
+    <p class="sub" id="sub">Opening WhatsApp in a moment.</p>
+    <p class="no" id="no" hidden><span id="noL">Order no.</span> <b id="noV"></b></p>
+    <div class="dots" id="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="acts" id="acts" hidden>
+      <a class="w" id="wa" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.8a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20Zm4.4-6c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.8 1c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.1 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a.9.9 0 0 0-.7.3 2.8 2.8 0 0 0-.9 2.1 4.9 4.9 0 0 0 1 2.6 11.3 11.3 0 0 0 4.3 3.8c1.6.7 2.3.7 3.1.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg><span id="waL">Open WhatsApp</span></a>
+      <a class="p" id="back" href="../menu/index.html">Back to the menu</a>
+    </div>
+  </main>
+  <script src="../assets/common.js"></script>
+  <script>
+  (() => {
+    'use strict';
+    try { window.opener = null; } catch (e) {}
+    const HAND = 'ajeenty-handoff-v1', TRAY = 'ajeenty-furn-v1', TOKEN = '@@ID@@';
+    const T = {
+      en: {
+        sending: 'Sending your order…', sendingP: 'Opening WhatsApp in a moment.',
+        done: 'Order received!', doneP: 'WhatsApp is opening with your order. Press send there so we see it right away.',
+        fail: 'Sending it on WhatsApp', failP: 'We couldn’t save your order online, so it’s going on WhatsApp instead. Press send there and we’ll take it from there.',
+        none: 'Nothing to send here', noneP: 'Your order may already be on its way. Head back to the menu to check.',
+        no: 'Order no.', wa: 'Open WhatsApp', track: 'Track your order', back: 'Back to the menu', title: 'Sending your order | AJEENTY'
+      },
+      ar: {
+        sending: 'عم نبعت طلبك…', sendingP: 'الواتساب عم يفتح هلّق.',
+        done: 'وصلنا طلبك!', doneP: 'الواتساب عم يفتح وطلبك مكتوب. اكبس ابعت هونيك لنشوفه دغري.',
+        fail: 'منبعتو عالواتساب', failP: 'ما قدرنا نحفظ طلبك أونلاين، فعم يفتح عالواتساب. اكبس ابعت هونيك ونحنا منكمّل.',
+        none: 'ما في شي للإرسال هون', noneP: 'يمكن طلبك صار عالطريق. ارجع عالمنيو لتتأكد.',
+        no: 'رقم الطلب', wa: 'افتح الواتساب', track: 'تابع طلبك', back: 'رجوع عالمنيو', title: 'عم نبعت طلبك | عجينتي'
+      }
+    };
+    const $ = s => document.querySelector(s);
+    const read = k => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
+    const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+    const ref = new URLSearchParams(location.search).get('r') || '';
+    const h = read(HAND);
+    const lg = h && h.lang === 'ar' ? 'ar' : (AJ.pickLang ? AJ.pickLang() : 'en');
+    const W = T[lg];
+    document.documentElement.lang = lg; document.documentElement.dir = lg === 'ar' ? 'rtl' : 'ltr';
+    document.title = W.title; $('#noL').textContent = W.no; $('#waL').textContent = W.wa; $('#back').textContent = W.back;
+    const waUrl = text => `https://wa.me/${AJ.WA}?text=${encodeURIComponent(text)}`;
+    function show(kind, id, text) {
+      $('#h').textContent = W[kind]; $('#sub').textContent = W[kind + 'P'];
+      $('#dots').hidden = kind !== 'sending';
+      document.body.classList.toggle('done', kind !== 'sending');
+      $('#no').hidden = !id; if (id) $('#noV').textContent = id;
+      $('#acts').hidden = kind === 'sending';
+      $('#wa').hidden = !text; if (text) $('#wa').href = waUrl(text);
+      if (kind === 'done' && id) { $('#back').textContent = W.track; $('#back').href = `../menu/index.html?order=${id}`; }
+    }
+    const withId = id => h.wa.split('\n').map(l => l.replace(TOKEN, id)).join('\n');
+    const withoutId = () => h.wa.split('\n').filter(l => !l.includes(TOKEN)).join('\n');
+    // keep the cart in step even if the menu tab is closed or asleep
+    function patchTray(fn) { const d = read(TRAY); if (d) { fn(d); write(TRAY, d); } }
+
+    if (!h || !ref || h.ref !== ref) { show('none'); return; }
+    if (h.state === 'ok') { show('done', h.id, withId(h.id)); return; }      // came back to this tab later
+    if (h.state === 'fail') { show('fail', '', withoutId()); return; }
+
+    show('sending');
+    AJ.order.send(h.payload).then(res => {
+      const text = withId(res.id);
+      AJ.order.set({ id: res.id, type: h.meta.type, at: Date.now(), checked: Date.now(), status: 'Received', preview: !!res.preview,
+        total: h.meta.total, time: h.meta.time, wa: text, waOpened: true, lines: h.meta.lines });
+      Object.assign(h, { state: 'ok', id: res.id, preview: !!res.preview }); write(HAND, h);
+      patchTray(d => { if (d.sent && d.sent.ref === h.ref) { d.tray = []; d.note = ''; d.sent = null; d.wa = 0; d.at = Date.now(); } });
+      show('done', res.id, text);
+      location.href = waUrl(text);
+    }, () => {
+      const text = withoutId();
+      h.state = 'fail'; write(HAND, h);
+      patchTray(d => { if (d.sent && d.sent.ref === h.ref) d.wa = Date.now(); });
+      show('fail', '', text);
+      location.href = waUrl(text);
+    });
+  })();
+  </script>
+</body>
+</html>

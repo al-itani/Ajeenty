@@ -27,7 +27,7 @@
       directions: 'Get directions', callUs: 'Call us', lblMobile: 'Mobile and WhatsApp', lblLand: 'Landline', lblEmail: 'Email',
       mapAria: 'Open AJEENTY’s location in Google Maps', mapHint: 'Open in Google Maps',
       footTag: 'Fresh dough. Hot oven.', fVisit: 'Visit', fAddr: 'Haraty Street, Moazzen Building<br>Bchara al Khoury, Beirut',
-      fHours: 'Hours', fHoursP: 'Monday to Saturday<br>7:00 AM – 7:00 PM<br>Sunday 8:00 AM – 3:00 PM', fOrder: 'Call us', fMobile: 'Mobile and WhatsApp', fLand: 'Landline', gmaps: 'Google Maps',
+      fHours: 'Hours', fHoursP: 'Monday to Saturday<br>7:00 AM – 7:00 PM<br>Sunday 8:00 AM – 3:00 PM', fOrder: 'Call us', fMobile: 'Mobile and WhatsApp', fLand: 'Landline', poweredBy: 'Powered by', weaveNote: 'Our menu is a Weave storefront', weaveNavAria: 'Powered by Weave. Opens Weave Stores', weaveAria: 'Powered by Weave. Our menu is a Weave storefront. Opens Weave Stores', gmaps: 'Google Maps',
       title: 'AJEENTY | Man’oushe & mo3ajanat in Ras El Nabeh, Beirut'
     },
     ar: {
@@ -49,7 +49,7 @@
       directions: 'دلّني عالطريق', callUs: 'اتصل فينا', lblMobile: 'خلوي وواتساب', lblLand: 'أرضي', lblEmail: 'إيميل',
       mapAria: 'افتح موقع عجينتي على Google Maps', mapHint: 'افتح على Google Maps',
       footTag: 'عجينة طازة. فرن حامي.', fVisit: 'العنوان', fAddr: 'شارع حاراتي، بناية المؤذن<br>بشارة الخوري، بيروت',
-      fHours: 'الدوام', fHoursP: 'الإثنين – السبت<br>7:00 الصبح – 7:00 المسا<br>الأحد 8:00 الصبح – 3:00 المسا', fOrder: 'اتصل فينا', fMobile: 'خلوي وواتساب', fLand: 'أرضي', gmaps: 'Google Maps',
+      fHours: 'الدوام', fHoursP: 'الإثنين – السبت<br>7:00 الصبح – 7:00 المسا<br>الأحد 8:00 الصبح – 3:00 المسا', fOrder: 'اتصل فينا', fMobile: 'خلوي وواتساب', fLand: 'أرضي', poweredBy: 'بدعم من', weaveNote: 'المنيو تبعنا متجر من Weave', weaveNavAria: 'بدعم من Weave. بيفتح Weave Stores', weaveAria: 'بدعم من Weave. المنيو تبعنا متجر من Weave. بيفتح Weave Stores', gmaps: 'Google Maps',
       title: 'عجينتي | مناقيش ومعجنات براس النبع، بيروت'
     }
   };

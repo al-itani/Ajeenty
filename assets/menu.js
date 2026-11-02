@@ -25,7 +25,7 @@ const T = {
     heatHint:'Tap Add on anything to start baking', heatNext:(n,x)=>`${n} more for ${x}`, heatMax:'Oven at full blast',
     waHead:"Marhaba AJEENTY! I'd like to order:", waName:'Name:', waHow:'Pickup or delivery:', waTime:'Time:', waAddr:'Delivery address:',
     navMenu:'Menu', navVisit:'Visit us', askWa:'Questions on WhatsApp', kicker:'The full menu', lede:'Tap the peel on anything you fancy. It bakes in the oven above and lands on your tray. Then order right here, for pickup or delivery.',
-    footTag:'Fresh dough. Hot oven.', fVisit:'Visit', fAddr:'Haraty Street, Moazzen Building<br>Bchara al Khoury, Beirut', fHours:'Hours', fHoursP:'Monday to Saturday<br>7:00 AM – 7:00 PM<br>Sunday 8:00 AM – 3:00 PM', fOrder:'Call us', fMobile:'Mobile and WhatsApp', fLand:'Landline', gmaps:'Google Maps',
+    footTag:'Fresh dough. Hot oven.', fVisit:'Visit', fAddr:'Haraty Street, Moazzen Building<br>Bchara al Khoury, Beirut', fHours:'Hours', fHoursP:'Monday to Saturday<br>7:00 AM – 7:00 PM<br>Sunday 8:00 AM – 3:00 PM', fOrder:'Call us', fMobile:'Mobile and WhatsApp', fLand:'Landline', poweredBy: 'Powered by', weaveNote: 'Our menu is a Weave storefront', weaveNavAria: 'Powered by Weave. Opens Weave Stores', weaveAria: 'Powered by Weave. Our menu is a Weave storefront. Opens Weave Stores', gmaps:'Google Maps',
     placeOrder:'Place order', details:'Your details', confirmed:'Order confirmed', orderNo:'Order', back:'Back',
     pickup:'Pickup', delivery:'Delivery', fType:'Pickup or delivery', fName:'Your name', fPhone:'Phone number', fAddress:'Delivery address', fAddressPh:'Area, street, building, floor', fTime:'Pickup time', fNote:'Notes (optional)', fNotePh:'Extra crispy, no onions…',
     asap:'As soon as possible', whenOpen:'As soon as you open', today:'Today', tomorrow:'Tomorrow', days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
@@ -53,7 +53,7 @@ const T = {
     heatHint:'اكبس «زيد» عأي صنف ليبلّش الخبز', heatNext:(n,x)=>`${n} كمان ليصير ${x}`, heatMax:'الفرن عالآخر',
     waHead:'مرحبا عجينتي! بدي اطلب:', waName:'الاسم:', waHow:'استلام أو دليفري:', waTime:'الوقت:', waAddr:'عنوان الدليفري:',
     navMenu:'المنيو', navVisit:'زورونا', askWa:'اسألنا عالواتساب', kicker:'المنيو كلّه', lede:'اكبس عالمطرحة حد أي صنف بيعجبك. بيخبز بالفرن فوق وبينزل عصينيتك. وبعدين اطلب من هون، استلام أو دليفري.',
-    footTag:'عجينة طازة. فرن حامي.', fVisit:'العنوان', fAddr:'شارع حاراتي، بناية المؤذن<br>بشارة الخوري، بيروت', fHours:'الدوام', fHoursP:'الإثنين – السبت<br>7:00 الصبح – 7:00 المسا<br>الأحد 8:00 الصبح – 3:00 المسا', fOrder:'اتصل فينا', fMobile:'خلوي وواتساب', fLand:'أرضي', gmaps:'Google Maps',
+    footTag:'عجينة طازة. فرن حامي.', fVisit:'العنوان', fAddr:'شارع حاراتي، بناية المؤذن<br>بشارة الخوري، بيروت', fHours:'الدوام', fHoursP:'الإثنين – السبت<br>7:00 الصبح – 7:00 المسا<br>الأحد 8:00 الصبح – 3:00 المسا', fOrder:'اتصل فينا', fMobile:'خلوي وواتساب', fLand:'أرضي', poweredBy: 'بدعم من', weaveNote: 'المنيو تبعنا متجر من Weave', weaveNavAria: 'بدعم من Weave. بيفتح Weave Stores', weaveAria: 'بدعم من Weave. المنيو تبعنا متجر من Weave. بيفتح Weave Stores', gmaps:'Google Maps',
     placeOrder:'اطلب', details:'تفاصيلك', confirmed:'تأكّد طلبك', orderNo:'طلب رقم', back:'رجوع',
     pickup:'استلام من المحل', delivery:'دليفري', fType:'استلام أو دليفري', fName:'الاسم', fPhone:'رقم التلفون', fAddress:'عنوان الدليفري', fAddressPh:'المنطقة، الشارع، البناية، الطابق', fTime:'وقت الاستلام', fNote:'ملاحظات (اختياري)', fNotePh:'مقرمشة زيادة، بلا بصل…',
     asap:'بأسرع وقت', whenOpen:'أول ما تفتحوا', today:'اليوم', tomorrow:'بكرا', days:['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],
@@ -871,15 +871,6 @@ form.addEventListener('submit', async e => {
   $('#formErr').hidden = true;
   const mode = AJ.order.mode();
   if (mode === 'whatsapp') { window.open(waHref(d), '_blank', 'noopener'); markWa(); return; }
-  // Sheet + WhatsApp: open the WhatsApp tab now, while the tap still counts (phones block pop-ups opened later),
-  // then point it at WhatsApp once the Sheet has given the order its number.
-  let waWin = null;
-  if (AJ.order.alsoWa()) {
-    try {
-      waWin = window.open('', '_blank');
-      if (waWin) { waWin.opener = null; waWin.document.write('<title>AJEENTY</title><p style="font:16px system-ui;padding:24px">Opening WhatsApp… / عم نفتح الواتساب…</p>'); }
-    } catch (e2) { waWin = null; }
-  }
   sending = true; $('#sendBtn').disabled = true; $('#sendTxt').textContent = t('sending');
   const payload = {
     type: d.type, name: d.name, phone: d.phone,
@@ -892,27 +883,61 @@ form.addEventListener('submit', async e => {
   const sig = JSON.stringify([payload.type, payload.name, payload.phone, payload.address, payload.time, payload.note, payload.items]);
   if (!state.sent || state.sent.sig !== sig) { state.sent = { ref: newRef(), sig }; save(); }
   payload.ref = state.sent.ref;
+  const meta = { type: d.type, time: d.timeLabel, total: total(), lines: state.tray.map(l => ({ q: l.q, en: lineName(l, 'en'), ar: lineName(l, 'ar') })) };
+  // Sheet + WhatsApp: open the AJEENTY send page (send/) now, while the tap still counts (phones block tabs
+  // opened later). That page is in front, so the phone doesn't pause it: it saves the order to the Sheet,
+  // then opens WhatsApp with the order and its number. This tab waits for its answer (see checkHand).
+  if (AJ.order.alsoWa()) {
+    try { localStorage.setItem(HAND, JSON.stringify({ ref: payload.ref, payload, lang: L(), wa: orderText(L(), d, HAND_ID), meta, state: 'pending', at: Date.now() })); } catch (e2) {}
+    let win = null;
+    try { win = window.open(`../send/?r=${payload.ref}`, '_blank'); } catch (e2) { win = null; }
+    if (win) {
+      clearTimeout(handWait && handWait.timer);
+      handWait = { ref: payload.ref, d, timer: setTimeout(() => endHand(null), 45000) };
+      return;   // stays "Sending…" until the send page answers
+    }
+    // the phone blocked the tab: save the order from here instead, the ticket then offers "Send on WhatsApp"
+  }
   try {
     const res = await AJ.order.send(payload);
-    const wa = AJ.order.alsoWa() ? orderText(L(), d, res.id) : '';
-    if (wa && waWin) { try { waWin.location.href = waLink(wa); } catch (e2) {} }
-    AJ.order.set({
-      id: res.id, type: d.type, at: Date.now(), checked: Date.now(), status: 'Received', preview: !!res.preview,
-      total: total(), time: d.timeLabel, wa, waOpened: !!waWin, lines: state.tray.map(l => ({ q: l.q, en: lineName(l, 'en'), ar: lineName(l, 'ar') }))
-    });
-    state.tray = []; state.note = ''; state.sent = null; state.wa = 0; save(); update();
-    form.reset(); delete form.dataset.touched;
-    const u = new URL(location.href); u.searchParams.set('order', res.id); history.replaceState(null, '', u);
-    setView('track'); startPolling(false);
-    announce(T[L()].ordered(res.id));
+    meta.wa = AJ.order.alsoWa() ? orderText(L(), d, res.id) : '';
+    orderDone(res, meta);
   } catch (err) {
-    // Sheet failed: the order still reaches you on WhatsApp if that tab is open.
-    if (waWin) { try { waWin.location.href = waHref(d); markWa(); } catch (e2) {} }
-    showSendError(d, !!waWin);
+    // Sheet failed: the error offers "Send on WhatsApp" (tapping it marks the tray as sent, see markWa).
+    showSendError(d, false);
   } finally {
-    sending = false; $('#sendBtn').disabled = false; $('#sendTxt').textContent = AJ.order.mode() === 'whatsapp' ? t('sendViaWa') : t('send');
+    if (!handWait) sendIdle();
   }
 });
+
+/* ---------------- order confirmed / handed off ---------------- */
+const HAND = 'ajeenty-handoff-v1', HAND_ID = '@@ID@@';
+let handWait = null;   // { ref, d, timer } while the send page is working on our order
+function sendIdle() { sending = false; $('#sendBtn').disabled = false; $('#sendTxt').textContent = AJ.order.mode() === 'whatsapp' ? t('sendViaWa') : t('send'); }
+function orderDone(res, meta) {
+  const o = AJ.order.get();
+  if (!o || o.id !== res.id) AJ.order.set({ id: res.id, type: meta.type, at: Date.now(), checked: Date.now(), status: 'Received', preview: !!res.preview,
+    total: meta.total, time: meta.time, wa: meta.wa || '', waOpened: !!meta.waOpened, lines: meta.lines });
+  state.tray = []; state.note = ''; state.sent = null; state.wa = 0; save(); update();
+  form.reset(); delete form.dataset.touched;
+  const u = new URL(location.href); u.searchParams.set('order', res.id); history.replaceState(null, '', u);
+  if (sheet.hidden) openChit('track'); else setView('track');
+  startPolling(false);
+  announce(T[L()].ordered(res.id));
+}
+// h: the send page's answer, or null when it never answered (tab closed, phone killed it)
+function endHand(h) {
+  const w = handWait; if (!w) return;
+  clearTimeout(w.timer); handWait = null; sendIdle();
+  if (h && h.state === 'ok') { const o = AJ.order.get(); orderDone({ id: h.id, preview: h.preview }, { ...h.meta, wa: o && o.id === h.id ? o.wa : '', waOpened: true }); }
+  else if (h && h.state === 'fail') { markWa(); showSendError(w.d, true); }
+  else showSendError(w.d, false);   // unknown: Send again reuses the same reference, so nothing is saved twice
+}
+function checkHand() {
+  if (!handWait) return;
+  let h = null; try { h = JSON.parse(localStorage.getItem(HAND) || 'null'); } catch (e) {}
+  if (h && h.ref === handWait.ref && (h.state === 'ok' || h.state === 'fail')) endHand(h);
+}
 
 function fmtClock(ts) { return new Intl.DateTimeFormat(L() === 'ar' ? 'ar-LB-u-nu-latn' : 'en-GB', { hour: 'numeric', minute: '2-digit', hour12: L() !== 'ar' }).format(new Date(ts)); }
 function renderTrack() {
@@ -958,7 +983,7 @@ function startPolling(checkNow = true) {
   pollT = setInterval(tick, o.preview ? 3000 : 30000);   // the Sheet is checked every 30 seconds
   if (checkNow) tick();
 }
-document.addEventListener('visibilitychange', () => { if (!document.hidden) startPolling(); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkHand(); startPolling(); } });
 $('#orderBar').addEventListener('click', () => openChit('form'));
 $('#placeBtn').addEventListener('click', () => setView('form'));
 $('#chitBack').addEventListener('click', () => setView('tray'));
@@ -1053,10 +1078,11 @@ function resync() {
   }
 }
 addEventListener('storage', e => {
+  if (e.key === HAND || e.key === null) checkHand();
   if (e.key === KEY || e.key === null) resync();
   if (e.key === AJ.order.KEY || e.key === null) { renderChip(); startPolling(false); if (!sheet.hidden && view === 'track') renderTrack(); }
 });
-addEventListener('pageshow', e => { if (e.persisted) { resync(); renderChip(); startPolling(); } });
+addEventListener('pageshow', e => { if (e.persisted) { checkHand(); resync(); renderChip(); startPolling(); } });
 const newRef = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), b => 'abcdefghijkmnpqrstuvwxyz23456789'[b % 32]).join('');
 
 /* ---------------- boot ---------------- */
