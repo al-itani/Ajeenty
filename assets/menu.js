@@ -338,14 +338,30 @@ const PHOTOS = {
   akawi:'akawi', 'spinach-dz':'spinach', 'half-spinach':'spinach', 'single-pastry':'spinach',
   'open-thyme':'zaatar-mini', 'box-thyme':'zaatar-mini',
   'sfiha-dz':'sfiha', 'half-sfiha':'sfiha', 'single-sfiha':'sfiha',
-  'pizza-m':'pizza', 'pizza-l':'pizza', 'pizza-dz':'pizza-mini', 'half-pizza':'pizza-mini', 'piece-pizza':'pizza-mini'
+  'pizza-m':'pizza', 'pizza-l':'pizza', 'pizza-dz':'pizza-mini', 'half-pizza':'pizza-mini', 'piece-pizza':'pizza-mini',
+  kafta:'kafta-manoushe', doublex:'duplex', 'soujouk-ch':'sujuk-cheese-mashrouha',
+  'purslane-dz':'purslane-ftayir', 'half-purslane':'purslane-ftayir', 'spinach-mix':'spinach-mix-ftayir',
+  sanbousik:'cheese-sambusik', 'piece-cheese-sambousik':'cheese-sambusik',
+  'cheese-parsley':'cheese-parsley', 'half-cheese-parsley':'cheese-parsley', 'piece-cheese-parsley':'cheese-parsley',
+  'open-kishik':'kishik-mini', 'box-kishik':'kishik-mini', 'spinach-labne':'spinach-labneh-serving',
+  'trab-meat':'trabolsiyeh-meat', 'trab-pizza':'trabolsiyeh-pizza',
+  'sh-spinach':'shakhtoura-spinach', 'sh-mhammara':'shakhtoura-mhammara',
+  'sh-purslane':'shakhtoura-purslane', 'sh-pizza':'shakhtoura-pizza', evervess:'evervess'
+};
+// Match the photographed flavor only. Unphotographed variants retain their illustration.
+const FLAVOR_PHOTOS = {
+  cans: {0:'pepsi', 1:'pepsi-diet', 3:'mirinda', 5:'7up'},
+  'mr-juicy': {0:'mr-juicy-mango', 1:'mr-juicy-apple', 2:'mr-juicy-orange', 3:'mr-juicy-strawberry-banana', 4:'mr-juicy-pineapple'},
+  tropicana: {0:'tropicana-orange', 1:'tropicana-pineapple'}
 };
 const photoSrc = k => `../img/photos/menu/${k}.webp`;
 const photoArt = (k, x = 0, y = 0, w = 100, r = 0) => `<image href="${photoSrc(k)}" x="${x}" y="${y}" width="${w}" height="${w}"${r ? ` transform="rotate(${r} ${x + w/2} ${y + w/2})"` : ''}/>`;
 const PHOTO_ART = { mixed: () => photoArt('spinach', -2, 0, 64, -12) + photoArt('sfiha', 38, 6, 62, 9) + photoArt('pizza-mini', 16, 38, 62, -3) };
-const hasPhoto = it => !!(PHOTOS[it.id] || PHOTO_ART[it.id]);
+const hasPhoto = (it, fi) => !!(FLAVOR_PHOTOS[it.id]?.[fi ?? 0] || PHOTOS[it.id] || PHOTO_ART[it.id]);
 const ART = {};
 function artFor(it, fi) {
+  const flavorPhoto = FLAVOR_PHOTOS[it.id]?.[fi ?? 0];
+  if (flavorPhoto) return photoArt(flavorPhoto);
   if (PHOTOS[it.id]) return photoArt(PHOTOS[it.id]);
   if (PHOTO_ART[it.id]) return PHOTO_ART[it.id]();
   const key = it.id + '|' + (fi ?? '');
@@ -417,6 +433,7 @@ function card(it) {
   const tags = [];
   if (it.jr) tags.push(t('jreeshDough'));
   if (solo && it.p.length === 2) tags.push(variantName(it, vs[0][1]));   // e.g. large spinach only comes as a man'oushe
+  if (it.id === 'soujouk-ch') tags.push(lg === 'en' ? 'Pictured: mashrouha' : 'بالصورة: مشروحة');
   const ctl = (v, p) => {
     const vn = variantName(it, v);
     const lab = it.cold ? T[lg].grab(it[lg], LBP(p)) : T[lg].add(it[lg], vn, LBP(p));
@@ -431,7 +448,7 @@ function card(it) {
     const vn = solo ? '' : variantName(it, v);
     return `<div class="opt">${vn ? `<span class="vl">${esc(vn)}</span><span class="dots" aria-hidden="true"></span>` : ''}${price(p)}${ctl(v, p)}</div>`;
   }).join('');
-  let h = `<div class="art${it.hi ? ' hi' : ''}${it.cold ? ' cold' : ''}${hasPhoto(it) ? ' photo' : ''}" data-art="${it.id}"><svg viewBox="0 0 100 100" aria-hidden="true">${artFor(it, fi)}</svg></div>`;
+  let h = `<div class="art${it.hi ? ' hi' : ''}${it.cold ? ' cold' : ''}${hasPhoto(it, fi) ? ' photo' : ''}" data-art="${it.id}"><svg viewBox="0 0 100 100" aria-hidden="true">${artFor(it, fi)}</svg></div>`;
   h += `<div class="head"><h3 class="nm">${esc(it[lg])}</h3><p class="alt-nm" lang="${other}" dir="${other === 'ar' ? 'rtl' : 'ltr'}">${esc(it[other])}</p>${tags.length ? `<p class="tags">${tags.map(x => `<span>${esc(x)}</span>`).join('')}</p>` : ''}</div>`;
   h += `<div class="opts">${rows}</div>`;
   if (it.flav) h += `<div class="fl" role="radiogroup" aria-label="${esc(t('flavor'))}">${it.flav.map((f,i) => `<button type="button" role="radio" aria-checked="${fi === i}" data-act="flav" data-id="${it.id}" data-i="${i}" style="--c:${f[2]}"><i></i>${esc(f[lg === 'en' ? 0 : 1])}</button>`).join('')}</div>`;
@@ -573,6 +590,7 @@ function setFlav(id, i) {
   const it = ITEMS[id], card = document.getElementById('it-' + id);
   if (!card) return;
   card.querySelector('.art svg').innerHTML = artFor(it, i);
+  card.querySelector('.art').classList.toggle('photo', hasPhoto(it, i));
   card.querySelectorAll('[data-act="flav"]').forEach(b => b.setAttribute('aria-checked', String(+b.dataset.i === i)));
 }
 
