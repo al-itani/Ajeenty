@@ -158,6 +158,7 @@ const MENU = [
     I('cans','Cans','علب',75000,{k:'can'},{cold:1,flav:[['Pepsi','بيبسي','#1F4FA0'],['Pepsi diet','بيبسي دايت','#C3C9D4'],['Pepsi max','بيبسي ماكس','#1B1D21'],['Mirinda','ميرندا','#F08A1C'],['Mirinda zero','ميرندا زيرو','#F4B54B'],['7up','سفن أب','#2E8B3E'],['7up diet','سفن أب دايت','#B9D3BE']]}),
     I('mr-juicy','Mr Juicy','مستر جوسي',30000,{k:'juice'},{cold:1,flav:[['Mango','مانجا','#F5A623'],['Apple','تفاح','#9BC23C'],['Orange','برتقال','#F28C28'],['Strawberry banana','فراولة وموز','#E5566D'],['Pineapple','أناناس','#EBC93F']]}),
     I('tropicana','Tropicana','تروبيكانا',60000,{k:'bottle'},{cold:1,flav:[['Orange','برتقال','#F28C28'],['Pineapple','أناناس','#EBC93F'],['Mango','مانجا','#F5A623']]}),
+    I('ayran','Laban ayran','لبن عيران',80000,{k:'water'},{cold:1}),
     I('water','Water, small','مياه صغيرة',30000,{k:'water'},{cold:1}),
     I('evervess','Evervess sparkling water','إيفرفس مياه فوارة',60000,{k:'sparkle'},{cold:1})
   ])
@@ -346,7 +347,7 @@ const PHOTOS = {
   'open-kishik':'kishik-mini', 'box-kishik':'kishik-mini', 'spinach-labne':'spinach-labneh-serving',
   'trab-meat':'trabolsiyeh-meat', 'trab-pizza':'trabolsiyeh-pizza',
   'sh-spinach':'shakhtoura-spinach', 'sh-mhammara':'shakhtoura-mhammara',
-  'sh-purslane':'shakhtoura-purslane', 'sh-pizza':'shakhtoura-pizza', evervess:'evervess'
+  'sh-purslane':'shakhtoura-purslane', 'sh-pizza':'shakhtoura-pizza', evervess:'evervess', ayran:'ayran'
 };
 // Match the photographed flavor only. Unphotographed variants retain their illustration.
 const FLAVOR_PHOTOS = {
@@ -482,7 +483,7 @@ const SW = {
   en: { label:'Search the menu', ph:'What are you craving?', clear:'Clear search', empty:'Nothing in the oven by that name.', hint:'Try cheese, zaatar, spinach or a section name.', reset:'See the whole menu', n:c => c === 1 ? '1 match' : `${c} matches` },
   ar: { label:'فتّش بالمنيو', ph:'شو مشتهي اليوم؟', clear:'امسح البحث', empty:'ما في شي بالفرن بهالاسم.', hint:'جرّب جبنة، زعتر، سبانخ أو اسم القسم.', reset:'شوف المنيو كلّه', n:c => `${c} نتيجة` }
 };
-const ALIAS = { thyme:'zaatar zatar zaatr زعتر', 'open-thyme':'zaatar zatar', 'fresh-thyme':'zaatar zatar', 'box-thyme':'zaatar zatar', akawi:'akkawi akawe cheese جبنة', moajanat:'mo3ajanat pastries fatayer معجنات فطاير', lahme:'lahm lahem meat لحمة', 'lahme-ch':'lahm meat', keshek:'kishik keshk kechek', 'open-kishik':'keshek keshk', 'box-kishik':'keshek keshk', sanbousik:'sambousik sambousek', 'piece-cheese-sambousik':'sanbousik sambousek', 'spinach-dz':'fatayer sabanekh', sfiha:'sfeeha sfeha meat', 'sfiha-dz':'sfeeha sfeha meat', soujouk:'sujuk sujok sausage', drinks:'drink soda juice water' };
+const ALIAS = { thyme:'zaatar zatar zaatr زعتر', 'open-thyme':'zaatar zatar', 'fresh-thyme':'zaatar zatar', 'box-thyme':'zaatar zatar', akawi:'akkawi akawe cheese جبنة', moajanat:'mo3ajanat pastries fatayer معجنات فطاير', lahme:'lahm lahem meat لحمة', 'lahme-ch':'lahm meat', keshek:'kishik keshk kechek', 'open-kishik':'keshek keshk', 'box-kishik':'keshek keshk', sanbousik:'sambousik sambousek', 'piece-cheese-sambousik':'sanbousik sambousek', 'spinach-dz':'fatayer sabanekh', sfiha:'sfeeha sfeha meat', 'sfiha-dz':'sfeeha sfeha meat', soujouk:'sujuk sujok sausage', ayran:'laban ayran yogurt yoghurt لبن عيران', drinks:'drink soda juice water' };
 const norm = v => String(v).toLowerCase().normalize('NFD').replace(/[̀-ًͯ-ٰٟ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[’'`]/g, '').replace(/3/g, 'a').trim();
 function filterMenu() {
   const W = SW[L()], q = norm(searchEl.value), terms = q.split(/\s+/).filter(Boolean);
