@@ -14,7 +14,7 @@ const T = {
   en:{
     skip:'Skip to the menu', h1:'The menu', title:'Menu | AJEENTY, Ras El Nabeh, Beirut',
     jreesh:'Jreesh (whole-wheat) dough for any man’oushe', jreeshHow:'Switch it on under the man’oushe in your tray.',
-    addLbl:'Add', home:'Home', catsLabel:'Menu sections',
+    addLbl:'Add', free:'Free', home:'Home', catsLabel:'Menu sections',
     manoushe:"Man'oushe", mashrouha:'Mashrouha', dozen:'Dozen', halfDozen:'Half dozen (6 pieces)', jreeshDough:'Jreesh dough', lbp:'LBP',
     tray:'Your tray', orderShort:'Order', clear:'Clear tray', clearConfirm:'Tap again to clear',
     copy:'Copy order', copied:'Copied', total:'Total', note:'Prices in Lebanese pounds.',
@@ -41,7 +41,7 @@ const T = {
   ar:{
     skip:'انتقل للمنيو', h1:'المنيو', title:'المنيو | عجينتي، راس النبع، بيروت',
     jreesh:'عجينة جريش (قمحة كاملة) لأي منقوشة', jreeshHow:'فعّلها تحت المنقوشة بصينيتك.',
-    addLbl:'زيد', home:'الرئيسية', catsLabel:'أقسام المنيو',
+    addLbl:'زيد', free:'مجاناً', home:'الرئيسية', catsLabel:'أقسام المنيو',
     manoushe:'منقوشة', mashrouha:'مشروحة', dozen:'دزينة', halfDozen:'نص دزينة (٦ قطع)', jreeshDough:'عجينة جريش', lbp:'ل.ل.',
     tray:'صينيتك', orderShort:'اطلب', clear:'فضّي الصينية', clearConfirm:'اكبس كمان مرة للتأكيد',
     copy:'انسخ الطلب', copied:'انتسخ', total:'المجموع', note:'الأسعار بالليرة اللبنانية.',
@@ -149,10 +149,13 @@ const MENU = [
     I('piece-cheese-sambousik','Cheese sambousik','سنبوسك جبنة',45000,{k:'moon'}),
     I('piece-cheese-parsley','Cheese & parsley','جبنة وبقدونس',45000,{k:'moon',g:1})
   ]),
+  S('sweet','End it sweet','ختمها عالحلو','Warm dough under a generous layer of Nutella.','عجينة سخنة وطبقة نوتيلا محرزة.',[
+    I('nutella','Nutella Ajeenty','نوتيلا عجينتي',300000,{k:'round',t:'akawi'},{x:{en:'Nuts',ar:'مكسرات',p:50000},sp:{base:'nutella-base',top:'nutella-nuts'}})
+  ]),
   S('addons','Add-ons','إضافات','Add extras to your order.','زيد إضافات على طلبك.',[
-    I('addon-labneh',"Add labneh","إضافة لبنة",50000,{k:'round',t:'cheese'},{addon:1}),
-    I('addon-special-mix',"Add special mix","إضافة خلطة خاصة",100000,{k:'round',t:'freshthyme'},{addon:1}),
-    I('addon-vegetables',"Add vegetables","إضافة خضار",20000,{k:'round',t:'tomato'},{addon:1})
+    I('addon-labneh',"Add labneh","إضافة لبنة",0,{k:'round',t:'cheese'},{addon:1}),
+    I('addon-special-mix',"Add special mix","إضافة خلطة خاصة",0,{k:'round',t:'freshthyme'},{addon:1}),
+    I('addon-vegetables',"Add vegetables","إضافة خضار",0,{k:'round',t:'tomato'},{addon:1})
   ]),
   S('drinks','Drinks','مشروبات','Cold from the fridge.','باردين من البراد.',[
     I('cans','Cans','علب',75000,{k:'can'},{cold:1,flav:[['Pepsi','بيبسي','#1F4FA0'],['Pepsi diet','بيبسي دايت','#C3C9D4'],['Pepsi max','بيبسي ماكس','#1B1D21'],['Mirinda','ميرندا','#F08A1C'],['Mirinda zero','ميرندا زيرو','#F4B54B'],['7up','سفن أب','#2E8B3E'],['7up diet','سفن أب دايت','#B9D3BE']]}),
@@ -347,7 +350,8 @@ const PHOTOS = {
   'open-kishik':'kishik-mini', 'box-kishik':'kishik-mini', 'spinach-labne':'spinach-labneh-serving',
   'trab-meat':'trabolsiyeh-meat', 'trab-pizza':'trabolsiyeh-pizza',
   'sh-spinach':'shakhtoura-spinach', 'sh-mhammara':'shakhtoura-mhammara',
-  'sh-purslane':'shakhtoura-purslane', 'sh-pizza':'shakhtoura-pizza', evervess:'evervess', ayran:'ayran'
+  'sh-purslane':'shakhtoura-purslane', 'sh-pizza':'shakhtoura-pizza', evervess:'evervess', ayran:'ayran',
+  nutella:'nutella-base'
 };
 // Match the photographed flavor only. Unphotographed variants retain their illustration.
 const FLAVOR_PHOTOS = {
@@ -360,7 +364,8 @@ const photoArt = (k, x = 0, y = 0, w = 100, r = 0) => `<image href="${photoSrc(k
 const PHOTO_ART = { mixed: () => photoArt('spinach', -2, 0, 64, -12) + photoArt('sfiha', 38, 6, 62, 9) + photoArt('pizza-mini', 16, 38, 62, -3) };
 const hasPhoto = (it, fi) => !!(FLAVOR_PHOTOS[it.id]?.[fi ?? 0] || PHOTOS[it.id] || PHOTO_ART[it.id]);
 const ART = {};
-function artFor(it, fi) {
+function artFor(it, fi, x = false) {
+  if (it.sp) return photoArt(it.sp.base) + (x ? photoArt(it.sp.top) : '');   // the topping layer sits exactly on its base photo
   const flavorPhoto = FLAVOR_PHOTOS[it.id]?.[fi ?? 0];
   if (flavorPhoto) return photoArt(flavorPhoto);
   if (PHOTOS[it.id]) return photoArt(PHOTOS[it.id]);
@@ -377,18 +382,19 @@ function artFor(it, fi) {
 // rest of that visit (so a retry is still possible) and starts empty on the next visit.
 const KEY = 'ajeenty-furn-v1';
 const TRAY_DAYS = 7;
-const state = { lang:'en', tray:[], flav:{}, note:'', at:0, sent:null, wa:0 };
+const state = { lang:'en', tray:[], flav:{}, xtra:{}, note:'', at:0, sent:null, wa:0 };
 function load(d, boot = false) {
   if (!d) { try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { d = null; } }
   state.tray = []; state.note = ''; state.sent = null; state.at = 0; state.wa = 0;
   if (!d) return;
   if (d.lang === 'ar' || d.lang === 'en') state.lang = d.lang;
   if (d.flav && typeof d.flav === 'object') state.flav = d.flav;
+  if (d.xtra && typeof d.xtra === 'object') state.xtra = d.xtra;
   if (boot && d.wa) { save(); return; }   // last visit's order already went out on WhatsApp: start with an empty tray
   state.wa = +d.wa || 0;
   if (d.at && Date.now() - d.at > TRAY_DAYS * 864e5) return;   // a tray left for over a week starts fresh
   state.at = +d.at || 0;
-  if (Array.isArray(d.tray)) state.tray = d.tray.filter(l => l && ITEMS[l.id] && ITEMS[l.id].p[l.v] != null && l.q > 0).map(l => ({id:l.id, v:+l.v||0, f:l.f ?? null, j:!!l.j, q:Math.min(99, l.q|0), ts:l.ts||0}));
+  if (Array.isArray(d.tray)) state.tray = d.tray.filter(l => l && ITEMS[l.id] && ITEMS[l.id].p[l.v] != null && l.q > 0).map(l => ({id:l.id, v:+l.v||0, f:l.f ?? null, j:!!l.j, x:!!(l.x && ITEMS[l.id].x), q:Math.min(99, l.q|0), ts:l.ts||0}));
   if (typeof d.note === 'string') state.note = d.note.slice(0, 300);
   if (d.sent && typeof d.sent.ref === 'string') state.sent = { ref: d.sent.ref, sig: String(d.sent.sig || '') };
 }
@@ -396,7 +402,7 @@ function save() { state.at = Date.now(); try { localStorage.setItem(KEY, JSON.st
 const L = () => state.lang;
 const t = k => T[L()][k];
 const count = () => state.tray.reduce((a,l) => a + l.q, 0);
-const unit = l => ITEMS[l.id].p[l.v] + (l.j ? JREESH : 0);
+const unit = l => ITEMS[l.id].p[l.v] + (l.j ? JREESH : 0) + (l.x ? ITEMS[l.id].x.p : 0);
 const total = () => state.tray.reduce((a,l) => a + unit(l)*l.q, 0);
 const variantName = (it, v, lg=L()) => it.p.length === 2 ? T[lg][v ? 'mashrouha' : 'manoushe'] : '';
 function lineName(l, lg=L()) {
@@ -406,6 +412,7 @@ function lineName(l, lg=L()) {
   else if (DUP[it.en] > 1) s += ` · ${SEC[it.sec][lg]}`;
   const v = variantName(it, l.v, lg); if (v) s += ` (${v})`;
   if (it.flav && l.f != null) s += ` – ${it.flav[l.f][lg === 'en' ? 0 : 1]}`;
+  if (l.x && it.x) s += ` + ${it.x[lg]}`;
   if (l.j) s += ` · ${T[lg].jreeshTag}`;
   return s;
 }
@@ -431,29 +438,31 @@ function card(it) {
   const vs = it.p.map((p, v) => [p, v]).filter(([p]) => p != null);   // only sizes this item really comes in
   const solo = vs.length === 1;
   const fi = it.flav ? (state.flav[it.id] || 0) : null;
+  const xon = !!(it.x && state.xtra[it.id]), xp = xon ? it.x.p : 0;   // price shown includes the extra while it's on
   const tags = [];
   if (it.jr) tags.push(t('jreeshDough'));
   if (solo && it.p.length === 2) tags.push(variantName(it, vs[0][1]));   // e.g. large spinach only comes as a man'oushe
   if (it.id === 'soujouk-ch') tags.push(lg === 'en' ? 'Pictured: mashrouha' : 'بالصورة: مشروحة');
   const ctl = (v, p) => {
     const vn = variantName(it, v);
-    const lab = it.cold ? T[lg].grab(it[lg], LBP(p)) : T[lg].add(it[lg], vn, LBP(p));
+    const lab = !p ? `${t('addLbl')} ${it[lg]}, ${t('free')}` : it.cold ? T[lg].grab(it[lg], LBP(p)) : T[lg].add(it[lg], vn, LBP(p));   // free add-ons say so instead of "0 LBP"
     return `<span class="ctl" data-ctl="${it.id}|${v}">`
       + `<button class="minus" type="button" data-act="dec" data-id="${it.id}" data-v="${v}" aria-label="${esc(T[lg].remove(it[lg] + (vn ? ' ' + vn : '')))}" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 12h11"/></svg></button>`
       + `<span class="ct num" data-ct="${it.id}|${v}" hidden>0</span>`
       + `<button class="add" type="button" data-act="add" data-id="${it.id}" data-v="${v}" aria-label="${esc(lab)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5v11M6.5 12h11"/></svg><span class="lbl">${esc(t('addLbl'))}</span></button>`
       + `</span>`;
   };
-  const price = p => `<span class="pr"><span class="num">${LBP(p)}</span><small>${t('lbp')}</small></span>`;
+  const price = p => p ? `<span class="pr"><span class="num">${LBP(p)}</span><small>${t('lbp')}</small></span>` : `<span class="pr"><span class="num">${esc(t('free'))}</span></span>`;
   const rows = vs.map(([p, v]) => {
     const vn = solo ? '' : variantName(it, v);
-    return `<div class="opt">${vn ? `<span class="vl">${esc(vn)}</span><span class="dots" aria-hidden="true"></span>` : ''}${price(p)}${ctl(v, p)}</div>`;
+    return `<div class="opt">${vn ? `<span class="vl">${esc(vn)}</span><span class="dots" aria-hidden="true"></span>` : ''}${price(p + xp)}${ctl(v, p + xp)}</div>`;
   }).join('');
-  let h = `<div class="art${it.hi ? ' hi' : ''}${it.cold ? ' cold' : ''}${hasPhoto(it, fi) ? ' photo' : ''}" data-art="${it.id}"><svg viewBox="0 0 100 100" aria-hidden="true">${artFor(it, fi)}</svg></div>`;
+  let h = it.sp ? spArt(it) : `<div class="art${it.hi ? ' hi' : ''}${it.cold ? ' cold' : ''}${hasPhoto(it, fi) ? ' photo' : ''}" data-art="${it.id}"><svg viewBox="0 0 100 100" aria-hidden="true">${artFor(it, fi)}</svg></div>`;
   h += `<div class="head"><h3 class="nm">${esc(it[lg])}</h3><p class="alt-nm" lang="${other}" dir="${other === 'ar' ? 'rtl' : 'ltr'}">${esc(it[other])}</p>${tags.length ? `<p class="tags">${tags.map(x => `<span>${esc(x)}</span>`).join('')}</p>` : ''}</div>`;
   h += `<div class="opts">${rows}</div>`;
+  if (it.x) h += `<div class="xt"><button type="button" aria-pressed="${xon}" data-act="xtra" data-id="${it.id}"><svg class="plus" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5v11M6.5 12h11"/></svg><svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg><span>${esc(it.x[lg])}</span><small class="num">+${LBP(it.x.p)} ${esc(t('lbp'))}</small></button></div>`;
   if (it.flav) h += `<div class="fl" role="radiogroup" aria-label="${esc(t('flavor'))}">${it.flav.map((f,i) => `<button type="button" role="radio" aria-checked="${fi === i}" data-act="flav" data-id="${it.id}" data-i="${i}" style="--c:${f[2]}"><i></i>${esc(f[lg === 'en' ? 0 : 1])}</button>`).join('')}</div>`;
-  return `<article class="item${solo ? ' solo' : ''}${it.flav ? ' flav' : ''}" id="it-${it.id}">${h}</article>`;
+  return `<article class="item${solo ? ' solo' : ''}${it.flav ? ' flav' : ''}${it.sp ? ' feature' : ''}" id="it-${it.id}">${h}</article>`;
 }
 function renderMenu() {
   const lg = L(), other = lg === 'en' ? 'ar' : 'en';
@@ -467,6 +476,7 @@ function renderMenu() {
       + `<header class="sec-head"><div class="sec-ttl"><h2 id="h-${s.id}">${esc(s[lg])}</h2><p class="alt" lang="${other}" dir="${other === 'ar' ? 'rtl' : 'ltr'}">${esc(s[other])}</p>${note ? `<p class="sec-note">${esc(note)}</p>` : ''}${jr}</div>${photo}</header>`
       + `<div class="items">${s.items.map(card).join('')}</div></section>`;
   }).join('');
+  mountSprinkles();
 }
 function renderStatic() {
   const W = T[L()];
@@ -483,7 +493,7 @@ const SW = {
   en: { label:'Search the menu', ph:'What are you craving?', clear:'Clear search', empty:'Nothing in the oven by that name.', hint:'Try cheese, zaatar, spinach or a section name.', reset:'See the whole menu', n:c => c === 1 ? '1 match' : `${c} matches` },
   ar: { label:'فتّش بالمنيو', ph:'شو مشتهي اليوم؟', clear:'امسح البحث', empty:'ما في شي بالفرن بهالاسم.', hint:'جرّب جبنة، زعتر، سبانخ أو اسم القسم.', reset:'شوف المنيو كلّه', n:c => `${c} نتيجة` }
 };
-const ALIAS = { thyme:'zaatar zatar zaatr زعتر', 'open-thyme':'zaatar zatar', 'fresh-thyme':'zaatar zatar', 'box-thyme':'zaatar zatar', akawi:'akkawi akawe cheese جبنة', moajanat:'mo3ajanat pastries fatayer معجنات فطاير', lahme:'lahm lahem meat لحمة', 'lahme-ch':'lahm meat', keshek:'kishik keshk kechek', 'open-kishik':'keshek keshk', 'box-kishik':'keshek keshk', sanbousik:'sambousik sambousek', 'piece-cheese-sambousik':'sanbousik sambousek', 'spinach-dz':'fatayer sabanekh', sfiha:'sfeeha sfeha meat', 'sfiha-dz':'sfeeha sfeha meat', soujouk:'sujuk sujok sausage', ayran:'laban ayran yogurt yoghurt لبن عيران', drinks:'drink soda juice water' };
+const ALIAS = { nutella:'nutela nutella nutela chocolate choco nuts شوكولا شوكولاتة نوتيلا مكسرات', sweet:'sweet dessert حلو حلويات', thyme:'zaatar zatar zaatr زعتر', 'open-thyme':'zaatar zatar', 'fresh-thyme':'zaatar zatar', 'box-thyme':'zaatar zatar', akawi:'akkawi akawe cheese جبنة', moajanat:'mo3ajanat pastries fatayer معجنات فطاير', lahme:'lahm lahem meat لحمة', 'lahme-ch':'lahm meat', keshek:'kishik keshk kechek', 'open-kishik':'keshek keshk', 'box-kishik':'keshek keshk', sanbousik:'sambousik sambousek', 'piece-cheese-sambousik':'sanbousik sambousek', 'spinach-dz':'fatayer sabanekh', sfiha:'sfeeha sfeha meat', 'sfiha-dz':'sfeeha sfeha meat', soujouk:'sujuk sujok sausage', ayran:'laban ayran yogurt yoghurt لبن عيران', drinks:'drink soda juice water' };
 const norm = v => String(v).toLowerCase().normalize('NFD').replace(/[̀-ًͯ-ٰٟ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[’'`]/g, '').replace(/3/g, 'a').trim();
 function filterMenu() {
   const W = SW[L()], q = norm(searchEl.value), terms = q.split(/\s+/).filter(Boolean);
@@ -563,15 +573,15 @@ function update() {
   if (!$('#sheet').hidden) renderChit();
 }
 function announce(msg) { const el = $('#live'); el.textContent = ''; setTimeout(() => { el.textContent = msg; }, 30); }
-function latest(id, v, f) {
-  return state.tray.filter(l => l.id === id && l.v === v && (f === undefined || l.f === f)).sort((a,b) => b.ts - a.ts)[0];
+function latest(id, v, f, x) {
+  return state.tray.filter(l => l.id === id && l.v === v && (f === undefined || l.f === f) && (x === undefined || !!l.x === x)).sort((a,b) => b.ts - a.ts)[0];
 }
 function add(id, v, btn) {
   const it = ITEMS[id]; if (!it || it.p[v] == null) return;
-  const f = it.flav ? (state.flav[id] || 0) : null;
-  const l = latest(id, v, f);
+  const f = it.flav ? (state.flav[id] || 0) : null, x = !!(it.x && state.xtra[id]);
+  const l = latest(id, v, f, x);
   if (l) { l.q = Math.min(99, l.q + 1); l.ts = Date.now(); }
-  else state.tray.push({id, v, f, j:false, q:1, ts:Date.now()});
+  else state.tray.push({id, v, f, j:false, x, q:1, ts:Date.now()});
   save(); update();
   const name = lineName(l || state.tray[state.tray.length-1]);
   announce(T[L()].added(name, T[L()].items(count()), LBP(total())));
@@ -579,12 +589,46 @@ function add(id, v, btn) {
     btn.classList.remove('shove'); void btn.offsetWidth; btn.classList.add('shove');
     const a = btn.closest('.item')?.querySelector('.art'); if (a) { a.classList.remove('hop'); void a.offsetWidth; a.classList.add('hop'); }
   }
-  play(it, f);
+  play(it, f, x);
 }
 function dec(id, v) {
-  const l = latest(id, v); if (!l) return;
+  const it = ITEMS[id];   // with an extra on the card, take one of those off first
+  const l = (it && it.x && latest(id, v, undefined, !!state.xtra[id])) || latest(id, v); if (!l) return;
   l.q--; if (l.q <= 0) state.tray.splice(state.tray.indexOf(l), 1);
   save(); update();
+}
+/* ---------------- extras that sprinkle on (assets/sprinkle.js) ---------------- */
+// The base photo, a topping-only layer cut to the same square, and nut chips cut from the same shop photo.
+// CHIPS.rects are [x, y, w, h] in nut-chips.webp; CHIPS.src is the size the chips were cut at.
+const CHIPS = { chips: photoSrc('nut-chips'), src: 944, rects: [[1,3,38,34],[46,4,28,32],[87,6,25,27],[125,5,30,29],[168,4,24,31],[209,5,21,29],[244,8,32,24],[5,49,30,21],[48,46,24,27],[89,47,22,26],[130,47,19,26],[171,46,18,27],[209,50,22,20],[250,50,20,20],[9,89,21,22],[48,90,23,19],[90,91,20,17],[128,92,24,15],[171,89,18,22],[211,91,18,18],[250,90,19,19],[11,130,17,19],[53,126,14,27],[91,131,18,17],[131,132,17,15],[172,131,16,17],[211,132,17,16],[250,133,19,14]] };
+const SPRINKLES = {};
+function spArt(it) {
+  const im = (k, cls, lazy) => `<img class="${cls}" src="${photoSrc(k)}" width="640" height="640" alt=""${lazy ? ' loading="lazy"' : ''} decoding="async">`;
+  return `<div class="art photo${it.hi ? ' hi' : ''}" data-art="${it.id}"><div class="sp" data-sp="${it.id}">`
+    + im(it.sp.base, 'sp-base', true) + im(it.sp.top, 'sp-top', true) + `<canvas class="sp-fx" aria-hidden="true"></canvas></div></div>`;
+}
+function mountSprinkles() {
+  for (const k in SPRINKLES) { SPRINKLES[k].destroy(); delete SPRINKLES[k]; }
+  menuEl.querySelectorAll('[data-sp]').forEach(el => {
+    const id = el.dataset.sp, top = el.querySelector('.sp-top');
+    SPRINKLES[id] = window.AJSprinkle ? window.AJSprinkle.create(el, CHIPS)
+      : { set: on => { top.style.opacity = on ? '1' : '0'; }, destroy() {} };   // no animation script: just show or hide the topping
+    SPRINKLES[id].set(!!state.xtra[id], false);
+  });
+}
+function setXtra(id) {
+  const it = ITEMS[id]; if (!it || !it.x) return;
+  const on = !state.xtra[id];
+  if (on) state.xtra[id] = true; else delete state.xtra[id];
+  save();
+  const el = document.getElementById('it-' + id);
+  if (el) {
+    el.querySelector('[data-act="xtra"]').setAttribute('aria-pressed', String(on));
+    const tmp = document.createElement('div'); tmp.innerHTML = card(it);   // price and Add label now include (or drop) the extra
+    el.querySelector('.opts').replaceWith(tmp.querySelector('.opts'));
+    update();
+  }
+  if (SPRINKLES[id]) SPRINKLES[id].set(on);
 }
 function setFlav(id, i) {
   state.flav[id] = i; save();
@@ -633,8 +677,8 @@ function fly(a, fromEl, flat, sp = 1) {
   anim.oncancel = () => el.remove();
 }
 const Q = []; let running = false;
-function play(it, f) {
-  const a = artFor(it, f);
+function play(it, f, x) {
+  const a = artFor(it, f, x);
   if (reduce) {
     if (!it.cold) { itemRaw.innerHTML = ''; itemBaked.innerHTML = onPeel(a); }
     return;
@@ -737,7 +781,7 @@ function renderChit() {
     let jr = '';
     if (it.jr) jr = `<span class="jr fixed">${esc(t('jreeshDough'))}</span>`;
     else if (it.sec === 'manakish') jr = `<label class="jr${l.j ? ' on' : ''}" for="${id}"><input type="checkbox" id="${id}" data-jr="${i}"${l.j ? ' checked' : ''}><span>${esc(t('jreeshTag'))} +${LBP(JREESH)}</span></label>`;
-    return `<div class="line"><span class="q">${l.q}×</span><div class="ln"><span class="n">${esc(lineName(l))}</span><span class="sub">${LBP(unit(l))} ${t('lbp')} ${t('each')}</span></div><b class="lt">${LBP(unit(l)*l.q)}</b><div class="ops">${jr}<div class="step"><button type="button" data-step="-1" data-i="${i}" aria-label="−">−</button><span>${l.q}</span><button type="button" data-step="1" data-i="${i}" aria-label="+">+</button></div></div></div>`;
+    return `<div class="line"><span class="q">${l.q}×</span><div class="ln"><span class="n">${esc(lineName(l))}</span>${unit(l) ? `<span class="sub">${LBP(unit(l))} ${t('lbp')} ${t('each')}</span>` : ''}</div><b class="lt">${unit(l) ? LBP(unit(l)*l.q) : esc(t('free'))}</b><div class="ops">${jr}<div class="step"><button type="button" data-step="-1" data-i="${i}" aria-label="−">−</button><span>${l.q}</span><button type="button" data-step="1" data-i="${i}" aria-label="+">+</button></div></div></div>`;
   }).join('');
   $('#totVal').innerHTML = `${LBP(total())}<small>${t('lbp')}</small>`;
   const cb = $('#clearBtn'); cb.textContent = cb.classList.contains('armed') ? t('clearConfirm') : t('clear'); cb.disabled = !state.tray.length;
@@ -1025,6 +1069,7 @@ menuEl.addEventListener('click', e => {
   if (act === 'add') add(id, +b.dataset.v, b);
   else if (act === 'dec') dec(id, +b.dataset.v);
   else if (act === 'flav') setFlav(id, +b.dataset.i);
+  else if (act === 'xtra') setXtra(id);
 });
 catsEl.addEventListener('click', e => {
   const b = e.target.closest('[data-sec]'); if (!b) return;
@@ -1047,7 +1092,7 @@ linesEl.addEventListener('change', e => {
   const c = e.target.closest('[data-jr]'); if (!c) return;
   const l = state.tray[+c.dataset.jr]; if (!l) return;
   l.j = c.checked;
-  const twin = state.tray.find(x => x !== l && x.id === l.id && x.v === l.v && x.f === l.f && x.j === l.j);
+  const twin = state.tray.find(x => x !== l && x.id === l.id && x.v === l.v && x.f === l.f && x.j === l.j && !!x.x === !!l.x);
   if (twin) { twin.q = Math.min(99, twin.q + l.q); state.tray.splice(state.tray.indexOf(l), 1); }
   save(); update();
   const nc = linesEl.querySelector(`[data-jr]`); if (nc && document.activeElement === document.body) nc.focus();
