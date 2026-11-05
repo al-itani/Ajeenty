@@ -81,6 +81,7 @@
     AJ.waLinks(lg);
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lg)));
     AJ.paintStatus(lg);
+    AJ.promo.paint(lg);
     headline();
     syncVideoBtn();
     AJ.order.chip(lg);

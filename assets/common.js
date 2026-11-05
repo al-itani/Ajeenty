@@ -44,11 +44,27 @@ window.AJ = (() => {
     if (u.searchParams.has('lang')) { u.searchParams.set('lang', lg); history.replaceState(null, '', u); }
   }
 
+  /* ---------- the clock ---------- */
+  // Testing a copy of the site (never on ajeenty.com): add ?now=2026-11-05T16:20 (Beirut time) to any page to see
+  // the site as it looks at that moment. It follows you to the other pages until the tab is closed. ?now=off goes back.
+  const LIVE_HOSTS = ['ajeenty.com', 'www.ajeenty.com'];
+  let skew = 0;
+  if (!LIVE_HOSTS.includes(location.hostname)) {
+    try {
+      const q = new URLSearchParams(location.search).get('now');
+      if (q === 'off') sessionStorage.removeItem('aj-now');
+      else if (q && !isNaN(Date.parse(q + ':00+02:00'))) sessionStorage.setItem('aj-now', String(Date.parse(q + ':00+02:00') - Date.now()));
+      skew = +sessionStorage.getItem('aj-now') || 0;
+    } catch (e) {}
+  }
+  const clockNow = () => Date.now() + skew;
+
   /* ---------- live opening status (Beirut time) ---------- */
+  // { day (0 = Sunday), mins (minutes since midnight), secs, y, m, d }
   function beirutNow() {
-    const parts = new Intl.DateTimeFormat('en-US', { timeZone: TZ, weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(new Date());
+    const parts = new Intl.DateTimeFormat('en-US', { timeZone: TZ, weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hourCycle: 'h23' }).formatToParts(new Date(clockNow()));
     const get = t => parts.find(p => p.type === t).value;
-    return { day: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday')), mins: (+get('hour') % 24) * 60 + (+get('minute')) };
+    return { day: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday')), mins: (+get('hour') % 24) * 60 + (+get('minute')), secs: +get('second'), y: +get('year'), m: +get('month'), d: +get('day') };
   }
   // open:   { open, day, closes, text }
   // closed: { open, day, inDays (0 = later today), nextDay, opens, text, when }  — `when` is "opens tomorrow at 7 AM" on its own
@@ -77,6 +93,105 @@ window.AJ = (() => {
       a.href = `https://wa.me/${WA}?text=${encodeURIComponent(a.dataset.wa === 'group' ? t.waGroup : t.waHello)}`;
     });
   }
+
+  /* ---------- November offer: 15% off delivery orders, every day 3 PM – 6:30 PM ---------- */
+  // Edit here and the banner on both pages, the tray, the order form and the WhatsApp message all follow.
+  // The Google Sheet script checks the same rule with its own clock (scripts/Ajeenty-orders-Code.gs → PROMO).
+  // After the last day the banner disappears on its own.
+  const PROMO = {
+    code: 'NOV-HH15', pct: 15,
+    from: '2026-11-01', to: '2026-11-30',   // Beirut dates, both included
+    start: 15 * 60, last: 18 * 60 + 30,     // first and last order, in minutes after midnight
+    round: 5000                              // the discounted total rounds to the nearest 5,000 LBP; a tie goes to the customer
+  };
+  const PW = {
+    en: {
+      label: 'November offer: 15% off every delivery order', only: 'November only', what: 'off every delivery order',
+      hours: '3 PM – 6:30 PM', days: 'Every day',
+      on: 'On now', left: (h, m) => `${[h ? `${h}h` : '', m ? `${m}m` : ''].filter(Boolean).join(' ')} left to order`, lastMins: m => `Last ${m} min to order`,
+      soon: m => m <= 90 ? `Starts in ${m} min` : 'Starts today at 3 PM', tomorrow: 'Back tomorrow at 3 PM', day: d => `Back ${d} at 3 PM`,
+      cta: 'Order delivery', ctaOff: 'See the menu', hint: 'Choose Delivery when you place your order. The 15% comes off on its own.'
+    },
+    ar: {
+      label: 'عرض تشرين التاني: خصم 15% على كل طلب دليفري', only: 'بس بتشرين التاني', what: 'على كل طلب دليفري',
+      hours: '3 – 6:30 المسا', days: 'كل يوم',
+      on: 'شغّال هلّق', left: (h, m) => `باقي ${[h ? `${h} س` : '', m ? `${m} د` : ''].filter(Boolean).join(' و')} للطلب`, lastMins: m => `آخر ${m} دقيقة للطلب`,
+      soon: m => m <= 90 ? `بيبلّش بعد ${m} دقيقة` : 'بيبلّش اليوم الساعة 3 المسا', tomorrow: 'منرجع بكرا الساعة 3 المسا', day: d => `منرجع ${d} الساعة 3 المسا`,
+      cta: 'اطلب دليفري', ctaOff: 'شوف المنيو', hint: 'نقّي «دليفري» وقت تطلب، والـ15% بتنزل لحالها.'
+    }
+  };
+  // A day runs the offer when it's inside the dates and we're still open at 3 PM (Sundays we close at 3, so not Sundays).
+  function promoDay(iso, dow) { const h = HOURS[dow]; return iso >= PROMO.from && iso <= PROMO.to && !!h && h[1] * 60 > PROMO.start; }
+  const lastOrder = dow => Math.min(PROMO.last, HOURS[dow][1] * 60 - 30);
+  // null: no offer now or later (everything hides)
+  // on:  { on: true, left: seconds until last order }
+  // off: { on: false, inDays: 0 = later today, nextDay, startsIn: minutes (today only) }
+  function promoState() {
+    const n = beirutNow(), base = Date.UTC(n.y, n.m - 1, n.d);
+    for (let k = 0; k < 40; k++) {
+      const dt = new Date(base + k * 864e5), iso = dt.toISOString().slice(0, 10), dow = dt.getUTCDay();
+      if (iso > PROMO.to) return null;
+      if (!promoDay(iso, dow)) continue;
+      if (k === 0) {
+        const last = lastOrder(dow);
+        if (n.mins >= PROMO.start && n.mins < last) return { on: true, left: (last - n.mins) * 60 - n.secs };
+        if (n.mins < PROMO.start) return { on: false, inDays: 0, nextDay: dow, startsIn: PROMO.start - n.mins };
+        continue;
+      }
+      return { on: false, inDays: k, nextDay: dow };
+    }
+    return null;
+  }
+  const promoOn = () => { const s = promoState(); return !!(s && s.on); };
+  const promoPrice = total => Math.max(0, Math.ceil(total * (100 - PROMO.pct) / 100 / PROMO.round - 0.5) * PROMO.round);
+  function promoLive(s, lang) {
+    const P = PW[lang] || PW.en;
+    if (s.on) { const mins = Math.max(1, Math.ceil(s.left / 60)); return mins <= 15 ? P.lastMins(mins) : P.left(Math.floor(mins / 60), mins % 60); }
+    return s.inDays === 0 ? P.soon(s.startsIn) : s.inDays === 1 ? P.tomorrow : P.day((W[lang] || W.en).days[s.nextDay]);
+  }
+  // The banner: <section data-promo hidden> on the homepage (with an "Order delivery" button),
+  // <section data-promo="menu" hidden> on the menu (with a how-to line instead). Built here, refreshed every 20 seconds.
+  let promoT = 0;
+  function paintPromo(lang) {
+    const P = PW[lang] || PW.en, s = promoState(), els = document.querySelectorAll('section[data-promo]');
+    document.documentElement.classList.toggle('promo-on', !!(s && s.on));
+    els.forEach(el => {
+      const wrap = el.closest('.promo-wrap'); if (wrap) wrap.hidden = !s;
+      if (!s) { el.hidden = true; el.innerHTML = ''; el.dataset.key = ''; return; }
+      const menu = el.dataset.promo === 'menu', key = `${lang}|${s.on}`;
+      if (el.dataset.key !== key) {
+        el.dataset.key = key;
+        el.className = `promo${menu ? ' promo-card' : ''}${s.on ? ' is-on' : ''}`;
+        el.setAttribute('aria-label', P.label);
+        el.innerHTML = `<div class="promo-in${menu ? '' : ' wrap'}">
+          <p class="promo-big" aria-hidden="true"><span class="promo-pct num" dir="ltr">${PROMO.pct}%</span><span class="promo-off" lang="ar">خصم</span></p>
+          <div class="promo-copy">
+            <p class="promo-eye">${P.only}</p>
+            <p class="promo-what"><span class="sr">${PROMO.pct}% </span>${P.what}</p>
+            <p class="promo-time"><span class="promo-pill num">${P.hours}</span><span class="promo-days">${P.days}</span></p>
+          </div>
+          <div class="promo-side">
+            <p class="promo-live"><span class="promo-dot" aria-hidden="true"></span>${s.on ? `<b>${P.on}</b>` : ''}<span class="promo-count num"></span></p>
+            ${menu ? `<p class="promo-hint">${P.hint}</p>` : s.on ? `<a class="btn promo-cta" href="${el.dataset.href || 'menu/index.html'}" data-promo-cta><svg class="ic" aria-hidden="true"><use href="#i-bike"/></svg><span>${P.cta}</span></a>`
+              : `<a class="btn promo-cta" href="${el.dataset.href || 'menu/index.html'}"><span>${P.ctaOff}</span></a>`}
+          </div>
+        </div>`;
+      }
+      el.querySelector('.promo-count').textContent = promoLive(s, lang);
+      el.hidden = false;
+    });
+    clearTimeout(promoT);
+    if (els.length) promoT = setTimeout(() => paintPromo(document.documentElement.lang || 'en'), 20000);
+    return s;
+  }
+  // "Order delivery" on the banner: the order form opens with Delivery already picked.
+  document.addEventListener('click', e => {
+    if (!(e.target.closest && e.target.closest('[data-promo-cta]'))) return;
+    try {
+      const k = 'ajeenty-customer-v1', c = JSON.parse(localStorage.getItem(k) || 'null') || {};
+      c.type = 'delivery'; localStorage.setItem(k, JSON.stringify(c));
+    } catch (err) {}
+  }, true);
 
   /* ---------- "into the furn" transition ---------- */
   const OVEN = `<svg viewBox="0 0 240 300" aria-hidden="true" focusable="false">
@@ -173,7 +288,6 @@ window.AJ = (() => {
   // While true, every online order is ALSO opened in WhatsApp (with its order number), on top of the Sheet.
   // Set to false once you only want the Sheet.
   const ALSO_WHATSAPP = true;
-  const LIVE_HOSTS = ['ajeenty.com', 'www.ajeenty.com'];
   const ORDER_KEY = 'ajeenty-order-v1';
   const FINAL = ['Picked up', 'Delivered', 'Cancelled'];
   const STEPS = {
@@ -293,7 +407,8 @@ window.AJ = (() => {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', trayBadges); else trayBadges();
 
   return {
-    WA, HOURS, pickLang, saveLang, status, dayName, paintStatus, waLinks, OVEN, now: beirutNow,
+    WA, HOURS, pickLang, saveLang, status, dayName, paintStatus, waLinks, OVEN, now: beirutNow, clock: clockNow,
+    promo: { ...PROMO, words: PW, state: promoState, on: promoOn, price: promoPrice, paint: paintPromo },
     order: { KEY: ORDER_KEY, mode: orderMode, alsoWa, get: getOrder, set: setOrder, send: sendOrder, refresh: refreshOrder, isFinal, label, chipLabel, STEPS, ST, chipVisible, chip: orderChip }
   };
 })();

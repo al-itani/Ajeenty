@@ -364,3 +364,17 @@ body.chip-up .order-chip{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 .xt button[aria-pressed="true"] .plus{display:none}
 .xt button[aria-pressed="true"] .tick{display:block}
 @media (prefers-reduced-motion:reduce){.art.hop .sp{animation:none}}
+
+/* ---------- November offer: tray, order form and ticket (the banner itself is in base.css) ---------- */
+.tray-promo{display:inline-block;margin-inline-start:8px;padding:2px 8px;border-radius:99px;background:var(--sand);color:var(--terra-ink);font:600 11.5px/1.3 var(--f-body);white-space:nowrap;vertical-align:1px}
+.tot-promo{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:8px;padding:9px 12px;border-radius:12px;background:rgba(172,91,51,.1);color:var(--terra-ink)}
+.tot-promo span{font-size:14px;font-weight:600}
+.tot-promo b{font:700 20px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.tot-promo b small{font:400 12px var(--f-body);margin-inline-start:4px}
+.recap .was{margin-inline-end:6px;font-weight:400;font-size:15px;color:var(--ink-2);text-decoration-thickness:1.5px}
+.note-box.promo-box{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;border:1.5px dashed var(--terra);background:rgba(172,91,51,.06);color:var(--ink)}
+.note-box.promo-box.on{border-style:solid;background:var(--sage);border-color:var(--sage);color:var(--on-sage);font-weight:500}
+.note-box.promo-box.ended{border-style:solid;border-color:var(--action);background:rgba(172,91,51,.1);color:#7A3B1C}
+.promo-switch{min-height:40px;padding:0 14px;border:0;border-radius:10px;background:var(--action);color:#fff;font-weight:600;font-size:14px;cursor:pointer}
+.promo-switch:hover{background:var(--action-2)}
+.tk-promo{margin-inline-start:6px;padding:2px 8px;border-radius:99px;background:rgba(172,91,51,.12);color:var(--terra-ink);font:600 12px/1.4 var(--f-body);font-style:normal;white-space:nowrap}

@@ -36,7 +36,11 @@ const T = {
     closedNote:s=>`We’re closed right now (${s}). We’ll start on your order as soon as we open.`, updated:x=>`Updated ${x} · refreshes on its own`, offline:'Can’t reach us right now. Retrying…', notFound:'We can’t find this order yet. If you just sent it, give it a minute.',
     questions:'Questions about your order?', backMenu:'Back to menu', yourOrder:'Your order', ordered:id=>`Order ${id} sent.`, waPhone:'Phone:', waNote:'Notes:', waId:'Order no.:',
     bothNote:'After you send, WhatsApp opens with your order and its number. Press send there too so we see it right away.', tkWaHint:'WhatsApp didn’t open? Send us the same order there so we see it right away.',
-    errSendWa:'We couldn’t save your order online, so it opened in WhatsApp instead. Press send there and we’ll take it from there.'
+    errSendWa:'We couldn’t save your order online, so it opened in WhatsApp instead. Press send there and we’ll take it from there.',
+    promoTag:'−15% delivery', promoRow:'With delivery now, 15% off', promoApplied:'Happy hour: 15% off this delivery order.',
+    promoNudge:s=>`Choose Delivery and save ${s} LBP. Happy hour runs until 6:30 PM.`, switchDelivery:'Switch to Delivery',
+    promoEnded:'Happy hour ended at 6:30 PM, so this order is back to the full price. Press Send order again to order.',
+    waPromo:'November happy hour: 15% off delivery', tkPromo:'15% off, happy hour'
   },
   ar:{
     skip:'انتقل للمنيو', h1:'المنيو', title:'المنيو | عجينتي، راس النبع، بيروت',
@@ -64,7 +68,11 @@ const T = {
     closedNote:s=>`نحنا مسكّرين هلّق (${s}). منبلّش بطلبك أول ما نفتح.`, updated:x=>`آخر تحديث ${x} · بيتحدّث لحالو`, offline:'ما عم نقدر نوصل هلّق. عم نرجع نجرّب…', notFound:'ما لقينا الطلب لهلّق. إذا هلّق بعتّو، استنّى دقيقة.',
     questions:'عندك سؤال عن طلبك؟', backMenu:'رجوع عالمنيو', yourOrder:'طلبك', ordered:id=>`انبعت الطلب ${id}.`, waPhone:'التلفون:', waNote:'ملاحظات:', waId:'رقم الطلب:',
     bothNote:'بعد ما تبعت، بيفتح الواتساب وطلبك ورقمه مكتوبين. اكبس ابعت هونيك كمان لنشوفه دغري.', tkWaHint:'ما فتح الواتساب؟ ابعتلنا نفس الطلب هونيك لنشوفه دغري.',
-    errSendWa:'ما قدرنا نحفظ طلبك أونلاين، فانفتح عالواتساب. اكبس ابعت هونيك ونحنا منكمّل.'
+    errSendWa:'ما قدرنا نحفظ طلبك أونلاين، فانفتح عالواتساب. اكبس ابعت هونيك ونحنا منكمّل.',
+    promoTag:'−15% دليفري', promoRow:'مع الدليفري هلّق، خصم 15%', promoApplied:'عرض بعد الضهر: خصم 15% على طلب الدليفري هيدا.',
+    promoNudge:s=>`نقّي «دليفري» وبتوفّر ${s} ل.ل. العرض لـ 6:30 المسا.`, switchDelivery:'حوّل عالدليفري',
+    promoEnded:'خلص العرض الساعة 6:30 المسا، فرجع الطلب عالسعر الكامل. اكبس «ابعت الطلب» مرة تانية لتطلب.',
+    waPromo:'عرض تشرين التاني: خصم 15% عالدليفري', tkPromo:'خصم 15%، عرض بعد الضهر'
   }
 };
 const HEAT = [
@@ -404,6 +412,9 @@ const t = k => T[L()][k];
 const count = () => state.tray.reduce((a,l) => a + l.q, 0);
 const unit = l => ITEMS[l.id].p[l.v] + (l.j ? JREESH : 0) + (l.x ? ITEMS[l.id].x.p : 0);
 const total = () => state.tray.reduce((a,l) => a + unit(l)*l.q, 0);
+// November offer (AJ.promo in common.js): delivery orders between 3 PM and the 6:30 PM last order pay 15% less.
+const promoTotal = () => AJ.promo.price(total());
+const promoFor = type => type === 'delivery' && AJ.promo.on();
 const variantName = (it, v, lg=L()) => it.p.length === 2 ? T[lg][v ? 'mashrouha' : 'manoushe'] : '';
 function lineName(l, lg=L()) {
   const it = ITEMS[l.id];
@@ -424,6 +435,7 @@ function orderText(lg = L(), d = null, id = '') {
   if (d) {
     out.push('', `${W.waName} ${d.name}`, `${W.waPhone} ${d.phone}`, `${W.waHow} ${d.type === 'delivery' ? W.delivery : W.pickup}`);
     out.push(d.type === 'delivery' ? `${W.waAddr} ${d.address}` : `${W.waTime} ${d.timeLabel}`);
+    if (d.promo) out.push(`🏷️ ${W.waPromo}`);
     if (d.note) out.push(`${W.waNote} ${d.note}`);
   }
   return out.join('\n');
@@ -533,11 +545,18 @@ function setLang(lg) {
   document.documentElement.dir = lg === 'ar' ? 'rtl' : 'ltr';
   document.title = t('title');
   AJ.saveLang(lg);
-  renderStatic(); renderMenu(); searchWords(); filterMenu(); update(); save(); AJ.paintStatus(lg);
+  renderStatic(); renderMenu(); searchWords(); filterMenu(); update(); save(); AJ.paintStatus(lg); AJ.promo.paint(lg);
   if (!sheet.hidden) setView(view);
   renderChip();
 }
 setInterval(() => AJ.paintStatus(L()), 60000);
+// The offer starts at 3 PM and stops taking orders at 6:30 PM: the tray and the form follow within 20 seconds.
+let promoWas = AJ.promo.on();
+setInterval(() => {
+  const on = AJ.promo.on(); if (on === promoWas) return;
+  promoWas = on; update();
+  if (!sheet.hidden && view === 'form') renderRecap();
+}, 20000);
 
 /* ---------------- updates ---------------- */
 const sceneEl = $('#scene'), traybar = $('#traybar');
@@ -555,6 +574,7 @@ function update() {
   $('#trayTotal').innerHTML = `${LBP(tot)}<small>${t('lbp')}</small>`;
   $('#trayOpen').setAttribute('aria-label', `${t('tray')}: ${T[lg].items(c)}, ${LBP(tot)} ${t('lbp')}`);
   $('#placeBtn').disabled = !c;
+  const tp = $('#trayPromo'); tp.hidden = !(c && AJ.promo.on()); tp.textContent = t('promoTag');
   renderChip();
   // heat
   const h = Math.min(c, 10) / 10;
@@ -784,6 +804,9 @@ function renderChit() {
     return `<div class="line"><span class="q">${l.q}×</span><div class="ln"><span class="n">${esc(lineName(l))}</span>${unit(l) ? `<span class="sub">${LBP(unit(l))} ${t('lbp')} ${t('each')}</span>` : ''}</div><b class="lt">${unit(l) ? LBP(unit(l)*l.q) : esc(t('free'))}</b><div class="ops">${jr}<div class="step"><button type="button" data-step="-1" data-i="${i}" aria-label="−">−</button><span>${l.q}</span><button type="button" data-step="1" data-i="${i}" aria-label="+">+</button></div></div></div>`;
   }).join('');
   $('#totVal').innerHTML = `${LBP(total())}<small>${t('lbp')}</small>`;
+  const tp = $('#totPromo'), pOn = AJ.promo.on() && total() > 0;
+  tp.hidden = !pOn;
+  if (pOn) tp.innerHTML = `<span>${esc(t('promoRow'))}</span><b>${LBP(promoTotal())}<small>${t('lbp')}</small></b>`;
   const cb = $('#clearBtn'); cb.textContent = cb.classList.contains('armed') ? t('clearConfirm') : t('clear'); cb.disabled = !state.tray.length;
   $('#copyBtn').textContent = t('copy'); $('#copyBtn').disabled = !state.tray.length;
 }
@@ -849,7 +872,6 @@ function toggleType() {
 function renderForm() {
   const lg = L(), W = T[lg], c = count(), mode = AJ.order.mode(), st = AJ.status(lg);
   $('#recapItems').textContent = W.items(c);
-  $('#recapTotal').innerHTML = `${LBP(total())}<small>${t('lbp')}</small>`;
   const mn = $('#modeNote');
   mn.hidden = mode === 'live' && !AJ.order.alsoWa();
   mn.className = 'note-box ' + (mode === 'preview' ? 'preview' : 'info');
@@ -866,7 +888,30 @@ function renderForm() {
   form.querySelectorAll('[data-tp]').forEach(x => x.setAttribute('placeholder', W[x.dataset.tp]));
   $('#sendTxt').textContent = mode === 'whatsapp' ? W.sendViaWa : W.send;
   toggleType();
+  delete form.dataset.sawPromo;
+  renderRecap();
 }
+// The total on the form: 15% off once Delivery is picked during happy hour, a nudge while Pickup is picked.
+// form.dataset.sawPromo remembers that the customer was shown the discount, so it never disappears silently (see submit).
+function renderRecap(ended = false) {
+  const lg = L(), tot = total(), on = AJ.promo.on() && tot > 0, disc = on && form.elements.type.value === 'delivery';
+  $('#recapTotal').innerHTML = disc ? `<s class="was num">${LBP(tot)}</s> ${LBP(promoTotal())}<small>${t('lbp')}</small>` : `${LBP(tot)}<small>${t('lbp')}</small>`;
+  if (form.dataset.sawPromo === '1' && !disc && !AJ.promo.on()) ended = true;
+  form.dataset.sawPromo = disc ? '1' : '';
+  const pn = $('#promoNote');
+  pn.hidden = !(on || ended);
+  pn.classList.toggle('on', disc);
+  pn.classList.toggle('ended', ended);
+  if (ended) pn.textContent = t('promoEnded');
+  else if (disc) pn.textContent = t('promoApplied');
+  else if (on) pn.innerHTML = `<span>${esc(T[lg].promoNudge(LBP(tot - promoTotal())))}</span> <button type="button" class="promo-switch" data-promo-switch>${esc(t('switchDelivery'))}</button>`;
+}
+$('#promoNote').addEventListener('click', e => {
+  if (!e.target.closest('[data-promo-switch]')) return;
+  const r = form.querySelector('input[name="type"][value="delivery"]');
+  r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true }));
+  const a = form.elements.address; if (!a.value) a.focus();
+});
 function fieldError(name, msg) {
   const inp = form.elements[name], wrap = inp.closest('.fld');
   let e = wrap.querySelector('.ferr');
@@ -904,7 +949,7 @@ function showSendError(d, waSent) {
   $('#formErr').scrollIntoView({ block: 'nearest' });
 }
 form.addEventListener('change', e => {
-  if (e.target.name === 'type') { form.dataset.touched = '1'; toggleType(); fieldError('address', ''); saveDraft(); }
+  if (e.target.name === 'type') { form.dataset.touched = '1'; toggleType(); fieldError('address', ''); renderRecap(); saveDraft(); }
   if (e.target.name === 'time') fieldError('time', '');
 });
 form.addEventListener('input', e => { if (e.target.getAttribute('aria-invalid')) fieldError(e.target.name, ''); saveDraft(); });
@@ -930,6 +975,9 @@ form.addEventListener('submit', async e => {
     el.innerHTML = timeSlots().map(o => `<option value="${esc(o.v)}">${esc(o.label)}</option>`).join('');
     fieldError('time', t('errTime')); el.focus(); return;
   }
+  // Happy hour ended while the form was open: show the full price once before sending at it.
+  d.promo = promoFor(d.type);
+  if (form.dataset.sawPromo === '1' && !d.promo) { renderRecap(true); $('#promoNote').scrollIntoView({ block: 'nearest' }); return; }
   saveCustomer(d);
   $('#formErr').hidden = true;
   const mode = AJ.order.mode();
@@ -939,14 +987,15 @@ form.addEventListener('submit', async e => {
     type: d.type, name: d.name, phone: d.phone,
     address: d.type === 'delivery' ? d.address : '', time: d.type === 'pickup' ? d.time : '',
     note: d.note, lang: L(), website: d.website,
-    items: state.tray.map(l => ({ name: lineName(l, 'en'), qty: l.q }))   // English names for the kitchen, no prices
+    items: state.tray.map(l => ({ name: lineName(l, 'en'), qty: l.q })),   // English names for the kitchen, no prices
+    promo: d.promo ? AJ.promo.code : ''   // the Sheet checks this against its own clock
   };
   // Same order sent again (a retry after a timeout or a dropped connection) keeps the same reference,
   // so the Sheet saves it once. Any change to the tray or the details makes it a new order.
-  const sig = JSON.stringify([payload.type, payload.name, payload.phone, payload.address, payload.time, payload.note, payload.items]);
+  const sig = JSON.stringify([payload.type, payload.name, payload.phone, payload.address, payload.time, payload.note, payload.items, payload.promo]);
   if (!state.sent || state.sent.sig !== sig) { state.sent = { ref: newRef(), sig }; save(); }
   payload.ref = state.sent.ref;
-  const meta = { type: d.type, time: d.timeLabel, total: total(), lines: state.tray.map(l => ({ q: l.q, en: lineName(l, 'en'), ar: lineName(l, 'ar') })) };
+  const meta = { type: d.type, time: d.timeLabel, total: d.promo ? promoTotal() : total(), promo: d.promo, lines: state.tray.map(l => ({ q: l.q, en: lineName(l, 'en'), ar: lineName(l, 'ar') })) };
   // Sheet + WhatsApp: open the AJEENTY send page (send/) now, while the tap still counts (phones block tabs
   // opened later). That page is in front, so the phone doesn't pause it: it saves the order to the Sheet,
   // then opens WhatsApp with the order and its number. This tab waits for its answer (see checkHand).
@@ -980,7 +1029,7 @@ function sendIdle() { sending = false; $('#sendBtn').disabled = false; $('#sendT
 function orderDone(res, meta) {
   const o = AJ.order.get();
   if (!o || o.id !== res.id) AJ.order.set({ id: res.id, type: meta.type, at: Date.now(), checked: Date.now(), status: 'Received', preview: !!res.preview,
-    total: meta.total, time: meta.time, wa: meta.wa || '', waOpened: !!meta.waOpened, lines: meta.lines });
+    total: meta.total, promo: !!meta.promo, time: meta.time, wa: meta.wa || '', waOpened: !!meta.waOpened, lines: meta.lines });
   state.tray = []; state.note = ''; state.sent = null; state.wa = 0; save(); update();
   form.reset(); delete form.dataset.touched;
   const u = new URL(location.href); u.searchParams.set('order', res.id); history.replaceState(null, '', u);
@@ -1021,7 +1070,7 @@ function renderTrack() {
   }).join('');
   $('#tkMeta').textContent = o.offline ? W.offline : o.missing ? W.notFound : AJ.order.isFinal(o.status) ? '' : W.updated(fmtClock(o.checked || o.at));
   $('#tkItems').innerHTML = Array.isArray(o.lines) && o.lines.length
-    ? `<ul>${o.lines.map(l => `<li><b>${l.q}×</b> ${esc(l[lg] || l.en)}</li>`).join('')}</ul>${o.total ? `<p class="tk-total"><span>${esc(W.total)}</span><b>${LBP(o.total)}<small>${esc(W.lbp)}</small></b></p>` : ''}`
+    ? `<ul>${o.lines.map(l => `<li><b>${l.q}×</b> ${esc(l[lg] || l.en)}</li>`).join('')}</ul>${o.total ? `<p class="tk-total"><span>${esc(W.total)}${o.promo ? ` <em class="tk-promo">${esc(W.tkPromo)}</em>` : ''}</span><b>${LBP(o.total)}<small>${esc(W.lbp)}</small></b></p>` : ''}`
     : '';
 }
 function renderChip() {

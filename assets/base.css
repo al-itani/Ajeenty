@@ -255,3 +255,64 @@ html.arriving .into-glow{opacity:1}
 .on-terra{background:var(--terra-ink);color:var(--flour);--on-sage:#F5EDE1;--on-sage-2:#E7D6C0;--line-sage:rgba(245,237,225,.22)}
 .on-terra :focus-visible{outline-color:var(--flour)}
 .on-terra .lede{color:var(--on-sage-2)}
+
+/* ---------- November offer banner (built by AJ.promo in common.js) ----------
+   Looks like the Instagram poster on purpose: sand paper, a big sage 15%, "خصم" underlined in terracotta,
+   and the hours in a terracotta pill, so people recognise the offer the moment they land. */
+.promo{position:relative;z-index:3;background:radial-gradient(ellipse 60% 120% at 12% 0%,rgba(255,250,242,.8),transparent 70%),radial-gradient(ellipse 50% 140% at 100% 100%,rgba(184,102,62,.16),transparent 70%),var(--sand);color:var(--sage);border-bottom:1px solid var(--line)}
+.promo p{margin:0}
+.promo-in{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px clamp(24px,3.4vw,56px);padding-block:clamp(20px,2.6vw,30px)}
+.promo-big{display:flex;align-items:flex-start;gap:clamp(6px,.8vw,12px);direction:ltr}
+.promo-pct{font:700 clamp(84px,9vw,136px)/.8 var(--f-display);letter-spacing:-.045em;color:var(--sage)}
+.promo-off{position:relative;margin-top:.05em;padding-bottom:12px;font:700 clamp(36px,3.6vw,56px)/1 var(--f-body);color:var(--sage)}
+.promo-off::after{content:"";position:absolute;inset-inline:-4px;bottom:0;height:6px;border-radius:9px;background:var(--terra);transform:rotate(-4deg)}
+.promo-eye{font:600 15px/1.3 var(--f-body);color:var(--terra-ink)}
+.promo-what{margin-top:2px!important;font:700 clamp(27px,2.7vw,40px)/1.08 var(--f-display);letter-spacing:-.01em;word-spacing:.08em;color:var(--sage);text-wrap:balance}
+:root[lang="ar"] .promo-what{line-height:1.3}
+.promo-time{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:14px!important}
+.promo-pill{display:inline-flex;align-items:center;min-height:38px;padding:0 18px;border-radius:99px;background:var(--action);color:#fff;font:700 18px/1 var(--f-display);white-space:nowrap}
+.promo-days{font:600 17px/1.3 var(--f-display);color:var(--sage)}
+:root[lang="ar"] .promo-days{font-family:var(--f-body)}
+.promo-side{display:grid;justify-items:end;gap:14px}
+.promo-live{display:flex;align-items:center;gap:9px;font-size:16px;line-height:1.3;color:var(--ink);white-space:nowrap}
+.promo-live b{font-weight:600;color:#2F6B2C}
+.promo-live b::after{content:"·";margin-inline-start:9px;font-weight:400;color:var(--ink-2)}
+.is-on .promo-count{font-weight:600;color:var(--terra-ink)}
+.promo-dot{position:relative;width:10px;height:10px;border-radius:50%;background:#9AA39B;flex:none}
+.is-on .promo-dot{background:#3F8A3A}
+.is-on .promo-dot{box-shadow:0 0 0 4px rgba(63,138,58,.18)}
+/* a few pulses when the homepage opens, then still: an endless animation keeps phones busy (see README, Speed notes).
+   The menu already has the oven moving, so its card never pulses. */
+.promo:not(.promo-card).is-on .promo-dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:#3F8A3A;animation:promoPing 1.8s ease-out 5}
+@keyframes promoPing{from{transform:scale(1);opacity:.55}to{transform:scale(2.8);opacity:0}}
+.promo-cta{min-height:58px;padding:0 30px;background:var(--sage);color:var(--on-sage);font-size:17px;font-weight:600}
+.promo-cta:hover{background:var(--furnace)}
+.promo-cta .ic{width:22px;height:22px}
+.promo-hint{max-width:17em;font-size:14px;line-height:1.45;color:var(--ink-2);text-align:end}
+/* on the menu: the same offer as a paper card under the oven */
+.promo-wrap{padding-top:22px}
+.promo-card{border:2px solid var(--terra);border-radius:22px;box-shadow:0 18px 34px -26px rgba(43,30,20,.55)}
+.promo-card .promo-in{padding:20px clamp(18px,2.6vw,32px)}
+.promo-card .promo-pct{font-size:clamp(72px,7vw,108px)}
+.promo-card .promo-what{font-size:clamp(24px,2.3vw,34px)}
+@media (max-width:860px){
+  .promo-in{grid-template-columns:auto minmax(0,1fr);gap:16px 18px}
+  .promo-side{grid-column:1/-1;justify-items:stretch;gap:12px}
+  .promo-live{justify-content:center;white-space:normal;flex-wrap:wrap}
+  .promo-hint{max-width:none;text-align:center}
+}
+@media (max-width:520px){
+  .promo-in{padding-block:18px 20px;gap:14px 14px}
+  .promo-pct,.promo-card .promo-pct{font-size:clamp(66px,20vw,84px)}
+  .promo-off{font-size:clamp(28px,8.4vw,36px);padding-bottom:9px}
+  .promo-off::after{height:5px}
+  .promo-big{flex-direction:column;align-items:center;gap:8px}
+  .promo-eye{font-size:14px}
+  .promo-what,.promo-card .promo-what{font-size:clamp(22px,6.4vw,27px)}
+  .promo-time{margin-top:10px!important;gap:6px 10px}
+  .promo-pill{min-height:34px;padding:0 14px;font-size:16px}
+  .promo-days{font-size:16px}
+  .promo-cta{width:100%;min-height:56px}
+  .promo-card .promo-in{padding:16px 16px 18px}
+}
+@media (prefers-reduced-motion:reduce){.is-on .promo-dot::after{animation:none}}
