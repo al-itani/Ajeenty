@@ -114,7 +114,6 @@ const MENU = [
     D('mj-spinach','Spinach','سبانخ',400000,{k:'cluster',of:{k:'tri',f:'spinach'}},{x:MIX}),
     D('mj-purslane','Purslane','بقلة',400000,{k:'cluster',of:{k:'tri',f:'purslane'}},{x:MIX}),
     D('mj-chard','Chard','سلق',400000,{k:'cluster',of:{k:'tri',f:'chard'}},{x:MIX}),
-    D('mj-fresh-thyme','Fresh thyme','زعتر أخضر',400000,{k:'cluster',of:{k:'round',t:'freshthyme'}}),
     D('mj-spicy-spinach','Spicy spinach','سبانخ حر',400000,{k:'cluster',of:{k:'tri',f:'spicy'}},{x:MIX}),
     D('mj-sanbousik','Cheese sanbousik','سنبوسك جبنة',400000,{k:'cluster',of:{k:'moon'}}),
     D('mj-cheese-parsley','Cheese & parsley','جبنة مع بقدونس',400000,{k:'cluster',of:{k:'moon',g:1}}),
@@ -153,8 +152,7 @@ const MENU = [
     I('piece-spicy-spinach','Spicy spinach','سبانخ حر',40000,{k:'tri',f:'spicy'},{x:MIX}),
     I('piece-jreesh-spinach','Jreesh spinach','سبانخ جريش',45000,{k:'tri',f:'spinach',d:'j'},{jr:1,x:MIX}),
     I('piece-spinach-labne','Spinach labne & mix','سبانخ لبنة مع خلطة',40000,{k:'tri',f:'labne'}),
-    I('piece-fresh-thyme','Fresh thyme','زعتر أخضر',40000,{k:'round',t:'freshthyme'}),
-    I('piece-open-thyme','Open thyme','زعتر مفتوح',30000,{k:'round',t:'zaatar'}),
+    I('piece-open-thyme','Open thyme','زعتر مفتوح',40000,{k:'round',t:'zaatar'}),
     I('piece-open-cheese','Open cheese','جبنة مفتوح',45000,{k:'round',t:'cheese'}),
     I('piece-open-kishik','Open kishik','كشك مفتوح',45000,{k:'round',t:'keshek'}),
     I('piece-cheese-sambousik','Cheese sambousik','سنبوسك جبنة',45000,{k:'moon'}),
@@ -508,7 +506,7 @@ const SW = {
   en: { label:'Search the menu', ph:'What are you craving?', clear:'Clear search', empty:'Nothing in the oven by that name.', hint:'Try cheese, zaatar, spinach or a section name.', reset:'See the whole menu', n:c => c === 1 ? '1 match' : `${c} matches` },
   ar: { label:'فتّش بالمنيو', ph:'شو مشتهي اليوم؟', clear:'امسح البحث', empty:'ما في شي بالفرن بهالاسم.', hint:'جرّب جبنة، زعتر، سبانخ أو اسم القسم.', reset:'شوف المنيو كلّه', n:c => `${c} نتيجة` }
 };
-const ALIAS = { nutella:'nutela nutella nutela chocolate choco nuts شوكولا شوكولاتة نوتيلا مكسرات', sweet:'sweet dessert حلو حلويات', thyme:'zaatar zatar zaatr زعتر', 'mj-open-thyme':'zaatar zatar', 'piece-open-thyme':'zaatar zatar', 'mj-fresh-thyme':'zaatar zatar', 'sh-zaatar':'zatar zaatr', 'box-thyme':'zaatar zatar', akawi:'akkawi akawe cheese جبنة', moajanat:'mo3ajanat pastries fatayer معجنات فطاير', lahme:'lahm lahem meat لحمة', 'lahme-ch':'lahm meat', keshek:'kishik keshk kechek', 'mj-open-kishik':'keshek keshk', 'piece-open-kishik':'keshek keshk', 'sh-kishik':'keshek keshk kechek', 'box-kishik':'keshek keshk', 'mj-sanbousik':'sambousik sambousek', 'piece-cheese-sambousik':'sanbousik sambousek', 'mj-spinach':'fatayer sabanekh', 'mj-purslane':'fatayer bakle', 'mj-chard':'fatayer selek', 'piece-spinach':'fatayer sabanekh', sfiha:'sfeeha sfeha meat', 'mj-sfiha':'sfeeha sfeha meat', 'piece-sfiha':'sfeeha sfeha meat', soujouk:'sujuk sujok sausage', ayran:'laban ayran yogurt yoghurt لبن عيران', drinks:'drink soda juice water', cans:'cans can soda soft drink pepsi mirinda 7up غازية' };
+const ALIAS = { nutella:'nutela nutella nutela chocolate choco nuts شوكولا شوكولاتة نوتيلا مكسرات', sweet:'sweet dessert حلو حلويات', thyme:'zaatar zatar zaatr زعتر', 'mj-open-thyme':'zaatar zatar', 'piece-open-thyme':'zaatar zatar', 'sh-zaatar':'zatar zaatr', 'box-thyme':'zaatar zatar', akawi:'akkawi akawe cheese جبنة', moajanat:'mo3ajanat pastries fatayer معجنات فطاير', lahme:'lahm lahem meat لحمة', 'lahme-ch':'lahm meat', keshek:'kishik keshk kechek', 'mj-open-kishik':'keshek keshk', 'piece-open-kishik':'keshek keshk', 'sh-kishik':'keshek keshk kechek', 'box-kishik':'keshek keshk', 'mj-sanbousik':'sambousik sambousek', 'piece-cheese-sambousik':'sanbousik sambousek', 'mj-spinach':'fatayer sabanekh', 'mj-purslane':'fatayer bakle', 'mj-chard':'fatayer selek', 'piece-spinach':'fatayer sabanekh', sfiha:'sfeeha sfeha meat', 'mj-sfiha':'sfeeha sfeha meat', 'piece-sfiha':'sfeeha sfeha meat', soujouk:'sujuk sujok sausage', ayran:'laban ayran yogurt yoghurt لبن عيران', drinks:'drink soda juice water', cans:'cans can soda soft drink pepsi mirinda 7up غازية' };
 const norm = v => String(v).toLowerCase().normalize('NFD').replace(/[̀-ًͯ-ٰٟ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[’'`]/g, '').replace(/3/g, 'a').trim();
 function filterMenu() {
   const W = SW[L()], q = norm(searchEl.value), terms = q.split(/\s+/).filter(Boolean);
