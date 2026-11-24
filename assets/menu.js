@@ -86,8 +86,9 @@ const HEAT = [
 /* ---------------- the menu (from the A3 print menu) ---------------- */
 const S = (id,en,ar,nen,nar,items) => ({id,en,ar,nen,nar,items});
 const I = (id,en,ar,p,art,o={}) => ({id,en,ar,p:Array.isArray(p)?p:[p],art,...o});
-// Moajanat are priced per dozen: the half dozen is half that, and comes first (it is the default).
-const D = (id,en,ar,dz,art,o={}) => I(id,en,ar,[dz/2,dz],art,{sz:1,...o});
+// Moajanat come as a half dozen (first, the default) or a dozen. Pass [half, dozen] when the half dozen
+// isn't exactly half; null means that size isn't sold. A plain number is the dozen, halved for the half.
+const D = (id,en,ar,dz,art,o={}) => I(id,en,ar,Array.isArray(dz)?dz:[dz/2,dz],art,{sz:1,...o});
 const MIX = {en:'Special mix', ar:'خلطة خاصة', p:0};   // free option on the ftayir
 const MENU = [
   S('manakish','Manakish','مناقيش','Fresh from the oven.','طازة من الفرن.',[
@@ -110,22 +111,23 @@ const MENU = [
     I('habash','Habash & cheese','حبش وجبنة',[450000,550000],{k:'round',t:'habash'})
   ]),
   S('moajanat','Moajanat','معجنات','Half dozen (6 pieces) or a full dozen.','نص دزينة (٦ قطع) أو دزينة كاملة.',[
-    D('mj-open-thyme','Open thyme','زعتر مفتوح',200000,{k:'cluster',of:{k:'round',t:'zaatar'}}),
+    D('mj-open-thyme','Open thyme','زعتر مفتوح',[null,200000],{k:'cluster',of:{k:'round',t:'zaatar'}}),
     D('mj-spinach','Spinach','سبانخ',400000,{k:'cluster',of:{k:'tri',f:'spinach'}},{x:MIX}),
     D('mj-purslane','Purslane','بقلة',400000,{k:'cluster',of:{k:'tri',f:'purslane'}},{x:MIX}),
     D('mj-chard','Chard','سلق',400000,{k:'cluster',of:{k:'tri',f:'chard'}},{x:MIX}),
-    D('mj-spicy-spinach','Spicy spinach','سبانخ حر',400000,{k:'cluster',of:{k:'tri',f:'spicy'}},{x:MIX}),
-    D('mj-sanbousik','Cheese sanbousik','سنبوسك جبنة',400000,{k:'cluster',of:{k:'moon'}}),
-    D('mj-cheese-parsley','Cheese & parsley','جبنة مع بقدونس',400000,{k:'cluster',of:{k:'moon',g:1}}),
+    D('mj-fresh-thyme','Fresh thyme','زعتر أخضر',400000,{k:'cluster',of:{k:'tri',f:'freshthyme'}}),
+    D('mj-spicy-spinach','Spicy spinach','سبانخ حر',[250000,400000],{k:'cluster',of:{k:'tri',f:'spicy'}},{x:MIX}),
     D('mj-open-cheese','Open cheese','جبنة مفتوح',400000,{k:'cluster',of:{k:'round',t:'cheese'}}),
     D('mj-open-kishik','Open kishik','كشك مفتوح',400000,{k:'cluster',of:{k:'round',t:'keshek'}}),
     D('mj-spinach-labne','Spinach labne & mix','سبانخ لبنة مع خلطة',400000,{k:'cluster',of:{k:'tri',f:'labne'}},{hi:1}),
-    D('mj-pizza','Pizza','بيتزا',420000,{k:'cluster',of:{k:'pizza'}}),
-    D('mj-jreesh-spinach','Jreesh spinach','سبانخ جريش',450000,{k:'cluster',of:{k:'tri',f:'spinach',d:'j'}},{jr:1,x:MIX}),
-    D('mj-sfiha','Sfiha','صفيحة',450000,{k:'cluster',of:{k:'sq'}}),
+    D('mj-sanbousik','Cheese sanbousik','سنبوسك جبنة',[250000,400000],{k:'cluster',of:{k:'moon'}}),
+    D('mj-cheese-parsley','Cheese & parsley','جبنة مع بقدونس',[250000,400000],{k:'cluster',of:{k:'moon',g:1}}),
+    D('mj-pizza','Pizza','بيتزا',[250000,420000],{k:'cluster',of:{k:'pizza'}}),
+    D('mj-jreesh-spinach','Jreesh spinach','سبانخ جريش',[250000,450000],{k:'cluster',of:{k:'tri',f:'spinach',d:'j'}},{jr:1,x:MIX}),
+    D('mj-sfiha','Sfiha','صفيحة',[250000,450000],{k:'cluster',of:{k:'sq'}}),
     I('box-thyme','Box – thyme','Box - زعتر',500000,{k:'box',t:'zaatar'}),
     I('box-kishik','Box – kishik','Box - كشك',500000,{k:'box',t:'keshek'}),
-    I('mixed','Mixed dozen pastries','معجنات دزينة مشكل',550000,{k:'mixed'})
+    D('mixed','Mixed pastries','معجنات مشكل',[275000,550000],{k:'mixed'})
   ]),
   S('trabolsiyeh','Trabolsiyeh','طرابلسية','Tripoli-style.','عالطريقة الطرابلسية.',[
     I('trab-cheese','Trabolsiyeh cheese','طرابلسية جبنة',220000,{k:'boat',f:'cheese',slit:1}),
@@ -149,14 +151,11 @@ const MENU = [
     I('piece-spinach','Spinach','سبانخ',40000,{k:'tri',f:'spinach'},{x:MIX}),
     I('piece-purslane','Purslane','بقلة',40000,{k:'tri',f:'purslane'},{x:MIX}),
     I('piece-chard','Chard','سلق',40000,{k:'tri',f:'chard'},{x:MIX}),
+    I('piece-fresh-thyme','Fresh thyme','زعتر أخضر',40000,{k:'tri',f:'freshthyme'}),
     I('piece-spicy-spinach','Spicy spinach','سبانخ حر',40000,{k:'tri',f:'spicy'},{x:MIX}),
-    I('piece-jreesh-spinach','Jreesh spinach','سبانخ جريش',45000,{k:'tri',f:'spinach',d:'j'},{jr:1,x:MIX}),
-    I('piece-spinach-labne','Spinach labne & mix','سبانخ لبنة مع خلطة',40000,{k:'tri',f:'labne'}),
-    I('piece-open-thyme','Open thyme','زعتر مفتوح',40000,{k:'round',t:'zaatar'}),
-    I('piece-open-cheese','Open cheese','جبنة مفتوح',45000,{k:'round',t:'cheese'}),
-    I('piece-open-kishik','Open kishik','كشك مفتوح',45000,{k:'round',t:'keshek'}),
-    I('piece-cheese-sambousik','Cheese sambousik','سنبوسك جبنة',45000,{k:'moon'}),
-    I('piece-cheese-parsley','Cheese & parsley','جبنة وبقدونس',45000,{k:'moon',g:1}),
+    I('piece-jreesh-spinach','Jreesh spinach','سبانخ جريش',50000,{k:'tri',f:'spinach',d:'j'},{jr:1,x:MIX}),
+    I('piece-cheese-sambousik','Cheese sambousik','سنبوسك جبنة',50000,{k:'moon'}),
+    I('piece-cheese-parsley','Cheese & parsley','جبنة وبقدونس',50000,{k:'moon',g:1}),
     I('piece-pizza','Pizza','بيتزا',50000,{k:'slice'}),
     I('piece-sfiha','Sfiha','صفيحة',50000,{k:'sq'})
   ]),
@@ -350,14 +349,14 @@ function art(sp, seed, c) {
 const PHOTOS = {
   akawi:'akawi',
   'mj-spinach':'spinach', 'piece-spinach':'spinach',
-  'mj-open-thyme':'zaatar-mini', 'piece-open-thyme':'zaatar-mini', 'box-thyme':'zaatar-mini',
+  'mj-open-thyme':'zaatar-mini', 'box-thyme':'zaatar-mini',
   'mj-sfiha':'sfiha', 'piece-sfiha':'sfiha',
   'pizza-m':'pizza', 'pizza-l':'pizza', 'mj-pizza':'pizza-mini', 'piece-pizza':'pizza-mini',
   kafta:'kafta-manoushe', doublex:'duplex', 'soujouk-ch':'sujuk-cheese-mashrouha',
   'mj-purslane':'purslane-ftayir', 'piece-purslane':'purslane-ftayir',
   'mj-sanbousik':'cheese-sambusik', 'piece-cheese-sambousik':'cheese-sambusik',
   'mj-cheese-parsley':'cheese-parsley', 'piece-cheese-parsley':'cheese-parsley',
-  'mj-open-kishik':'kishik-mini', 'piece-open-kishik':'kishik-mini', 'box-kishik':'kishik-mini', 'mj-spinach-labne':'spinach-labneh-serving',
+  'mj-open-kishik':'kishik-mini', 'box-kishik':'kishik-mini', 'mj-spinach-labne':'spinach-labneh-serving',
   'trab-meat':'trabolsiyeh-meat', 'trab-pizza':'trabolsiyeh-pizza',
   'sh-spinach':'shakhtoura-spinach', 'sh-mhammara':'shakhtoura-mhammara',
   'sh-purslane':'shakhtoura-purslane', 'sh-pizza':'shakhtoura-pizza', evervess:'evervess', ayran:'ayran',
@@ -506,7 +505,7 @@ const SW = {
   en: { label:'Search the menu', ph:'What are you craving?', clear:'Clear search', empty:'Nothing in the oven by that name.', hint:'Try cheese, zaatar, spinach or a section name.', reset:'See the whole menu', n:c => c === 1 ? '1 match' : `${c} matches` },
   ar: { label:'فتّش بالمنيو', ph:'شو مشتهي اليوم؟', clear:'امسح البحث', empty:'ما في شي بالفرن بهالاسم.', hint:'جرّب جبنة، زعتر، سبانخ أو اسم القسم.', reset:'شوف المنيو كلّه', n:c => `${c} نتيجة` }
 };
-const ALIAS = { nutella:'nutela nutella nutela chocolate choco nuts شوكولا شوكولاتة نوتيلا مكسرات', sweet:'sweet dessert حلو حلويات', thyme:'zaatar zatar zaatr زعتر', 'mj-open-thyme':'zaatar zatar', 'piece-open-thyme':'zaatar zatar', 'sh-zaatar':'zatar zaatr', 'box-thyme':'zaatar zatar', akawi:'akkawi akawe cheese جبنة', moajanat:'mo3ajanat pastries fatayer معجنات فطاير', lahme:'lahm lahem meat لحمة', 'lahme-ch':'lahm meat', keshek:'kishik keshk kechek', 'mj-open-kishik':'keshek keshk', 'piece-open-kishik':'keshek keshk', 'sh-kishik':'keshek keshk kechek', 'box-kishik':'keshek keshk', 'mj-sanbousik':'sambousik sambousek', 'piece-cheese-sambousik':'sanbousik sambousek', 'mj-spinach':'fatayer sabanekh', 'mj-purslane':'fatayer bakle', 'mj-chard':'fatayer selek', 'piece-spinach':'fatayer sabanekh', sfiha:'sfeeha sfeha meat', 'mj-sfiha':'sfeeha sfeha meat', 'piece-sfiha':'sfeeha sfeha meat', soujouk:'sujuk sujok sausage', ayran:'laban ayran yogurt yoghurt لبن عيران', drinks:'drink soda juice water', cans:'cans can soda soft drink pepsi mirinda 7up غازية' };
+const ALIAS = { nutella:'nutela nutella nutela chocolate choco nuts شوكولا شوكولاتة نوتيلا مكسرات', sweet:'sweet dessert حلو حلويات', thyme:'zaatar zatar zaatr زعتر', 'mj-open-thyme':'zaatar zatar', 'sh-zaatar':'zatar zaatr', 'box-thyme':'zaatar zatar', akawi:'akkawi akawe cheese جبنة', moajanat:'mo3ajanat pastries fatayer معجنات فطاير', lahme:'lahm lahem meat لحمة', 'lahme-ch':'lahm meat', keshek:'kishik keshk kechek', 'mj-open-kishik':'keshek keshk', 'sh-kishik':'keshek keshk kechek', 'box-kishik':'keshek keshk', 'mj-sanbousik':'sambousik sambousek', 'piece-cheese-sambousik':'sanbousik sambousek', 'mj-spinach':'fatayer sabanekh', 'mj-purslane':'fatayer bakle', 'mj-chard':'fatayer selek', 'mj-fresh-thyme':'zaatar akhdar fatayer', 'piece-fresh-thyme':'zaatar akhdar fatayer', 'piece-spinach':'fatayer sabanekh', sfiha:'sfeeha sfeha meat', 'mj-sfiha':'sfeeha sfeha meat', 'piece-sfiha':'sfeeha sfeha meat', soujouk:'sujuk sujok sausage', ayran:'laban ayran yogurt yoghurt لبن عيران', drinks:'drink soda juice water', cans:'cans can soda soft drink pepsi mirinda 7up غازية' };
 const norm = v => String(v).toLowerCase().normalize('NFD').replace(/[̀-ًͯ-ٰٟ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[’'`]/g, '').replace(/3/g, 'a').trim();
 function filterMenu() {
   const W = SW[L()], q = norm(searchEl.value), terms = q.split(/\s+/).filter(Boolean);

@@ -406,6 +406,12 @@ window.AJ = (() => {
   addEventListener('pageshow', () => trayBadges());
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', trayBadges); else trayBadges();
 
+  /* ---------- installable app (PWA): the service worker lives at the site root, next to the manifest ---------- */
+  const SW_URL = new URL('../sw.js', (document.currentScript && document.currentScript.src) || location.href);
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && !navigator.webdriver) {
+    addEventListener('load', () => navigator.serviceWorker.register(SW_URL, { scope: new URL('./', SW_URL).pathname }).catch(() => {}));
+  }
+
   return {
     WA, HOURS, pickLang, saveLang, status, dayName, paintStatus, waLinks, OVEN, now: beirutNow, clock: clockNow,
     promo: { ...PROMO, words: PW, state: promoState, on: promoOn, price: promoPrice, paint: paintPromo },
