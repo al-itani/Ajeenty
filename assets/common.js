@@ -412,6 +412,150 @@ window.AJ = (() => {
     addEventListener('load', () => navigator.serviceWorker.register(SW_URL, { scope: new URL('./', SW_URL).pathname }).catch(() => {}));
   }
 
+  /* ---------- "Get the app" (PWA install) ----------
+     Android and desktop Chrome/Edge: our button opens the phone's own install popup (one tap).
+     iPhone and iPad: Apple doesn't let a website install itself, so the button opens a short picture guide
+     for Share → Add to Home Screen. Nothing shows once the app is installed, or for 14 days after "Not now". */
+  (() => {
+    const DISMISS_KEY = 'ajeenty-app-later';
+    const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    if (standalone || navigator.webdriver) return;
+    const ua = navigator.userAgent;
+    const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    const ipad = ios && !/iPhone|iPod/.test(ua);
+    const inApp = /Instagram|FBAN|FBAV|FB_IAB|Snapchat|Line\/|TikTok|musical_ly/i.test(ua);
+    const otherIosBrowser = ios && /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+    const phoneSized = () => matchMedia('(max-width: 900px)').matches;
+    const later = () => { try { return Date.now() < +(localStorage.getItem(DISMISS_KEY) || 0); } catch (e) { return false; } };
+    let deferred = null;
+
+    const IW = {
+      en: {
+        title: 'The AJEENTY app', sub: 'Order in one tap, free.', get: 'Get it', notNow: 'Not now', close: 'Close',
+        foot: 'Get the app',
+        sheetTitle: 'Add AJEENTY to your home screen', sheetSub: '10 seconds. No App Store, no account.',
+        s0: 'First, open this page in Safari: tap <b>•••</b> (top or bottom corner), then <b>Open in browser</b>.',
+        s1: ipad ? 'Tap the <b>Share</b> button at the top of Safari.' : otherIosBrowser ? 'Tap the <b>Share</b> button next to the address bar.' : 'Tap the <b>Share</b> button at the bottom of Safari.',
+        s1b: 'Don’t see it? Tap <b>•••</b> first, then <b>Share</b>.',
+        s2: 'Scroll down a little and tap <b>Add to Home Screen</b>.',
+        s3: 'Tap <b>Add</b>. Done! AJEENTY is now on your home screen.',
+        got: 'Got it', here: 'It’s down here'
+      },
+      ar: {
+        title: 'تطبيق عجينتي', sub: 'اطلب بكبسة وحدة، ببلاش.', get: 'نزّلو', notNow: 'مش هلّق', close: 'سكّر',
+        foot: 'نزّل التطبيق',
+        sheetTitle: 'زيد عجينتي عشاشتك الرئيسية', sheetSub: '١٠ ثواني. بلا App Store، بلا حساب.',
+        s0: 'أول شي، افتح الصفحة بـ <bdi>Safari</bdi>: اكبس <b>•••</b> (بالزاوية)، بعدين <b><bdi>Open in browser</bdi></b>.',
+        s1: ipad ? 'اكبس زر <b>المشاركة</b> فوق بـ <bdi>Safari</bdi>.' : otherIosBrowser ? 'اكبس زر <b>المشاركة</b> حدّ شريط العنوان.' : 'اكبس زر <b>المشاركة</b> تحت بـ <bdi>Safari</bdi>.',
+        s1b: 'مش شايفو؟ اكبس <b>•••</b> أول، بعدين <b>مشاركة</b>.',
+        s2: 'انزل شوي واكبس <b>إضافة إلى الشاشة الرئيسية</b> <small><bdi dir="ltr">Add to Home Screen</bdi></small>',
+        s3: 'اكبس <b>إضافة</b> <bdi dir="ltr">(Add)</bdi>. خلص! عجينتي صار عشاشتك الرئيسية.',
+        got: 'تمام', here: 'هون تحت'
+      }
+    };
+    const lg = () => (document.documentElement.lang === 'ar' ? 'ar' : 'en');
+    const w = () => IW[lg()];
+    const ICON = new URL('icon-192.png', SW_URL).href;   // the app icon sits next to sw.js at the site root
+    const SHARE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M8 10.5H6.5A1.5 1.5 0 0 0 5 12v7.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V12a1.5 1.5 0 0 0-1.5-1.5H16"/></svg>';
+    const ADD = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/></svg>';
+    const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5.5 12.5 4 4 9-9"/></svg>';
+    const DOTS = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg>';
+
+    let bar = null, sheet = null, footLi = null;
+    function render() {
+      const t = w();
+      if (bar) {
+        bar.querySelector('.app-t').textContent = t.title;
+        bar.querySelector('.app-s').textContent = t.sub;
+        bar.querySelector('.app-go').textContent = t.get;
+        bar.querySelector('.app-x').setAttribute('aria-label', t.notNow);
+      }
+      if (footLi) footLi.firstChild.textContent = t.foot;
+      if (sheet && !sheet.hidden) fillSheet();
+    }
+    function showBar() {
+      if (bar || later() || !phoneSized()) return;
+      const nav = document.querySelector('header.nav'); if (!nav) return;
+      bar = document.createElement('aside');
+      bar.className = 'app-bar';
+      bar.innerHTML = `<img src="${ICON}" width="44" height="44" alt=""><span class="app-txt"><b class="app-t"></b><span class="app-s"></span></span>`
+        + '<button type="button" class="app-go"></button><button type="button" class="app-x"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>';
+      bar.querySelector('.app-go').addEventListener('click', install);
+      bar.querySelector('.app-x').addEventListener('click', () => {
+        try { localStorage.setItem(DISMISS_KEY, String(Date.now() + 14 * 864e5)); } catch (e) {}
+        bar.remove(); bar = null;
+      });
+      nav.before(bar);
+      render();
+    }
+    function showFoot() {
+      const ul = document.querySelector('.foot-links'); if (!ul || footLi) return;
+      footLi = document.createElement('li');
+      const a = document.createElement('a'); a.href = '#'; a.addEventListener('click', e => { e.preventDefault(); install(); });
+      footLi.appendChild(a); ul.prepend(footLi); render();
+    }
+    function hideAll() { bar?.remove(); bar = null; footLi?.remove(); footLi = null; closeSheet(); }
+
+    async function install() {
+      if (deferred) {
+        const d = deferred; deferred = null;
+        d.prompt();
+        try { const r = await d.userChoice; if (r.outcome === 'accepted') hideAll(); } catch (e) {}
+        return;
+      }
+      if (ios) openSheet();
+    }
+
+    function fillSheet() {
+      const t = w();
+      const steps = [];
+      if (inApp) steps.push([DOTS, t.s0]);
+      steps.push([SHARE, `${t.s1}<small>${t.s1b}</small>`], [ADD, t.s2], [CHECK, t.s3]);
+      sheet.querySelector('.app-card').innerHTML =
+        `<button type="button" class="app-close" aria-label="${t.close}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>`
+        + `<img class="app-icon" src="${ICON}" width="64" height="64" alt="">`
+        + `<h2 id="appSheetT">${t.sheetTitle}</h2><p class="app-lede">${t.sheetSub}</p>`
+        + `<ol class="app-steps">${steps.map(([ic, tx], i) => `<li><span class="app-n">${i + 1}</span><span class="app-ic">${ic}</span><span class="app-tx">${tx}</span></li>`).join('')}</ol>`
+        + `<button type="button" class="btn btn-action app-ok">${t.got}</button>`;
+      sheet.querySelector('.app-close').addEventListener('click', closeSheet);
+      sheet.querySelector('.app-ok').addEventListener('click', closeSheet);
+      sheet.querySelector('.app-point').innerHTML = `<span>${t.here}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg>`;
+    }
+    let lastFocus = null;
+    function openSheet() {
+      if (!sheet) {
+        sheet = document.createElement('div');
+        sheet.className = 'app-sheet';
+        sheet.setAttribute('role', 'dialog'); sheet.setAttribute('aria-modal', 'true'); sheet.setAttribute('aria-labelledby', 'appSheetT');
+        sheet.innerHTML = '<div class="app-card"></div><div class="app-point" aria-hidden="true"></div>';
+        sheet.addEventListener('click', e => { if (e.target === sheet) closeSheet(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && sheet && !sheet.hidden) closeSheet(); });
+        document.body.appendChild(sheet);
+      }
+      sheet.classList.toggle('pad', ipad || otherIosBrowser || inApp);   // the "down here" arrow only fits Safari on iPhone
+      fillSheet();
+      lastFocus = document.activeElement;
+      sheet.hidden = false;
+      document.documentElement.classList.add('app-open');
+      sheet.querySelector('.app-ok').focus({ preventScroll: true });
+      sheet.querySelector('.app-card').scrollTop = 0;
+    }
+    function closeSheet() {
+      if (!sheet || sheet.hidden) return;
+      sheet.hidden = true;
+      document.documentElement.classList.remove('app-open');
+      lastFocus?.focus?.();
+    }
+
+    addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; showFoot(); showBar(); });
+    addEventListener('appinstalled', hideAll);
+    const ready = () => {
+      if (ios) { showFoot(); showBar(); }
+      new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
+  })();
+
   return {
     WA, HOURS, pickLang, saveLang, status, dayName, paintStatus, waLinks, OVEN, now: beirutNow, clock: clockNow,
     promo: { ...PROMO, words: PW, state: promoState, on: promoOn, price: promoPrice, paint: paintPromo },

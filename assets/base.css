@@ -316,3 +316,41 @@ html.arriving .into-glow{opacity:1}
   .promo-card .promo-in{padding:16px 16px 18px}
 }
 @media (prefers-reduced-motion:reduce){.is-on .promo-dot::after{animation:none}}
+
+/* ---------- "Get the app": phone banner above the nav, and the iPhone how-to sheet ---------- */
+.app-bar{display:flex;align-items:center;gap:12px;padding:10px var(--gut);background:var(--flour);color:var(--ink);border-bottom:1px solid var(--line);font-size:14px;line-height:1.3}
+.app-bar img{flex:none;width:44px;height:44px;border-radius:11px;box-shadow:0 2px 6px rgba(28,35,29,.18)}
+.app-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.app-t{font:600 15px/1.25 var(--f-body)}
+.app-s{color:var(--ink-2);font-size:13px}
+.app-go{flex:none;min-height:40px;padding:0 16px;border:0;border-radius:99px;background:var(--action);color:#fff;font:500 14px/1 var(--f-body);cursor:pointer}
+.app-go:hover{background:var(--action-2)}
+.app-x{flex:none;display:grid;place-items:center;width:36px;height:36px;margin-inline-end:-8px;border:0;border-radius:50%;background:none;color:var(--ink-2);cursor:pointer}
+.app-x svg,.app-close svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.app-sheet{position:fixed;inset:0;z-index:3000;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:16px 12px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(28,35,29,.55);animation:app-fade .2s ease-out}
+.app-sheet[hidden]{display:none}
+.app-card{position:relative;width:100%;max-width:440px;max-height:calc(100% - 64px);overflow:auto;padding:20px 18px 16px;border-radius:22px;background:var(--flour);color:var(--ink);text-align:center;box-shadow:0 24px 60px -20px rgba(0,0,0,.5);animation:app-up .3s cubic-bezier(.2,.9,.3,1.1)}
+.app-sheet.pad{justify-content:center}
+.app-close{position:absolute;top:10px;inset-inline-end:10px;display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:50%;background:var(--sand);color:var(--ink);cursor:pointer}
+.app-icon{width:52px;height:52px;border-radius:15px;box-shadow:0 4px 12px rgba(28,35,29,.2)}
+.app-card h2{margin:10px 0 4px;padding:0 30px;font:700 21px/1.25 var(--f-display);text-wrap:balance}
+.app-lede{margin:0 0 14px;color:var(--ink-2);font-size:15px;line-height:1.45}
+.app-steps{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:8px;text-align:start}
+.app-steps li{display:grid;grid-template-columns:28px 44px 1fr;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:#fff;border:1px solid var(--line);font-size:16px;line-height:1.4}
+.app-n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--sage);color:var(--on-sage);font:600 14px/1 var(--f-body)}
+.app-ic{display:grid;place-items:center;width:44px;height:44px;border-radius:11px;background:#EEF3FB;color:#1A73E8}
+.app-ic svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.app-ic svg circle{fill:currentColor;stroke:none}
+.app-tx b{font-weight:600}
+.app-tx small{display:block;margin-top:3px;color:var(--ink-2);font-size:13px}
+.app-ok{width:100%;justify-content:center;min-height:50px;font-size:16px}
+.app-point{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:10px;color:#fff;font:600 14px/1 var(--f-body)}
+.app-point svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;animation:app-bob 1.2s ease-in-out infinite}
+.app-sheet.pad .app-point{display:none}
+.app-open,.app-open body{overflow:hidden}
+@keyframes app-fade{from{opacity:0}}
+@keyframes app-up{from{transform:translateY(24px);opacity:0}}
+@keyframes app-bob{50%{transform:translateY(6px)}}
+@media (prefers-reduced-motion:reduce){.app-sheet,.app-card,.app-point svg{animation:none}}
+@media (max-width:380px){.app-bar{gap:10px}.app-bar img{width:38px;height:38px;border-radius:9px}.app-s{display:none}}
+@media (max-height:760px){.app-icon,.app-lede{display:none}.app-card{padding-top:16px}.app-card h2{margin:4px 0 12px;font-size:19px}.app-steps li{grid-template-columns:26px 36px 1fr;gap:8px;padding:9px 10px;font-size:15px}.app-n{width:26px;height:26px}.app-ic{width:36px;height:36px;border-radius:9px}.app-ic svg{width:22px;height:22px}.app-ok{min-height:46px}.app-point{margin-top:6px}}
