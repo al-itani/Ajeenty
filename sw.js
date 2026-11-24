@@ -4,7 +4,7 @@
    the cached copy is only used when there's no connection. Versioned assets, fonts and images are
    served from the cache and refreshed in the background. Orders (Google Apps Script) and anything
    on another site are never touched. Bump VERSION when this file changes. */
-const VERSION = 'ajeenty-20261124-pwa';
+const VERSION = 'ajeenty-20261124-menuapp';
 const CORE = ['./', 'index.html', 'menu/', 'menu/index.html', '404.html', 'site.webmanifest', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

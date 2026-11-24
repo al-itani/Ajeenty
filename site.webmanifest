@@ -5,7 +5,7 @@
   "description": "Man’oushe, mo3ajanat and fresh dough in Ras El Nabeh, Beirut.",
   "lang": "en",
   "dir": "ltr",
-  "start_url": "./?source=pwa",
+  "start_url": "./menu/?source=pwa",
   "scope": "./",
   "display": "standalone",
   "display_override": [
@@ -36,20 +36,6 @@
       "src": "favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Menu & order",
-      "short_name": "Menu",
-      "url": "./menu/?source=pwa",
-      "icons": [
-        {
-          "src": "icon-192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
     }
   ]
 }
