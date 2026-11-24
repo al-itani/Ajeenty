@@ -424,6 +424,8 @@ window.AJ = (() => {
     const ua = navigator.userAgent;
     const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
     const ipad = ios && !/iPhone|iPod/.test(ua);
+    const android = /Android/.test(ua);
+    const samsung = /SamsungBrowser/.test(ua);
     const inApp = /Instagram|FBAN|FBAV|FB_IAB|Snapchat|Line\/|TikTok|musical_ly/i.test(ua);
     const otherIosBrowser = ios && /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
     const phoneSized = () => matchMedia('(max-width: 900px)').matches;
@@ -435,23 +437,29 @@ window.AJ = (() => {
         title: 'The AJEENTY app', sub: 'Order in one tap, free.', get: 'Get it', notNow: 'Not now', close: 'Close',
         foot: 'Get the app',
         sheetTitle: 'Add AJEENTY to your home screen', sheetSub: '10 seconds. No App Store, no account.',
-        s0: 'First, open this page in Safari: tap <b>•••</b> (top or bottom corner), then <b>Open in browser</b>.',
+        s0: android ? 'First, open this page in Chrome: tap <b>⋮</b> at the top, then <b>Open in Chrome</b>.' : 'First, open this page in Safari: tap <b>•••</b> (top or bottom corner), then <b>Open in browser</b>.',
         s1: ipad ? 'Tap the <b>Share</b> button at the top of Safari.' : otherIosBrowser ? 'Tap the <b>Share</b> button next to the address bar.' : 'Tap the <b>Share</b> button at the bottom of Safari.',
         s1b: 'Don’t see it? Tap <b>•••</b> first, then <b>Share</b>.',
         s2: 'Scroll down a little and tap <b>Add to Home Screen</b>.',
         s3: 'Tap <b>Add</b>. Done! AJEENTY is now on your home screen.',
-        got: 'Got it', here: 'It’s down here'
+        got: 'Got it', here: 'It’s down here',
+        a1: samsung ? 'Tap the <b>menu</b> button (three lines) at the bottom right.' : 'Tap the <b>⋮</b> menu at the top right of Chrome.',
+        a2: samsung ? 'Tap <b>Add page to</b>, then <b>Home screen</b>.' : 'Tap <b>Add to Home screen</b> or <b>Install app</b>.',
+        a3: 'Tap <b>Install</b> or <b>Add</b>. Done! AJEENTY is now on your home screen.'
       },
       ar: {
         title: 'تطبيق عجينتي', sub: 'اطلب بكبسة وحدة، ببلاش.', get: 'نزّلو', notNow: 'مش هلّق', close: 'سكّر',
         foot: 'نزّل التطبيق',
         sheetTitle: 'زيد عجينتي عشاشتك الرئيسية', sheetSub: '١٠ ثواني. بلا App Store، بلا حساب.',
-        s0: 'أول شي، افتح الصفحة بـ <bdi>Safari</bdi>: اكبس <b>•••</b> (بالزاوية)، بعدين <b><bdi>Open in browser</bdi></b>.',
+        s0: android ? 'أول شي، افتح الصفحة بـ <bdi>Chrome</bdi>: اكبس <b>⋮</b> فوق، بعدين <b><bdi>Open in Chrome</bdi></b>.' : 'أول شي، افتح الصفحة بـ <bdi>Safari</bdi>: اكبس <b>•••</b> (بالزاوية)، بعدين <b><bdi>Open in browser</bdi></b>.',
         s1: ipad ? 'اكبس زر <b>المشاركة</b> فوق بـ <bdi>Safari</bdi>.' : otherIosBrowser ? 'اكبس زر <b>المشاركة</b> حدّ شريط العنوان.' : 'اكبس زر <b>المشاركة</b> تحت بـ <bdi>Safari</bdi>.',
         s1b: 'مش شايفو؟ اكبس <b>•••</b> أول، بعدين <b>مشاركة</b>.',
         s2: 'انزل شوي واكبس <b>إضافة إلى الشاشة الرئيسية</b> <small><bdi dir="ltr">Add to Home Screen</bdi></small>',
         s3: 'اكبس <b>إضافة</b> <bdi dir="ltr">(Add)</bdi>. خلص! عجينتي صار عشاشتك الرئيسية.',
-        got: 'تمام', here: 'هون تحت'
+        got: 'تمام', here: 'هون تحت',
+        a1: samsung ? 'اكبس زر <b>القائمة</b> (التلات خطوط) تحت عاليمين.' : 'اكبس <b>⋮</b> فوق عاليمين بـ <bdi>Chrome</bdi>.',
+        a2: samsung ? 'اكبس <b>إضافة الصفحة إلى</b>، بعدين <b>الشاشة الرئيسية</b>.' : 'اكبس <b>إضافة إلى الشاشة الرئيسية</b> أو <b>تثبيت التطبيق</b>.',
+        a3: 'اكبس <b>تثبيت</b> أو <b>إضافة</b>. خلص! عجينتي صار عشاشتك الرئيسية.'
       }
     };
     const lg = () => (document.documentElement.lang === 'ar' ? 'ar' : 'en');
@@ -460,6 +468,7 @@ window.AJ = (() => {
     const SHARE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M8 10.5H6.5A1.5 1.5 0 0 0 5 12v7.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V12a1.5 1.5 0 0 0-1.5-1.5H16"/></svg>';
     const ADD = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/></svg>';
     const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5.5 12.5 4 4 9-9"/></svg>';
+    const VDOTS = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="18" r="1.6"/></svg>';
     const DOTS = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg>';
 
     let bar = null, sheet = null, footLi = null;
@@ -504,14 +513,15 @@ window.AJ = (() => {
         try { const r = await d.userChoice; if (r.outcome === 'accepted') hideAll(); } catch (e) {}
         return;
       }
-      if (ios) openSheet();
+      if (ios || android) openSheet();
     }
 
     function fillSheet() {
       const t = w();
       const steps = [];
-      if (inApp) steps.push([DOTS, t.s0]);
-      steps.push([SHARE, `${t.s1}<small>${t.s1b}</small>`], [ADD, t.s2], [CHECK, t.s3]);
+      if (inApp) steps.push([android ? VDOTS : DOTS, t.s0]);
+      if (android) steps.push([samsung ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14"/></svg>' : VDOTS, t.a1], [ADD, t.a2], [CHECK, t.a3]);
+      else steps.push([SHARE, `${t.s1}<small>${t.s1b}</small>`], [ADD, t.s2], [CHECK, t.s3]);
       sheet.querySelector('.app-card').innerHTML =
         `<button type="button" class="app-close" aria-label="${t.close}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>`
         + `<img class="app-icon" src="${ICON}" width="64" height="64" alt="">`
@@ -533,7 +543,7 @@ window.AJ = (() => {
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && sheet && !sheet.hidden) closeSheet(); });
         document.body.appendChild(sheet);
       }
-      sheet.classList.toggle('pad', ipad || otherIosBrowser || inApp);   // the "down here" arrow only fits Safari on iPhone
+      sheet.classList.toggle('pad', ipad || otherIosBrowser || inApp || android);   // the "down here" arrow only fits Safari on iPhone
       fillSheet();
       lastFocus = document.activeElement;
       sheet.hidden = false;
@@ -551,7 +561,7 @@ window.AJ = (() => {
     addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; showFoot(); showBar(); });
     addEventListener('appinstalled', hideAll);
     const ready = () => {
-      if (ios) { showFoot(); showBar(); }
+      if (ios || android) { showFoot(); showBar(); }   // Android: the button uses the one-tap popup when Chrome offers it, else the guide
       new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
     };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
