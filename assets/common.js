@@ -412,14 +412,15 @@ window.AJ = (() => {
     addEventListener('load', () => navigator.serviceWorker.register(SW_URL, { scope: new URL('./', SW_URL).pathname }).catch(() => {}));
   }
 
-  /* ---------- "Get the app" (PWA install) ----------
+  /* ---------- "Get the app" (PWA install), on the menu page only ----------
      Android and desktop Chrome/Edge: our button opens the phone's own install popup (one tap).
      iPhone and iPad: Apple doesn't let a website install itself, so the button opens a short picture guide
      for Share → Add to Home Screen. Nothing shows once the app is installed, or for 14 days after "Not now". */
   (() => {
     const DISMISS_KEY = 'ajeenty-app-later';
     const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-    if (standalone || navigator.webdriver) return;
+    const onMenu = location.pathname.startsWith(new URL('menu/', SW_URL).pathname);   // the banner and link only live on the menu page
+    if (standalone || navigator.webdriver || !onMenu) return;
     const ua = navigator.userAgent;
     const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
     const ipad = ios && !/iPhone|iPod/.test(ua);
